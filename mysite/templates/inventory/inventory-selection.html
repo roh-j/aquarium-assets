@@ -33,6 +33,10 @@
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <!-- metisMenu (A jQuery menu plugin) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
     <!-- SVG.js -->
@@ -50,74 +54,54 @@
     <script src="{% static 'assets/js/inventory-core.js' %}"></script>
 
     <title>Aquarium Assets</title>
-    <script>
-        $(function () {
-            var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-                'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-                'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-                'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-                'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-                'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-                'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-                'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-                'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming', '구피', 'West VirginiaWest VirginiaWest VirginiaWest Virginia'
-            ];
-
-            var cities = ['Pontevedra', 'A Coruña', 'Lugo', 'Ourense'];
-
-            $('#city').typeahead({
-                source: cities
-            });
-
-
-            $('#states_search').typeahead({
-                source: states
-            });
-
-            $("#dataTables-example").DataTable({
-                "columnDefs": [
-                    {
-                        "targets": [6],
-                        "searchable": false,
-                        "orderable": false
-                    }
-                ],
-                "lengthChange": false,
-                "dom": "f" + "tr" + "p" + "i",
-                "language": {
-                    "search": "",
-                    "paginate": {
-                        "previous": "이전",
-                        "next": "다음"
-                    }
-                },
-                "initComplete": function () {
-                    $("#dataTables-example_info").detach().appendTo("#table-info");
-                    $("#dataTables-example_paginate").detach().appendTo("#paging");
-                    $("#dataTables-example_filter input").removeClass("input-sm");
-                    $("#dataTables-example_filter").prepend(
-                        "<span class='mr-3'><i class='fas fa-search'></i></span>"
-                    );
-                    $("#dataTables-example_filter").detach().appendTo(".dataTables-table-filter");
-                }
-                /*
-                "info": false,
-                "searching": false,
-                "paging": false,
-                "initComplete": function () {
-                    $("#dataTables-example_paginate").detach().appendTo("#tes");
-                    $("#dataTables-example_filter").detach().appendTo("#search");
-                    $("#dataTables-example_filter").prepend(
-                        "<span><i class='fas fa-search'></i></span>"
-                    );
-                }
-                */
-            });
-        });
-    </script>
 </head>
 
 <body>
+    <div id="alert-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
+                </div>
+                <form id="" method="POST">
+                    {% csrf_token %}
+                    <div id="alert-modal-body" class="modal-body">
+                        <div class="form-group">
+                            <label for="id_species" class="control-label">열대어 품종</label>
+                            <input type="text" class="form-control" id="id_species" name="species">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_size" class="control-label">크기 (cm)</label>
+                            <input type="number" class="form-control" id="id_size" name="size" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_quantity" class="control-label">마릿수</label>
+                            <input type="number" class="form-control" id="id_quantity" name="quantity" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_gender" class="control-label d-block">암수구별</label>
+                            <div id="id_gender" class="btn-group">
+                                <button type="button" class="btn btn-default">암컷</button>
+                                <button type="button" class="btn btn-default">수컷</button>
+                                <button type="button" class="btn btn-default">없음</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_auto_growth" class="control-label d-block">자동성장</label>
+                            <label class="switch">
+                                <input type="checkbox" id="id_auto_growth" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-cls-top mb-0">
             <div class="container-fluid">
@@ -133,7 +117,7 @@
         </nav>
         <nav class="navbar-default navbar-side">
             <div class="collapse sidebar-collapse">
-                <ul id="management-menu" class="nav">
+                <ul id="console-menu" class="nav">
                     <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
@@ -164,7 +148,7 @@
                         <a href="#"><i class="fas fa-folder-open fa-fw"></i>기타 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
                             <li><a href=""><i class="fas fa-desktop fa-fw"></i>페이지 관리</a></li>
-                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>라운지 이동</a></li>
+                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>장터 이동</a></li>
                             <li><a href="/business/"><i class="fas fa-exchange-alt fa-fw"></i>대시보드 전환</a></li>
                         </ul>
                     </li>
@@ -183,7 +167,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
-                        <ul id="store-tabs" class="nav nav-tabs">
+                        <ul class="nav nav-tabs">
                             <li class="active"><a href="#storage-room" data-toggle="tab">생물실 선택</a></li>
                             <li><a href="#store-layout" data-toggle="tab">매장 레이아웃</a></li>
                             <li><a href="#aquarium" data-toggle="tab">수조 선택</a></li>
@@ -226,10 +210,10 @@
                             </div>
                             <div class="tab-pane" id="store-layout">
                                 <div class="table-responsive">
-                                    <div id="store-layout-canvas" class="text-center"></div>
+                                    <div id="store-layout-canvas">
+                                        <div id="svg-store-layout" class="text-center"></div>
+                                    </div>
                                 </div>
-                                <hr>
-                                <div id="store-layout-console" class="text-center"></div>
                                 <hr>
                                 <div class="text-center">
                                     <a href="" class="btn btn-default">처음으로</a>
@@ -237,90 +221,30 @@
                             </div>
                             <div class="tab-pane" id="aquarium">
                                 <div class="table-responsive">
-                                    <div id="aquarium-canvas" class="text-center"></div>
+                                    <div id="aquarium-canvas" class="text-center">
+                                        <div id="svg-center" class="text-center mx-auto">
+                                            <div id="svg-mini-map"></div>
+                                        </div>
+                                        <hr>
+                                        <div id="svg-aquarium" class="text-center"></div>
+                                    </div>
                                 </div>
-                                <hr>
-                                <div id="aquarium-console" class="text-center"></div>
                                 <hr>
                                 <div class="text-center">
                                     <div class="btn-group">
-                                        <button type="button" id="redo-store-layout" class="btn btn-default">
-                                            <i class="fas fa-arrow-left"></i> 이전
-                                        </button>
+                                        <button type="button" id="redo-store-layout" class="btn btn-default">이전</button>
                                         <a href="" class="btn btn-default">처음으로</a>
                                     </div>
                                 </div>
                                 <hr>
-                                <form method="POST">
-                                    <div class="panel panel-default border-dark">
-                                        <div class="panel-heading border-dark">열대어 등록</div>
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th class="text-center text-nowrap">열대어 품종</th>
-                                                        <th></th>
-                                                        <th class="text-center text-nowrap">크기 (cm)</th>
-                                                        <th></th>
-                                                        <th class="text-center text-nowrap">마릿수</th>
-                                                        <th></th>
-                                                        <th class="text-center text-nowrap">암수 구별</th>
-                                                        <th></th>
-                                                        <th class="text-center text-nowrap">자동 성장</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="min-table-cell bg-default">
-                                                            <div class="form-control-hidden"><i class="fas fa-anchor"></i></div>
-                                                        </td>
-                                                        <td><input type="text" id="states_search" class="form-control-hidden min-215"></td>
-                                                        <td class="min-table-cell bg-default">
-                                                            <div class="form-control-hidden"><i class="fas fa-anchor"></i></div>
-                                                        </td>
-                                                        <td><input type="number" class="form-control-hidden min-215" value="0" min="0"></td>
-                                                        <td class="min-table-cell bg-default">
-                                                            <div class="form-control-hidden"><i class="fas fa-anchor"></i></div>
-                                                        </td>
-                                                        <td><input type="number" class="form-control-hidden min-215" value="0" min="0"></td>
-                                                        <td class="min-table-cell bg-default">
-                                                            <div class="form-control-hidden"><i class="fas fa-anchor"></i></div>
-                                                        </td>
-                                                        <td class="min-table-cell table-cell-regular">
-                                                            <div class="btn-group d-flex">
-                                                                <button type="button" class="btn btn-default">암컷</button>
-                                                                <button type="button" class="btn btn-default">수컷</button>
-                                                                <button type="button" class="btn btn-default">없음</button>
-                                                            </div>
-                                                        </td>
-                                                        <td class="min-table-cell bg-default">
-                                                            <div class="form-control-hidden"><i class="fas fa-anchor"></i></div>
-                                                        </td>
-                                                        <td class="min-table-cell table-cell-regular">
-                                                            <label class="switch">
-                                                                <input type="checkbox" checked>
-                                                                <span class="slider round"></span>
-                                                            </label>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="panel-footer bg-white clearfix">
-                                            <div class="btn-group pull-right">
-                                                <button type="button" class="btn btn-default">다시 입력</button>
-                                                <button type="submit" class="btn btn-primary">등록</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                                <div id="inventory-menu">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#alert-modal">재고 추가</button>
+                                </div>
                                 <hr>
-                                <div class="panel panel-default border-dark">
-                                    <div class="panel-heading border-dark">재고 현황</div>
-                                    <div class="dataTables-table-filter text-right"></div>
+                                <div class="panel panel-default border-dark mb-0">
+                                    <div id="inventory-tool" class="panel-heading border-dark text-right"></div>
                                     <div class="table-responsive">
-                                        <table id="dataTables-example" class="table table-align-middle table-bordered table-hover">
+                                        <table id="inventory_table" class="table table-align-middle table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center text-nowrap">번호</th>
@@ -340,7 +264,7 @@
                                                     <td>2.7 cm</td>
                                                     <td>3 마리</td>
                                                     <td><i class="fas fa-circle text-success"></i> 분양 가능</td>
-                                                    <td class="min-table-cell">
+                                                    <td class="min cell-button">
                                                         <div class="btn-group d-flex pull-right">
                                                             <button type="button" class="btn btn-sm btn-default">가격 수정</button>
                                                             <button type="button" class="btn btn-sm btn-default">삭제</button>
@@ -354,7 +278,7 @@
                                                     <td>1.7 cm</td>
                                                     <td>12 마리</td>
                                                     <td><i class="fas fa-circle text-warning"></i> 성장 단계</td>
-                                                    <td class="min-table-cell">
+                                                    <td class="min cell-button">
                                                         <div class="btn-group d-flex pull-right">
                                                             <button type="button" class="btn btn-sm btn-default">가격 수정</button>
                                                             <button type="button" class="btn btn-sm btn-default">삭제</button>
@@ -364,9 +288,9 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div id="table-info" class="panel-footer bg-white"></div>
+                                    <div id="inventory-info" class="panel-footer bg-white"></div>
                                 </div>
-                                <div id="paging" class="text-center"></div>
+                                <div id="inventory-pagination" class="text-center"></div>
                             </div>
                         </div>
                     </div>

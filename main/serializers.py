@@ -48,14 +48,23 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class AuthSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(required=True, write_only=True)
+    error_messages = {
+        'invalid': '유효한 문자열이 아닙니다.',
+        'blank': '이 입력란은 비워둘 수 없습니다.',
+        'max_length': '이 입력란의 길이가 {max_length} 이하 여야 합니다.',
+        'min_length': '이 입력란의 길이가 {min_length} 이상인지 확인하십시오.'
+    }
+
+    username = serializers.CharField(
+        error_messages=error_messages, required=True)
+    password = serializers.CharField(
+        error_messages=error_messages, required=True, write_only=True)
 
     def validate(self, data):
         self.user = authenticate(
             username=data['username'], password=data['password'])
 
         if self.user is None:
-            raise serializers.ValidationError("입력오류")
+            raise serializers.ValidationError("아이디 또는 비밀번호를 다시 확인하세요.")
 
         return data

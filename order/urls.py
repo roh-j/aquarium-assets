@@ -20,4 +20,5 @@ app_name = 'Order'
 
 urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='RegisterView'),
+    path('list/', views.ListView.as_view(), name='ListView'),
 ]

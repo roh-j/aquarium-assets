@@ -71,14 +71,15 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h5 id="storage-room-modal-title" class="modal-title"></h5>
                 </div>
-                <form id="form-storage-room" class="form-horizontal clearfix" method="POST">
+                <form id="form-storage-room" method="POST">
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="id_storage_room_name" class="col-sm-4 control-label">생물실 레이블</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="id_storage_room_name" name="storage_room_name" class="form-control">
-                            </div>
+                            <label for="id_storage_room_name" class="control-label">생물실 레이블</label>
+                            <input type="text" class="form-control" id="id_storage_room_name" name="storage_room_name">
+                        </div>
+                        <div class="alert bg-default border-secondary">
+                            <i class="fas fa-exclamation-circle"></i> 생물실 레이블을 입력하세요.
                         </div>
                     </div>
                     <div id="storage-room-modal-footer" class="modal-footer"></div>
@@ -93,110 +94,95 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h5 id="aquarium-section-modal-title" class="modal-title"></h5>
                 </div>
-                <form id="form-aquarium-section" class="form-horizontal clearfix" method="POST">
+                <form id="form-aquarium-section" method="POST">
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="id_section_name" class="col-sm-4 control-label">섹션 레이블</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="id_section_name" name="section_name">
+                            <label for="id_section_name" class="control-label">섹션 레이블</label>
+                            <input type="text" class="form-control" id="id_section_name" name="section_name">
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-6">
+                                <label for="id_aquarium_num_of_columns" class="control-label">가로</label>
+                                <input type="number" class="form-control" id="id_aquarium_num_of_columns" name="aquarium_num_of_columns" min="0">
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="id_aquarium_num_of_rows" class="control-label">높이 (층)</label>
+                                <input type="number" class="form-control" id="id_aquarium_num_of_rows" name="aquarium_num_of_rows" min="0">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="id_aquarium_num_of_columns" class="col-sm-4 control-label">가로</label>
-                            <div class="col-sm-8">
-                                <input type="number" class="form-control" id="id_aquarium_num_of_columns" name="aquarium_num_of_columns" value="0" min="0">
+                        <div class="alert bg-default border-secondary">
+                            <i class="fas fa-exclamation-circle"></i> 섹션 안에 있는 수조의 개수를 입력하세요.
+                        </div>
+                        <div class="alert bg-default border-secondary">
+                            <div class="text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="143" height="82">
+                                    <g transform="translate(0, 0)">
+                                        <pattern id="water" width=".25" height="1.1" patternContentUnits="objectBoundingBox">
+                                            <path fill="#6198b3" d="M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z" />
+                                        </pattern>
+                                        <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-grid" />
+                                        <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-plane" />
+                                        <polygon points="81,2 62,21 62,81 81,62" class="effect-aquarium-grid" />
+                                        <polygon points="81,2 62,21 62,81 81,62" class="effect-aquarium-plane" />
+                                        <rect x="1" y="21" width="60" height="60" class="effect-aquarium-front-grid" />
+                                        <rect x="1" y="21" width="60" height="60" class="effect-aquarium-front-button" />
+                                        <mask id="water-mask">
+                                            <rect x="1" y="21" width="60" height="60" fill="#fff" />
+                                        </mask>
+                                        <rect mask="url(#water-mask)" fill="url(#water)" x="-300" y="45" width="1200" height="120" opacity="0.3">
+                                            <animate attributeType="xml" attributeName="x" from="-300" to="0" repeatCount="indefinite" dur="3s" />
+                                        </rect>
+                                        <rect mask="url(#water-mask)" fill="url(#water)" x="-400" y="40" width="1600" height="120" opacity="0.3">
+                                            <animate attributeType="xml" attributeName="x" from="-400" to="0" repeatCount="indefinite" dur="4s" />
+                                        </rect>
+                                    </g>
+                                    <g transform="translate(61, 0)">
+                                        <pattern id="water" width=".25" height="1.1" patternContentUnits="objectBoundingBox">
+                                            <path fill="#6198b3" d="M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z" />
+                                        </pattern>
+                                        <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-grid" />
+                                        <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-plane" />
+                                        <polygon points="81,2 62,21 62,81 81,62" class="effect-aquarium-grid" />
+                                        <polygon points="81,2 62,21 62,81 81,62" class="effect-aquarium-plane" />
+                                        <rect x="1" y="21" width="60" height="60" class="effect-aquarium-front-grid" />
+                                        <rect x="1" y="21" width="60" height="60" class="effect-aquarium-front-button" />
+                                        <mask id="water-mask">
+                                            <rect x="1" y="21" width="60" height="60" fill="#fff" />
+                                        </mask>
+                                        <rect mask="url(#water-mask)" fill="url(#water)" x="-300" y="45" width="1200" height="120" opacity="0.3">
+                                            <animate attributeType="xml" attributeName="x" from="-300" to="0" repeatCount="indefinite" dur="3s" />
+                                        </rect>
+                                        <rect mask="url(#water-mask)" fill="url(#water)" x="-400" y="40" width="1600" height="120" opacity="0.3">
+                                            <animate attributeType="xml" attributeName="x" from="-400" to="0" repeatCount="indefinite" dur="4s" />
+                                        </rect>
+                                    </g>
+                                </svg>
                             </div>
+                            <hr>
+                            <div class="text-center">섹션 안에 수조의 개수가 위와 같다면 가로 2, 높이 1로 입력합니다.</div>
                         </div>
                         <div class="form-group">
-                            <label for="id_aquarium_num_of_rows" class="col-sm-4 control-label">높이 (층)</label>
-                            <div class="col-sm-8">
-                                <input type="number" class="form-control" id="id_aquarium_num_of_rows" name="aquarium_num_of_rows" value="0" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-4 col-sm-8">
-                                <div class="alert bg-default border-secondary mb-0">
-                                    <i class="fas fa-exclamation-circle"></i> 섹션 안에 있는 수조의 개수를 입력하세요.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-4 col-sm-8">
-                                <div class="alert bg-default border-secondary text-center mb-0">
-                                    <div class="text-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="141" height="81">
-                                            <g transform="translate(0, 0)">
-                                                <pattern id="water" width=".25" height="1.1" patternContentUnits="objectBoundingBox">
-                                                    <path fill="#207ba9" d="M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z" />
-                                                </pattern>
-                                                <rect x="1" y="20" width="60" height="60" class="effect-aquarium-front-grid" />
-                                                <rect x="1" y="20" width="60" height="60" class="effect-aquarium-front-button" />
-                                                <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-grid" />
-                                                <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-plane" />
-                                                <polygon points="80,1 61,20 61,80 80,61" class="effect-aquarium-grid" />
-                                                <polygon points="80,1 61,20 61,80 80,61" class="effect-aquarium-plane" />
-                                                <mask id="water-mask">
-                                                    <rect x="1" y="20" width="59" height="60" fill="#fff" />
-                                                </mask>
-                                                <rect mask="url(#water-mask)" fill="url(#water)" x="-300" y="45" width="1200" height="120" opacity="0.3">
-                                                    <animate attributeType="xml" attributeName="x" from="-300" to="0" repeatCount="indefinite" dur="3s" />
-                                                </rect>
-                                                <rect mask="url(#water-mask)" fill="url(#water)" x="-400" y="40" width="1600" height="120" opacity="0.3">
-                                                    <animate attributeType="xml" attributeName="x" from="-400" to="0" repeatCount="indefinite" dur="4s" />
-                                                </rect>
-                                            </g>
-                                            <g transform="translate(60, 0)">
-                                                <pattern id="water" width=".25" height="1.1" patternContentUnits="objectBoundingBox">
-                                                    <path fill="#207ba9" d="M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z" />
-                                                </pattern>
-                                                <rect x="1" y="20" width="60" height="60" class="effect-aquarium-front-grid" />
-                                                <rect x="1" y="20" width="60" height="60" class="effect-aquarium-front-button" />
-                                                <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-grid" />
-                                                <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-plane" />
-                                                <polygon points="80,1 61,20 61,80 80,61" class="effect-aquarium-grid" />
-                                                <polygon points="80,1 61,20 61,80 80,61" class="effect-aquarium-plane" />
-                                                <mask id="water-mask">
-                                                    <rect x="1" y="20" width="59" height="60" fill="#fff" />
-                                                </mask>
-                                                <rect mask="url(#water-mask)" fill="url(#water)" x="-300" y="45" width="1200" height="120" opacity="0.3">
-                                                    <animate attributeType="xml" attributeName="x" from="-300" to="0" repeatCount="indefinite" dur="3s" />
-                                                </rect>
-                                                <rect mask="url(#water-mask)" fill="url(#water)" x="-400" y="40" width="1600" height="120" opacity="0.3">
-                                                    <animate attributeType="xml" attributeName="x" from="-400" to="0" repeatCount="indefinite" dur="4s" />
-                                                </rect>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                    (예시) 가로: 2 / 높이: 1
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="id_section_color" class="col-sm-4 control-label">섹션 색상</label>
+                            <label for="id_section_color" class="control-label">섹션 색상</label>
                             <input type="hidden" id="id_section_color" name="section_color" value="#cd5c5c">
-                            <div class="col-sm-8">
-                                <div id="aquarium-section-edit-color-selected" class="color-selected" style="background: #cd5c5c"></div>
-                            </div>
+                            <div id="aquarium-section-edit-color-selected" class="color-selected" style="background: #cd5c5c"></div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-offset-4 col-sm-8">
-                                <div id="aquarium-section-edit-color-picker" class="color-picker clearfix">
-                                    <ul>
-                                        <li style="background: #cd5c5c" data-section-color="#cd5c5c"></li>
-                                        <li style="background: #ff4500" data-section-color="#ff4500"></li>
-                                        <li style="background: #008b8b" data-section-color="#008b8b"></li>
-                                        <li style="background: #b8860b" data-section-color="#b8860b"></li>
-                                        <li style="background: #32cd32" data-section-color="#32cd32"></li>
-                                        <li style="background: #ffd700" data-section-color="#ffd700"></li>
-                                        <li style="background: #48d1cc" data-section-color="#48d1cc"></li>
-                                        <li style="background: #ff69b4" data-section-color="#ff69b4"></li>
-                                        <li style="background: #87cefa" data-section-color="#87cefa"></li>
-                                        <li style="background: #6495ed" data-section-color="#6495ed"></li>
-                                        <li style="background: #dc143c" data-section-color="#dc143c"></li>
-                                        <li style="background: #ff8c00" data-section-color="#ff8c00"></li>
-                                    </ul>
-                                </div>
+                            <div id="aquarium-section-edit-color-picker" class="color-picker clearfix">
+                                <ul>
+                                    <li style="background: #cd5c5c" data-section-color="#cd5c5c"></li>
+                                    <li style="background: #ff4500" data-section-color="#ff4500"></li>
+                                    <li style="background: #008b8b" data-section-color="#008b8b"></li>
+                                    <li style="background: #b8860b" data-section-color="#b8860b"></li>
+                                    <li style="background: #32cd32" data-section-color="#32cd32"></li>
+                                    <li style="background: #ffd700" data-section-color="#ffd700"></li>
+                                    <li style="background: #48d1cc" data-section-color="#48d1cc"></li>
+                                    <li style="background: #ff69b4" data-section-color="#ff69b4"></li>
+                                    <li style="background: #87cefa" data-section-color="#87cefa"></li>
+                                    <li style="background: #6495ed" data-section-color="#6495ed"></li>
+                                    <li style="background: #dc143c" data-section-color="#dc143c"></li>
+                                    <li style="background: #ff8c00" data-section-color="#ff8c00"></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -220,7 +206,7 @@
         </nav>
         <nav class="navbar-default navbar-side">
             <div class="collapse sidebar-collapse">
-                <ul id="management-menu" class="nav">
+                <ul id="console-menu" class="nav">
                     <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
@@ -251,7 +237,7 @@
                         <a href="#"><i class="fas fa-folder-open fa-fw"></i>기타 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
                             <li><a href=""><i class="fas fa-desktop fa-fw"></i>페이지 관리</a></li>
-                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>라운지 이동</a></li>
+                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>장터 이동</a></li>
                             <li><a href="/business/"><i class="fas fa-exchange-alt fa-fw"></i>대시보드 전환</a></li>
                         </ul>
                     </li>
@@ -309,14 +295,10 @@
                                         </div>
                                         {% endif %}
                                     </div>
-                                    <div class="panel-footer bg-white clearfix">
-                                        <div class="btn-group pull-right">
-                                            <button type="button" id="storage-room-modify" class="btn btn-default" disabled="disabled">
-                                                변경
-                                            </button>
-                                            <button type="button" id="move-aquarium-section" class="btn btn-default" disabled="disabled">
-                                                다음 <i class="fas fa-arrow-right"></i>
-                                            </button>
+                                    <div class="panel-footer bg-white text-right">
+                                        <div class="btn-group">
+                                            <button type="button" id="storage-room-modify" class="btn btn-default" disabled="disabled">변경</button>
+                                            <button type="button" id="move-aquarium-section" class="btn btn-default" disabled="disabled">다음</button>
                                         </div>
                                     </div>
                                 </div>
@@ -329,31 +311,27 @@
                                         <hr>
                                         <div id="async-aquarium-section"></div>
                                     </div>
-                                    <div class="panel-footer bg-white clearfix">
-                                        <div class="btn-group pull-right">
+                                    <div class="panel-footer bg-white text-right">
+                                        <div class="btn-group">
                                             <a href="" class="btn btn-default">처음으로</a>
-                                            <button type="button" id="aquarium-section-modify" class="btn btn-default" disabled="disabled">
-                                                변경
-                                            </button>
-                                            <button type="button" id="move-store-layout" class="btn btn-default" disabled="disabled">
-                                                다음 <i class="fas fa-arrow-right"></i>
-                                            </button>
+                                            <button type="button" id="aquarium-section-modify" class="btn btn-default" disabled="disabled">변경</button>
+                                            <button type="button" id="move-store-layout" class="btn btn-default" disabled="disabled">다음</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="store-layout">
                                 <div class="table-responsive">
-                                    <div id="store-layout-canvas" class="text-center"></div>
+                                    <div id="store-layout-canvas">
+                                        <div id="svg-store-layout" class="text-center"></div>
+                                    </div>
                                 </div>
                                 <hr>
                                 <div id="store-layout-console" class="text-center"></div>
                                 <hr>
                                 <div class="text-center">
                                     <div class="btn-group">
-                                        <button type="button" id="redo-aquarium-section" class="btn btn-default">
-                                            <i class="fas fa-arrow-left"></i> 이전
-                                        </button>
+                                        <button type="button" id="redo-aquarium-section" class="btn btn-default">이전</button>
                                         <a href="" class="btn btn-default">처음으로</a>
                                     </div>
                                 </div>

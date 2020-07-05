@@ -8,7 +8,7 @@ var aquarium_num_of_rows = null;
 var aquarium_num_of_columns = null;
 
 $(function () {
-    $("#management-menu").metisMenu();
+    $("#console-menu").metisMenu();
     $(".nav-second-level").removeClass("d-none");
 
     $("#storage-room-modal").on("hide.bs.modal", function (e) {
@@ -56,7 +56,7 @@ $(function () {
 
     $("#storage-room-register").click(function (e) {
         $("#storage-room-modal-title").html(
-            "<i class='fas fa-exclamation-circle text-primary'></i> 방 등록"
+            "<i class='fas fa-exclamation-circle text-primary'></i> 생물실 등록"
         );
         $("#storage-room-modal-footer").html(
             "<button type='submit' class='btn btn-primary' data-http-method='post'>등록</button>"
@@ -69,7 +69,7 @@ $(function () {
             $("form#form-storage-room input#id_storage_room_name").val(storage_room_name);
 
             $("#storage-room-modal-title").html(
-                "<i class='fas fa-exclamation-circle text-primary'></i> 방 변경"
+                "<i class='fas fa-exclamation-circle text-primary'></i> 생물실 변경"
             );
             $("#storage-room-modal-footer").html(
                 "<div class='btn-group'>\

@@ -20,4 +20,9 @@ app_name = 'Price'
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='IndexView'),
+    path('unit-price/', views.UnitPriceView.as_view(), name='UnitPriceView'),
+    path('unit-price/species/', views.SpeciesView.as_view(),
+         name='SpeciesView'),
+    path('unit-price/breed/', views.BreedView.as_view(),
+         name='BreedView'),
 ]

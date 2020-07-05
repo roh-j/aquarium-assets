@@ -28,6 +28,10 @@ class StorageRoomSerializer(serializers.ModelSerializer):
 
 
 class AquariumSectionSerializer(serializers.ModelSerializer):
+    section_name = serializers.CharField(required=True)
+    section_color = serializers.CharField(required=True)
+    aquarium_num_of_rows = serializers.IntegerField(required=True)
+    aquarium_num_of_columns = serializers.IntegerField(required=True)
 
     class Meta:
         model = StoreModels.AquariumSection

@@ -44,17 +44,15 @@
         </div>
     </nav>
     <div class="container-fluid mt-5">
-        <div class="panel panel-default border-dark max-360 mx-auto">
+        <div class="panel panel-default border-dark max-380 mx-auto">
             <div class="panel-heading border-dark">비즈니스 관리</div>
             <div class="panel-body">
-                <img src="{% static 'assets/img/icon/Actions-view-pim-contacts-icon.png' %}"
-                    class="primary-image img-responsive">
-                <h4 class="text-center">
-                    <span class="label label-primary font-weight-normal">{{ user }}님</span>
-                </h4>
+                <img src="{% static 'assets/img/icon/Actions-view-pim-contacts-icon.png' %}" class="primary-image img-responsive">
                 <hr>
                 {% if not business_list %}
-                <div class="alert border-secondary"><i class="fas fa-exclamation-circle"></i> 비즈니스 등록이 필요합니다.</div>
+                <div class="alert bg-default border-secondary">
+                    <i class="fas fa-exclamation-circle"></i> 비즈니스 등록이 필요합니다.
+                </div>
                 {% else %}
                 <div class="list-group">
                     {% for list in business_list %}

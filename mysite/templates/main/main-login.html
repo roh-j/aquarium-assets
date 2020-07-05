@@ -73,8 +73,8 @@
         </div>
     </nav>
     <div class="container-fluid mt-5">
-        <div class="panel panel-default border-dark max-360 mx-auto">
-            <div class="panel-heading border-dark">환영합니다.</div>
+        <div class="panel panel-default border-dark max-380 mx-auto">
+            <div class="panel-heading border-dark">로그인</div>
             <div class="panel-body">
                 <img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive">
                 <hr>
@@ -82,11 +82,11 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="id_username">사용자 계정</label>
-                        <input type="text" id="id_username" name="username" class="form-control" autofocus>
+                        <input type="text" class="form-control" id="id_username" name="username" autofocus>
                     </div>
                     <div class="form-group">
-                        <label for="id_password">비밀번호</label>
-                        <input type="password" id="id_password" name="password" class="form-control">
+                        <label for="id_password">암호</label>
+                        <input type="password" class="form-control" id="id_password" name="password">
                     </div>
                     <div class="text-right">
                         <a href="../register/">회원이 아니십니까?</a>

@@ -5,13 +5,11 @@ table.dataTable {
     max-width: none !important;
     border-collapse: collapse !important;
 }
-.dataTables_filter > label {
+.dataTables_filter > label,
+.dataTables_length > label {
     margin: 0;
 }
-.dataTables-table-filter {
-    border-bottom: 1px solid #343a40;
-    padding: 8px;
-}
+
 .panel > .dt-bootstrap > .table,
 .panel > .table-responsive > .dt-bootstrap > .table,
 .panel > .panel-collapse > .table {

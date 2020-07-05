@@ -41,7 +41,7 @@
     <script>
         $(function () {
             autosize($(".write-message"));
-            $("#management-menu").metisMenu();
+            $("#console-menu").metisMenu();
             $(".nav-second-level").removeClass("d-none");
         });
     </script>
@@ -63,7 +63,7 @@
         </nav>
         <nav class="navbar-default navbar-side">
             <div class="collapse sidebar-collapse">
-                <ul id="management-menu" class="nav">
+                <ul id="console-menu" class="nav">
                     <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
@@ -94,7 +94,7 @@
                         <a href="#"><i class="fas fa-folder-open fa-fw"></i>기타 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
                             <li><a href=""><i class="fas fa-desktop fa-fw"></i>페이지 관리</a></li>
-                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>라운지 이동</a></li>
+                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>장터 이동</a></li>
                             <li><a href="/business/"><i class="fas fa-exchange-alt fa-fw"></i>대시보드 전환</a></li>
                         </ul>
                     </li>

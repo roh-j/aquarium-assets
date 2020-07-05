@@ -1,5 +1,17 @@
 var DJANGO_STATIC_URL = '/static';
 
+var date = new Date();
+var year = date.getFullYear();
+var month = new String(date.getMonth() + 1);
+var day = new String(date.getDate());
+
+if (month.length == 1) {
+    month = "0" + month;
+}
+if (day.length == 1) {
+    day = "0" + day;
+}
+
 $(function () {
     function getCookie(name) {
         var cookieValue = null;

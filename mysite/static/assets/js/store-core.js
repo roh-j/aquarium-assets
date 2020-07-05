@@ -73,7 +73,7 @@ var async_aquarium_section = function (callback) {
                 "<div class='standby'>\
                 <img src='" + DJANGO_STATIC_URL + "/assets/img/icon/Apps-utilities-file-archiver-icon.png' class='img-responsive mx-auto'>\
                 <hr>\
-                <p class='text-center'>방의 섹션을 등록할 수 있습니다.</p>\
+                <p class='text-center'>생물실의 섹션을 등록할 수 있습니다.</p>\
                 </div>"
             );
         }
@@ -104,38 +104,40 @@ var draw_store_layout = function (url, callback) {
         var idx = 0;
 
         if (SVG.supported) {
-            $("#store-layout-canvas").empty();
+            $("#svg-store-layout").empty();
 
             var row_count = 13;
             var col_label = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
             var width_interval = 60;
             var height_interval = 40;
 
-            var layout = SVG("store-layout-canvas").size((col_label.length + 1) * width_interval + 2, (row_count + 1) * height_interval + 2);
+            var layout = SVG("svg-store-layout").size((col_label.length + 1) * width_interval + col_label.length + 2, (row_count + 1) * height_interval + row_count + 2).attr(
+                { "class": "align-middle" }
+            );
 
             for (i = 0; i < row_count; i++) {
-                var y = i * height_interval + 67;
-                layout.plain(i + 1).attr({ "text-anchor": "middle", "x": 31, "y": y });
+                var y = (height_interval * (i + 1) + i + 2 + 20);
+                layout.plain(i + 1).attr({ "text-anchor": "middle", "x": 30, "y": y });
             }
 
             for (i = 0; i < col_label.length; i++) {
-                var x = i * width_interval + 91;
-                layout.plain(col_label[i]).attr({ "text-anchor": "middle", "x": x, "y": 27 });
+                var x = (width_interval * (i + 1) + i + 2 + 30);
+                layout.plain(col_label[i]).attr({ "text-anchor": "middle", "x": x, "y": 20 });
             }
 
             for (i = 0; i < row_count; i++) {
                 for (j = 0; j < col_label.length; j++) {
                     layout.rect(60, 40).attr({
                         "class": "store-layout-grid",
-                        "x": (j * width_interval + 1 + width_interval),
-                        "y": (i * height_interval + 1 + height_interval)
+                        "x": (width_interval * (j + 1) + j + 2),
+                        "y": (height_interval * (i + 1) + i + 2)
                     });
                     if (idx < data.length && i == data[idx]["row"] && j == data[idx]["column"]) {
                         layout.rect(60, 40).attr({
                             "class": "store-layout-button",
                             "fill": data[idx]["color"],
-                            "x": (j * width_interval + 1 + width_interval),
-                            "y": (i * height_interval + 1 + height_interval),
+                            "x": (width_interval * (j + 1) + j + 2),
+                            "y": (height_interval * (i + 1) + i + 2),
                             "data-store-layout-row": i,
                             "data-store-layout-column": j,
                             "data-store-layout-selected": true,
@@ -148,8 +150,8 @@ var draw_store_layout = function (url, callback) {
                         layout.rect(60, 40).attr({
                             "class": "store-layout-button",
                             "fill": "#e7e7e7",
-                            "x": (j * width_interval + 1 + width_interval),
-                            "y": (i * height_interval + 1 + height_interval),
+                            "x": (width_interval * (j + 1) + j + 2),
+                            "y": (height_interval * (i + 1) + i + 2),
                             "data-store-layout-row": i,
                             "data-store-layout-column": j,
                             "data-store-layout-selected": false
@@ -188,7 +190,7 @@ var draw_store_layout = function (url, callback) {
             });
 
             $("#store-layout-console").html(
-                "<i class='fas fa-circle' style='color: " + section_color + ";'></i> 섹션을 추가 / 삭제합니다."
+                "<i class='fas fa-circle' style='color: " + section_color + "'></i> " + section_name
             );
         }
         else {

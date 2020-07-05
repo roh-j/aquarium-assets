@@ -1,4 +1,4 @@
-/* the switch - the box around the slider */
+/* toggle switch (w3schools) */
 
 .switch {
     position: relative;
@@ -7,17 +7,11 @@
     height: 34px;
     margin-bottom: 0 !important;
 }
-
-/* hide default html checkbox */
-
 .switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
-
-/* the slider */
-
 .slider {
     position: absolute;
     cursor: pointer;
@@ -51,9 +45,6 @@ input:checked + .slider:before {
     -ms-transform: translatex(26px);
     transform: translatex(26px);
 }
-
-/* rounded sliders */
-
 .slider.round {
     border-radius: 34px;
 }
@@ -69,6 +60,14 @@ rect.store-layout-grid {
     stroke-width: 2;
 }
 rect.store-layout-button {
+    stroke: none;
+}
+rect.mini-map-store-layout-grid {
+    fill: none;
+    stroke: #ddd;
+    stroke-width: 2;
+}
+rect.mini-map-store-layout-button {
     stroke: none;
 }
 
@@ -96,7 +95,7 @@ rect.aquarium-front-button {
     cursor: pointer;
 }
 rect.aquarium-front-button:hover {
-    fill: #badefc;
+    fill: #d0e0e8;
 }
 
 /* effect */
@@ -107,19 +106,16 @@ polygon.effect-aquarium-grid {
     stroke-width: 2;
     stroke-linejoin: bevel;
 }
-
 rect.effect-aquarium-front-grid {
     fill: none;
     stroke: #000;
     stroke-width: 2;
     stroke-linejoin: bevel;
 }
-
 polygon.effect-aquarium-plane {
     fill: #e7e7e7;
     stroke: none;
 }
-
 rect.effect-aquarium-front-button {
     fill: #fff;
     stroke: none;
@@ -131,7 +127,6 @@ div.color-picker {
     width: 187px;
     padding: 5px;
     border: 1px solid #343a40;
-    border-radius: 4px;
 }
 div.color-picker ul {
     list-style: none;
@@ -149,15 +144,14 @@ div.color-picker ul li {
     border: 1px solid #343a40;
     cursor: pointer;
 }
-div.color-picker ul li:nth-child( 6n ) {
+div.color-picker ul li:nth-child(6n) {
     margin: 0;
 }
-div.color-picker ul li:nth-child( n + 7 ) {
+div.color-picker ul li:nth-child(n + 7) {
     margin-bottom: 0;
 }
 div.color-selected {
     width: 34px;
     height: 34px;
     border: 1px solid #343a40;
-    border-radius: 4px;
 }
