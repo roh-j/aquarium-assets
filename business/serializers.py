@@ -19,7 +19,7 @@ class BusinessSerializer(serializers.ModelSerializer):
         fields = ('registration_number', 'name_of_company',
                   'address', 'contact', 'alias',)
 
-    def set_FK(self, key):
+    def set_foreign_key(self, key):
         self.FK = key
 
     def validate_registration_number(self, value):

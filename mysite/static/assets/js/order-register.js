@@ -10,7 +10,12 @@ $(function () {
     $('.nav-second-level').removeClass('d-none');
     init_toast();
     init_spinner();
-    init_select_all();
+
+    params['order_type'] = '';
+    params['order_items'] = [];
+    params['customer_name'] = '';
+    params['contact'] = '';
+    params['address'] = '';
 
     $('.wide-screen').on('click', function () {
         wide_screen('toggle');
@@ -46,14 +51,8 @@ $(function () {
 
     $('input:radio[name=order_type]').on('click', function () {
         var value = $('input:radio[name=order_type]:checked').val();
-
-        switch (value) {
-            case 'pickup':
-                value = '매장'; break;
-            case 'delivery':
-                value = '택배'; break;
-        }
-        $('#view-order-type').text(value);
+        
+        $('#view-order-type').text(conv_order_type(value));
     });
 
     customer_table = $('#customer_table').DataTable({
@@ -87,6 +86,8 @@ $(function () {
             $('#customer_table_length').detach().appendTo('#customer-tool').addClass('ml-auto');
             $('#customer_table_filter').detach().appendTo('#customer-tool');
             $('#customer_table_paginate').detach().appendTo('#customer-pagination');
+
+            async_customer();
         }
     });
 
@@ -234,7 +235,7 @@ var async_product = function (callback) {
                                 data-unit-price="' + data[i]['unit_price'] + '"\
                                 data-species="' + data[i]['creature__species'] + '"\
                                 data-breed="' + data[i]['creature__breed'] + '"\
-                                data-remark="' + escape_html(data[i]['remark']) + '"\
+                                data-remark="' + escape_html(data[i]['creature__remark']) + '"\
                                 data-min-size="' + data[i]['unit_price__min_size'] + '"\
                                 data-max-size="' + data[i]['unit_price__max_size'] + '"\
                                 data-stages-of-development="' + data[i]['unit_price__stages_of_development'] + '"\
@@ -245,7 +246,7 @@ var async_product = function (callback) {
                         </th>\
                         <td>' + data[i]['creature__species'] + '</td>\
                         <td>' + data[i]['creature__breed'] + '</td>\
-                        <td>' + data[i]['remark'] + '</td>\
+                        <td>' + data[i]['creature__remark'] + '</td>\
                         <td>' + conv_stages_of_development(data[i]['unit_price__stages_of_development']) + '</td>\
                         <td>' + conv_unit(data[i]['unit']) + '</td>\
                         <td>' + data[i]['unit_price__price'].toLocaleString() + ' 원</td>\
@@ -257,6 +258,21 @@ var async_product = function (callback) {
                 )
             ).draw();
         }
+
+        $('.select-all').on('click', function () {
+            var rows = product_table.rows({ 'search': 'applied' }).nodes();
+            $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        });
+
+        $('#product_table tbody').on('change', 'input[type="checkbox"]', function () {
+            if (!this.checked) {
+                var el = $('.select-all').get(0);
+
+                if (el && el.checked && ('indeterminate' in el)) {
+                    el.indeterminate = true;
+                }
+            }
+        });
 
         $('.add-to-cart').on('click', function () {
             var overlap = false;
@@ -294,39 +310,116 @@ var async_product = function (callback) {
         });
 
         $('#selected-items-to-cart').on('click', function () {
-            $('input:checkbox[name=product]').each(function () {
-                if ($(this).is(':checked')) {
-                    var overlap = false;
-                    var product = $('th span.data-bind', $(this).closest('tr'));
-                    for (i = 0; i < order_items.length; i++) {
-                        if (order_items[i]['id'] == product.data('id')) {
-                            if (order_items[i]['remaining_quantity'] <= order_items[i]['quantity']) {
-                                return;
-                            }
-                            order_items[i]['quantity'] = parseInt(order_items[i]['quantity']) + 1;
-                            overlap = true;
+            var cells = product_table.cells().nodes();
+            
+            $(cells).find('input:checkbox[name=product]:checked').each(function () {
+                var overlap = false;
+                var product = $('th span.data-bind', $(this).closest('tr'));
+                for (i = 0; i < order_items.length; i++) {
+                    if (order_items[i]['id'] == product.data('id')) {
+                        if (order_items[i]['remaining_quantity'] <= order_items[i]['quantity']) {
+                            return;
                         }
+                        order_items[i]['quantity'] = parseInt(order_items[i]['quantity']) + 1;
+                        overlap = true;
                     }
-                    if (!overlap) {
-                        var data = {
-                            'id': product.data('id'),
-                            'unit_price': product.data('unit-price'),
-                            'species': product.data('species'),
-                            'breed': product.data('breed'),
-                            'remark': product.data('remark'),
-                            'min_size': product.data('min-size'),
-                            'max_size': product.data('max-size'),
-                            'stages_of_development': product.data('stages-of-development'),
-                            'unit': product.data('unit'),
-                            'price': product.data('price'),
-                            'quantity': 1,
-                            'remaining_quantity': product.data('remaining-quantity')
-                        };
-                        order_items.push(data);
-                    }
-                    add_to_cart();
                 }
+                if (!overlap) {
+                    var data = {
+                        'id': product.data('id'),
+                        'unit_price': product.data('unit-price'),
+                        'species': product.data('species'),
+                        'breed': product.data('breed'),
+                        'remark': product.data('remark'),
+                        'min_size': product.data('min-size'),
+                        'max_size': product.data('max-size'),
+                        'stages_of_development': product.data('stages-of-development'),
+                        'unit': product.data('unit'),
+                        'price': product.data('price'),
+                        'quantity': 1,
+                        'remaining_quantity': product.data('remaining-quantity')
+                    };
+                    order_items.push(data);
+                }
+                add_to_cart();
             });
+        });
+        typeof callback === 'function' && callback();
+    }).fail(function (res, status, xhr) { });
+};
+
+var async_customer = function (callback) {
+    $.ajax({
+        url: '../../customer/list/',
+        method: 'get',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        dataType: 'json'
+    }).done(function (data, status, xhr) {
+        customer_table.clear().draw();
+
+        for (i = 0; i < data.length; i++) {
+            customer_table.row.add(
+                $(
+                    '<tr>\
+                        <th scope="row" class="selection">\
+                            <div class="pretty p-default p-round">\
+                                <input type="radio" name="customer">\
+                                <div class="state p-warning">\
+                                    <label></label>\
+                                </div>\
+                            </div>\
+                        </th>\
+                        <th>\
+                            <span class="data-bind"\
+                                data-customer-name="' + data[i]['customer_name'] + '"\
+                                data-contact="' + data[i]['contact'] + '"\
+                                data-address="' + data[i]['address'] + '"></span>\
+                            ' + (customer_table.rows().count() + 1) + '\
+                        </th>\
+                        <td>' + data[i]['customer_name'] + '</td>\
+                        <td>' + data[i]['contact'] + '</td>\
+                        <td>' + data[i]['address'] + '</td>\
+                        <td class="min col-btn">\
+                            <button type="button" class="add-to-recipient btn btn-default">입력</button>\
+                        </td>\
+                    </tr>'
+                )
+            ).draw();
+        }
+
+        $('.add-to-recipient').on('click', function () {
+            var customer = $('th span.data-bind', $(this).closest('tr'));
+
+            params['customer_name'] = customer.data('customer-name');
+            params['contact'] = customer.data('contact');
+            params['address'] = customer.data('address');
+
+            $('#view-customer-name').text(customer.data('customer-name'));
+            $('#view-contact').text(customer.data('contact'));
+            $('#view-address').text(customer.data('address'));
+
+            $('#customer-modal').modal('hide');
+        });
+
+        $('#selected-items-to-recipient').on('click', function () {
+            var selection = $('input:radio[name=customer]:checked');
+
+            if (selection.val() != undefined) {
+                var customer = $('th span.data-bind', selection.closest('tr'));
+
+                params['customer_name'] = customer.data('customer-name');
+                params['contact'] = customer.data('contact');
+                params['address'] = customer.data('address');
+
+                $('#view-customer-name').text(customer.data('customer-name'));
+                $('#view-contact').text(customer.data('contact'));
+                $('#view-address').text(customer.data('address'));
+
+                $('#customer-modal').modal('hide');
+            }
         });
         typeof callback === 'function' && callback();
     }).fail(function (res, status, xhr) { });

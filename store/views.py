@@ -27,7 +27,7 @@ class StorageRoomView(APIView):
         serializer = StorageRoomSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.set_FK(control_number)
+            serializer.set_foreign_key(control_number)
             serializer.save()
             return JsonResponse(serializer.data, status=201)
 
@@ -38,7 +38,7 @@ class StorageRoomView(APIView):
         serializer = StorageRoomSerializer(data=request.data, instance=storage_room)
 
         if serializer.is_valid():
-            serializer.set_FK(control_number)
+            serializer.set_foreign_key(control_number)
             serializer.save()
             return JsonResponse(serializer.data, status=201)
 
@@ -61,7 +61,7 @@ class AquariumSectionView(APIView):
         serializer = AquariumSectionSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.set_FK(request.data['FK'])
+            serializer.set_foreign_key(request.data['FK'])
             serializer.save()
             return JsonResponse(serializer.data, status=201)
 
@@ -72,7 +72,7 @@ class AquariumSectionView(APIView):
         serializer = AquariumSectionSerializer(data=request.data, instance=aquarium_section)
 
         if serializer.is_valid():
-            serializer.set_FK(request.data['FK'])
+            serializer.set_foreign_key(request.data['FK'])
             serializer.save()
             return JsonResponse(serializer.data, safe=False, status=201)
 
@@ -133,7 +133,7 @@ class StoreLayoutView(APIView):
         serializer = StoreLayoutSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.set_FK(request.data['FK1'], request.data['FK2'])
+            serializer.set_foreign_key(request.data['FK1'], request.data['FK2'])
             serializer.save()
             return JsonResponse(serializer.data, status=201)
 

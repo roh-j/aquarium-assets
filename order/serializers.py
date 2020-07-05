@@ -20,6 +20,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True)
+    customer_name = serializers.CharField(allow_blank=True, required=False)
+    contact = serializers.CharField(allow_blank=True, required=False)
+    address = serializers.CharField(allow_blank=True, required=False)
     order_date = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
 
     class Meta:
@@ -27,7 +30,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ('id', 'order_items', 'customer_name',
                   'contact', 'address', 'order_type', 'order_date',)
 
-    def set_FK(self, key):
+    def set_foreign_key(self, key):
         self.FK = key
 
     def get_customer(self, customer_name, contact, address):
@@ -38,44 +41,59 @@ class OrderSerializer(serializers.ModelSerializer):
 
         return customer
 
-    def create(self, validated_data):
-        customer = self.get_customer(validated_data['customer_name'], validated_data['contact'], validated_data['address'])
+    def validate(self, data):
+        if len(data['order_items']) == 0:
+            raise serializers.ValidationError()
+        return data
 
-        if customer is None:
-            customer = Customer.objects.create(
+    def create(self, validated_data):
+        if validated_data['customer_name'] != '' and validated_data['contact'] != '' and validated_data['address'] != '':
+            customer = self.get_customer(validated_data['customer_name'], validated_data['contact'], validated_data['address'])
+
+            if customer is None:
+                customer = Customer.objects.create(
+                    console=Console.objects.get(id=self.FK),
+                    customer_name=validated_data['customer_name'],
+                    contact=validated_data['contact'],
+                    address=validated_data['address'],
+                )
+                customer.save()
+
+            order = Order.objects.create(
+                console=Console.objects.get(id=self.FK),
+                customer=customer,
+                customer_name=validated_data['customer_name'],
+                contact=validated_data['contact'],
+                address=validated_data['address'],
+                order_type=validated_data['order_type'],
+            )
+        else:
+            order = Order.objects.create(
                 console=Console.objects.get(id=self.FK),
                 customer_name=validated_data['customer_name'],
                 contact=validated_data['contact'],
                 address=validated_data['address'],
+                order_type=validated_data['order_type'],
             )
-            customer.save()
 
-        order = Order.objects.create(
-            console=Console.objects.get(id=self.FK),
-            customer=customer,
-            customer_name=validated_data['customer_name'],
-            contact=validated_data['contact'],
-            address=validated_data['address'],
-            order_type=validated_data['order_type'],
-        )
-
-        for value in validated_data['order_items']:
-            unit_price = value['unit_price']
+        for validated_data_item in validated_data['order_items']:
+            unit_price = validated_data_item['unit_price']
 
             order_item = OrderItem.objects.create(
                 order=order,
                 unit_price=unit_price,
-                species=value['species'],
-                breed=value['breed'],
-                min_size=value['min_size'],
-                max_size=value['max_size'],
-                stages_of_development=value['stages_of_development'],
-                unit=value['unit'],
-                price=value['price'],
-                quantity=value['quantity'],
-                remaining_order_quantity=value['quantity'],
+                species=validated_data_item['species'],
+                breed=validated_data_item['breed'],
+                remark=validated_data_item['remark'],
+                min_size=validated_data_item['min_size'],
+                max_size=validated_data_item['max_size'],
+                stages_of_development=validated_data_item['stages_of_development'],
+                unit=validated_data_item['unit'],
+                price=validated_data_item['price'],
+                quantity=validated_data_item['quantity'],
+                remaining_order_quantity=validated_data_item['quantity'],
             )
-            unit_price.order_quantity = F('order_quantity') + value['quantity']
+            unit_price.order_quantity = F('order_quantity') + validated_data_item['quantity']
 
             unit_price.save()
             order_item.save()

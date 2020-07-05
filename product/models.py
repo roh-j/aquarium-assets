@@ -16,9 +16,9 @@ UNIT_CHOICES = (
     ('male', 'male'),
 )
 SCOPE_OF_SALES_CHOICES = (
-    ('delivery_and_pickup', 'delivery_and_pickup'),
-    ('pickup_only', 'pickup_only'),
-    ('delivery_only', 'delivery_only'),
+    ('store_and_online', 'store_and_online'),
+    ('store_only', 'store_only'),
+    ('online_only', 'online_only'),
     ('not_for_sale', 'not_for_sale'),
 )
 
@@ -30,6 +30,7 @@ class Creature(models.Model):
     )
     species = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
+    remark = models.CharField(max_length=200, null=True, blank=True)
     last_modified_date = models.DateTimeField(default=timezone.now)
     creation_date = models.DateTimeField(default=timezone.now)
 

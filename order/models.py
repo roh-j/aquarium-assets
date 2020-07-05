@@ -43,9 +43,9 @@ class Order(models.Model):
         null=True,
         blank=True,
     )
-    customer_name = models.CharField(max_length=40)
-    contact = models.CharField(max_length=20)
-    address = models.CharField(max_length=200)
+    customer_name = models.CharField(max_length=40, null=True, blank=True)
+    contact = models.CharField(max_length=20, null=True, blank=True)
+    address = models.CharField(max_length=200, null=True, blank=True)
     order_type = models.CharField(
         max_length=20,
         choices=ORDER_TYPE_CHOICES,

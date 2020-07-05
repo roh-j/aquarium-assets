@@ -48,7 +48,7 @@
                 </div>
                 <div class="modal-body text-center"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">확인</button>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title">받는 분</h5>
+                    <h5 class="modal-title">받는분</h5>
                 </div>
                 <form id="form-recipient-register" method="POST">
                     <div class="modal-body">
@@ -104,37 +104,16 @@
                                         <th>동작</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row" class="min">
-                                            <div class="pretty p-default p-round">
-                                                <input type="radio">
-                                                <div class="state p-warning">
-                                                    <label></label>
-                                                </div>
-                                            </div>
-                                        </th>
-                                        <th>1</th>
-                                        <td>철수</td>
-                                        <td>010-1234-5678</td>
-                                        <td>서울특별시</td>
-                                        <td class="min col-btn">
-                                            <button type="button" class="btn btn-default">담기</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
                             </table>
                         </div>
                         <div class="panel-footer text-right">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default">선택 항목 담기</button>
-                            </div>
+                            <button type="button" id="selected-items-to-recipient" class="btn btn-default">선택 항목 입력</button>
                         </div>
                     </div>
                     <div id="customer-pagination" class="text-center"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
@@ -214,7 +193,8 @@
                         <div id="order-menu">
                             <button type="button" class="wide-screen btn btn-default">넓게</button>
                         </div>
-                        <hr><h4 class="lead-step">Step 1. <small>상품 선택</small></h4><hr>
+                        <hr>
+                        <h4 class="lead-step">Step 1. <small>상품 선택</small></h4>
                         <div class="panel panel-default">
                             <div id="product-tool" class="panel-heading d-flex"></div>
                             <div class="table-responsive">
@@ -222,10 +202,14 @@
                                     <thead>
                                         <tr>
                                             <th class="selection">
-                                                <div class="pretty p-icon">
-                                                    <input type="checkbox" class="check-all">
+                                                <div class="pretty p-icon p-has-indeterminate">
+                                                    <input type="checkbox" class="select-all">
                                                     <div class="state p-warning">
                                                         <i class="icon mdi mdi-check-bold"></i>
+                                                        <label></label>
+                                                    </div>
+                                                    <div class="state p-is-indeterminate">
+                                                        <i class="icon mdi mdi-minus"></i>
                                                         <label></label>
                                                     </div>
                                                 </div>
@@ -244,13 +228,12 @@
                                 </table>
                             </div>
                             <div class="panel-footer text-right">
-                                <div class="btn-group">
-                                    <button type="button" id="selected-items-to-cart" class="btn btn-default">선택 항목 담기</button>
-                                </div>
+                                <button type="button" id="selected-items-to-cart" class="btn btn-default">선택 항목 담기</button>
                             </div>
                         </div>
                         <div id="product-pagination" class="text-center"></div>
-                        <hr><h4 class="lead-step">Step 2. <small>항목 관리</small></h4><hr>
+                        <hr>
+                        <h4 class="lead-step">Step 2. <small>항목 관리</small></h4>
                         <div class="panel panel-default">
                             <div id="order-item-tool" class="panel-heading d-flex"></div>
                             <div class="table-responsive">
@@ -275,27 +258,27 @@
                             </div>
                         </div>
                         <div id="order-item-pagination" class="text-center"></div>
-                        <hr><h4 class="lead-step">Step 3. <small>주문서 확인</small></h4><hr>
+                        <hr>
+                        <h4 class="lead-step">Step 3. <small>주문서 확인</small></h4>
                         <div class="dl-order bs-callout bs-callout-warning">
                             <dl>
-                                <dt>받는 분</dt>
+                                <dt>받는분</dt>
                                 <dd id="view-customer-name">(없음)</dd>
                                 <dt>연락처</dt>
                                 <dd id="view-contact">(없음)</dd>
                                 <dt>주소</dt>
                                 <dd id="view-address">(없음)</dd>
                                 <dt>배송</dt>
-                                <dd id="view-order-type">매장</dd>
+                                <dd id="view-order-type">방문수령</dd>
                                 <dt>합계</dt>
                                 <dd id="view-payment" class="text-danger">0 원</dd>
                             </dl>
                         </div>
-                        <hr>
                         <div class="text-right">
                             <div class="pretty p-default p-round">
                                 <input type="radio" name="order_type" value="pickup" checked>
                                 <div class="state p-warning">
-                                    <label>매장</label>
+                                    <label>방문수령</label>
                                 </div>
                             </div>
                             <div class="pretty p-default p-round mr-0">
@@ -307,7 +290,7 @@
                         </div>
                         <hr>
                         <div class="text-right">
-                            <div class="btn-group mr-3">
+                            <div class="btn-group mr-2">
                                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#customer-modal">기존 고객</button>
                                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#recipient-register-modal">신규 고객</button>
                             </div>

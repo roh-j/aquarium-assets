@@ -64,34 +64,50 @@ var init_toast = function () {
 
 var init_spinner = function () {
     $('.input-spinner > button').on('click', function () {
-        value = $(this).data('spinner-value');
-        target = $(this).data('spinner-target');
-        type = $(target).data('input-type');
-        pre_value = $(target).val();
+        var target = '#' + $(this).closest('div.form-group').children('label').attr('for');
+        var pre = $(target).val();
+        var val = $(this).data('spinner-value');
+        var type = $(target).data('input-type');
 
         if (type == 'float') {
-            pre_value = parseFloat(pre_value);
-            value = parseFloat(value);
-            res_value = (pre_value + value).toFixed(1);
+            pre = parseFloat(pre);
+            val = parseFloat(val);
+            res = (pre + val).toFixed(1);
 
-            if (res_value >= 0.0) {
-                $(target).val(res_value);
+            if (res >= 0.0) {
+                $(target).val(res);
             }
-        } else if (type == 'int') {
-            pre_value = parseInt(pre_value);
-            value = parseInt(value);
-            res_value = pre_value + value;
+        }
+        else if (type == 'int') {
+            pre = parseInt(pre);
+            val = parseInt(val);
+            res = pre + val;
 
-            if (res_value >= 0) {
-                $(target).val(res_value);
+            if (res >= 0) {
+                $(target).val(res);
             }
         }
     });
 };
 
+var form_reset = function (form) {
+    var form = $(form);
+    form.each(function () {
+        this.reset();
+    });
+    form
+        .find('input[type=radio]')
+        .closest('label')
+        .removeClass('active');
+    form
+        .find('input[type=radio]:checked')
+        .closest('label')
+        .addClass('active');
+};
+
 var init_radio_reset = function () {
     $('button[type=reset]').closest('form').on('reset', function () {
-        form = $(this);
+        var form = $(this);
         setTimeout(function () {
             form
                 .find('input[type=radio]')
@@ -106,10 +122,10 @@ var init_radio_reset = function () {
 };
 
 var init_select_all = function () {
-    $('table thead .check-all').on('click', function () {
-        target = $(this).closest('table');
+    $('table thead .select-all').on('click', function () {
+        var target = $(this).closest('table');
         $('input:checkbox', target).not(this).prop('checked', this.checked);
-    })
+    });
 };
 
 var conv_unit = function (value) {
@@ -141,11 +157,25 @@ var conv_stages_of_development = function (value) {
 var conv_order_type = function (value) {
     switch (value) {
         case 'pickup':
-            order_type = '매장'; break;
+            order_type = '방문수령'; break;
         case 'delivery':
             order_type = '택배'; break;
     }
     return order_type;
+};
+
+var conv_scope_of_sales = function (value) {
+    switch (value) {
+        case 'store_and_online':
+            scope_of_sales = '모두'; break;
+        case 'store_only':
+            scope_of_sales = '매장'; break;
+        case 'online_only':
+            scope_of_sales = '온라인'; break;
+        case 'not_for_sale':
+            scope_of_sales = '없음'; break;
+    }
+    return scope_of_sales;
 };
 
 var conv_status = function (value) {

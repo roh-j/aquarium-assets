@@ -9,13 +9,13 @@ var aquarium_column = null;
 var order_sheet_table = null;
 var inventory_table = null;
 var coordinate = null;
+var order = null;
 
 $(function () {
     $('#console-menu').metisMenu();
     $('.nav-second-level').removeClass('d-none');
     init_toast();
     init_spinner();
-    init_select_all();
 
     $('span.relative-time').each(function () {
         var conv = moment($(this).text(), 'YYYY-MM-DD HH:mm:ss').fromNow();
@@ -24,6 +24,14 @@ $(function () {
 
     $('.wide-screen').on('click', function () {
         wide_screen('toggle');
+        order_sheet_table.$('input[type="checkbox"]').each(function () {
+            if (!$.contains(document, this)) {
+                console.log(this)
+                if (this.checked) {
+                    console.log(this.name)
+                }
+            }
+        });
     });
 
     $('#skip-order-sheet').on('click', function () {
@@ -78,7 +86,7 @@ $(function () {
             async_order_sheet(load_complete());
         }
     });
-
+    
     inventory_table = $('#inventory_table').DataTable({
         'buttons': [
             {
@@ -146,20 +154,32 @@ $(function () {
         }).done(function (data, status, xhr) {
             var species = [];
             var breed = [];
+            var remark = [];
 
             $('#species-dropdown-menu').empty();
             $('#breed-dropdown-menu').empty();
+            $('#remark-dropdown-menu').empty();
 
             for (i = 0; i < data.length; i++) {
-                species.push(data[i]['species']);
-                breed.push(data[i]['breed']);
+                if ($.inArray(data[i]['species'], species) < 0) {
+                    species.push(data[i]['species']);
+                    $('#species-dropdown-menu').append('<li><a href="#" data-target="#id_species">' + data[i]['species'] + '</a></li>');
+                }
 
-                $('#species-dropdown-menu').append('<li><a href="#" data-target="#id_species">' + data[i]['species'] + '</a></li>');
-                $('#breed-dropdown-menu').append('<li><a href="#" data-target="#id_breed">' + data[i]['breed'] + '</a></li>');
+                if ($.inArray(data[i]['breed'], breed) < 0) {
+                    breed.push(data[i]['breed']);
+                    $('#breed-dropdown-menu').append('<li><a href="#" data-target="#id_breed">' + data[i]['breed'] + '</a></li>');
+                }
+
+                if (data[i]['remark'] != '' && $.inArray(data[i]['remark'], remark) < 0) {
+                    remark.push(data[i]['remark']);
+                    $('#remark-dropdown-menu').append('<li><a href="#" data-target="#id_remark">' + data[i]['remark'] + '</a></li>');
+                }
             }
 
             $('#id_species').typeahead({ source: species, items: 5 });
             $('#id_breed').typeahead({ source: breed, items: 5 });
+            $('#id_remark').typeahead({ source: remark, items: 5 });
 
             $('.dropdown-menu li a').on('click', function (e) {
                 e.preventDefault();
@@ -211,6 +231,8 @@ var async_order_sheet = function (callback) {
         },
         dataType: 'json'
     }).done(function (data, status, xhr) {
+        order = data;
+
         for (i = 0; i < data.length; i++) {
             for (j = 0; j < data[i]['order_items'].length; j++) {
                 var remaining_order_quantity = parseInt(data[i]['order_items'][j]['quantity']) - parseInt(data[i]['order_items'][j]['remaining_order_quantity']);
@@ -227,11 +249,7 @@ var async_order_sheet = function (callback) {
                                     </div>\
                                 </div>\
                             </th>\
-                            <th>\
-                                <span class="data-bind"\
-                                    data-id="' + data[i]['id'] + '"></span>\
-                                ' + data[i]['id'] + '\
-                            </th>\
+                            <th>' + data[i]['id'] + '</th>\
                             <td>' + data[i]['order_date'].split(' ')[0] + '</td>\
                             <td>' + conv_order_type(data[i]['order_type']) + '</td>\
                             <td>' + data[i]['order_items'][j]['species'] + '</td>\
@@ -248,6 +266,115 @@ var async_order_sheet = function (callback) {
                 ).draw();
             }
         }
+
+        $('.select-all').on('click', function () {
+            var checked = this.checked;
+            var cells = order_sheet_table.cells().nodes();
+            var rows = order_sheet_table.rows({ 'search': 'applied' });
+
+            rows.every(function (rowIdx, tableLoop, rowLoop) {
+                var data = this.data();
+
+                $(cells).find('input:checkbox[name=order][value=' + data[1] + ']').each(function () {
+                    $(this).prop('checked', checked);
+                });
+            });
+        });
+
+        $('#order_sheet_table tbody').on('change', 'input[type="checkbox"]', function () {
+            var checked = this.checked;
+            var cells = order_sheet_table.cells().nodes();
+
+            $(cells).find('input:checkbox[name=order][value=' + $(this).val() + ']').each(function () {
+                $(this).prop('checked', checked);
+            });
+
+            if (!this.checked) {
+                var el = $('.select-all').get(0);
+
+                if (el && el.checked && ('indeterminate' in el)) {
+                    el.indeterminate = true;
+                }
+            }
+        });
+
+        $('#selected-order').on('click', function () {
+            var cells = order_sheet_table.cells().nodes();
+            var pre = null;
+            var idx = 0;
+            
+            $(cells).find('input:checkbox[name=order]:checked').each(function () {
+                if (pre == $(this).val()) {
+                    return;
+                }
+                for (i = idx; i < order.length; i++) {
+                    if (order[i]['id'] == $(this).val()) {
+                        var tbody = '';
+
+                        if (pre == null) {
+                            $('#shipping-order').append('<div class="panel-group" id="accordion"></div>');
+                        }
+                        for (j = 0; j < order[i]['order_items'].length; j++) {
+                            var remaining_order_quantity = parseInt(order[i]['order_items'][j]['quantity']) - parseInt(order[i]['order_items'][j]['remaining_order_quantity']);
+                            tbody +=
+                                '<tr>\
+                                    <th scope="row" class="selection">\
+                                        <div class="pretty p-default p-round">\
+                                            <input type="radio" name="shipping_order">\
+                                            <div class="state p-warning">\
+                                                <label></label>\
+                                            </div>\
+                                        </div>\
+                                    </th>\
+                                    <th>\
+                                        <span class="data-bind"\
+                                            data-items-id="' + order[i]['order_items'][j]['id'] + '"></span>\
+                                        ' + (j + 1) + '\
+                                    </th>\
+                                    <td>' + order[i]['order_items'][j]['species'] + '</td>\
+                                    <td>' + order[i]['order_items'][j]['breed'] + '</td>\
+                                    <td>' + null_to_empty(order[i]['order_items'][j]['remark']) + '</td>\
+                                    <td>' + conv_stages_of_development(order[i]['order_items'][j]['stages_of_development']) + '</td>\
+                                    <td>' + conv_unit(order[i]['order_items'][j]['unit']) + '</td>\
+                                    <td>' + remaining_order_quantity + ' / ' + order[i]['order_items'][j]['quantity'] + '</td>\
+                                </tr>'
+                        }
+                        $('#shipping-order .panel-group').append(
+                            '<div class="panel panel-default">\
+                                <div class="panel-heading">\
+                                    <a href="#order-' + order[i]['id'] + '" data-toggle="collapse" data-parent="#accordion">\
+                                        ' + order[i]['id'] + ' &bullet; ' + order[i]['order_date'].split(' ')[0] + ' &bullet; ' + conv_order_type(data[i]['order_type']) + '\
+                                    </a>\
+                                </div>\
+                                <div id="order-' + order[i]['id'] + '" class="table-responsive panel-collapse collapse">\
+                                    <table class="table table-bordered table-hover">\
+                                        <thead>\
+                                            <th class="selection"></th>\
+                                            <th>번호</th>\
+                                            <th>어종</th>\
+                                            <th>품종</th>\
+                                            <th>특이사항</th>\
+                                            <th>단계</th>\
+                                            <th>단위</th>\
+                                            <th>처리</th>\
+                                        </thead>\
+                                        <tbody>\
+                                            ' + tbody + '\
+                                        </tbody>\
+                                    </table>\
+                                </div>\
+                            </div>'
+                        );
+                        idx = i;
+                        break;
+                    }
+                }
+                pre = $(this).val();
+            });
+
+            $('#shipping-order .panel-group .panel:first-child > .panel-collapse').addClass('in');
+            $('.nav-tabs a[href="#storage-room"]').tab('show');
+        });
         typeof callback === 'function' && callback();
     }).fail(function (res, status, xhr) { });
 };
@@ -276,20 +403,28 @@ var async_aquarium_stock = function (callback) {
                         <th scope="row">' + (inventory_table.rows().count() + 1) + '</th>\
                         <td>' + data[i]['creature__species'] + '</td>\
                         <td>' + data[i]['creature__breed'] + '</td>\
-                        <td>' + data[i]['remark'] + '</td>\
+                        <td>' + data[i]['creature__remark'] + '</td>\
                         <td>' + data[i]['size'] + ' cm</td>\
                         <td>' + conv_unit(data[i]['gender']) + '</td>\
                         <td>' + data[i]['quantity'] + '</td>\
                         <td>' + conv_status(data[i]['status']) + '</td>\
                         <td class="min col-btn">\
                             <div class="btn-group d-flex">\
+                                <button type="button" class="btn btn-default shipping-register"><i class="fas fa-minus fa-fw"></i></button>\
+                                <button type="button" class="btn btn-default receiving-register"><i class="fas fa-plus fa-fw"></i></button>\
                                 <button type="button" class="btn btn-default"><i class="fas fa-pen fa-fw"></i></button>\
-                                <button type="button" class="btn btn-default"><i class="fas fa-trash-alt fa-fw"></i></button>\
                             </div>\
                         </td>\
                     </tr>'
                 )
             ).draw();
+
+            $('.shipping-register').on('click', function () {
+                $('#shipping-register-modal').modal('show');
+            });
+            $('.receiving-register').on('click', function () {
+                $('#receiving-register-modal').modal('show');
+            });
         }
         typeof callback === 'function' && callback();
     }).fail(function (res, status, xhr) { });

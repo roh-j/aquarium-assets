@@ -30,6 +30,9 @@ table tbody tr td {
     vertical-align: middle !important;
     white-space: nowrap !important;
 }
+.panel-group .panel-collapse {
+    border-top: 1px solid #343a40 !important;
+}
 .panel,
 .panel-heading {
     border-color: #343a40 !important;
@@ -57,11 +60,17 @@ table tbody tr td {
     padding-right: 0;
 }
 .list-inline li + li:before {
-    content: "•";
+    content: "\2022";
     margin-right: 5px;
 }
 thead > tr > th.selection {
     width: 36px;
+}
+.modal-lg-form {
+    max-width: 568px;
+}
+.panel-heading a {
+    color: #333;
 }
 /* ui styles */
 .btn,
@@ -279,7 +288,6 @@ table .pretty {
 .dl-order dd {
     padding-top: 10px;
     padding-bottom: 10px;
-    border-bottom: 1px dashed #ddd;
 }
 .dl-order dt:first-of-type,
 .dl-order dd:first-of-type {
@@ -355,11 +363,9 @@ table .pretty {
 .sidebar-collapse .nav {
     padding: 0;
 }
-.sidebar-collapse .nav > li > a {
+.sidebar-collapse > .nav > li > a {
     color: #fff;
     text-shadow: none;
-}
-.sidebar-collapse > .nav > li > a {
     padding: 20px;
 }
 .sidebar-collapse > .nav > li {
@@ -379,14 +385,9 @@ table .pretty {
     border-bottom: none !important;
 }
 .nav-second-level li a {
-    padding-left: 47.5px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-.nav-third-level li a {
-    padding-left: 55px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    color: #fff;
+    text-shadow: none;
+    padding: 20px 20px 20px 47.5px;
 }
 /* media queries */
 @media (min-width: 768px) {
@@ -412,7 +413,6 @@ table .pretty {
         margin-left: 180px;
         padding-top: 10px;
         padding-bottom: 10px;
-        border-bottom: 1px dashed #ddd;
     }
 }
 @media (min-width: 992px) {
@@ -442,6 +442,12 @@ table .pretty {
 @media (max-width: 767.98px) {
     .table-responsive {
         border: none !important;
+    }
+    .dl-order dd {
+        border-bottom: 1px dashed #ddd;
+    }
+    .dl-order dd:last-child {
+        border: none;
     }
 }
 @media (max-width: 991.98px) {

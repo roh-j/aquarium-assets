@@ -19,7 +19,7 @@ $(function () {
                 'filename': '생물 단가표 ' + year + '-' + month + '-' + day,
                 'title': '',
                 'exportOptions': {
-                    'columns': [1, 2, 3, 4, 5, 6, 7]
+                    'columns': [1, 2, 3, 4, 5, 6, 7, 8, 9]
                 },
                 'customize': function (xlsx) {
                     var sheet = xlsx.xl.worksheets['sheet1.xml'];
@@ -33,7 +33,7 @@ $(function () {
         ],
         'columnDefs': [
             {
-                'targets': [8],
+                'targets': [10],
                 'searchable': false,
                 'orderable': false
             }
@@ -80,20 +80,32 @@ $(function () {
         }).done(function (data, status, xhr) {
             var species = [];
             var breed = [];
+            var remark = [];
 
             $('#species-dropdown-menu').empty();
             $('#breed-dropdown-menu').empty();
+            $('#remark-dropdown-menu').empty();
 
             for (i = 0; i < data.length; i++) {
-                species.push(data[i]['species']);
-                breed.push(data[i]['breed']);
+                if ($.inArray(data[i]['species'], species) < 0) {
+                    species.push(data[i]['species']);
+                    $('#species-dropdown-menu').append('<li><a href="#" data-target="#id_species">' + data[i]['species'] + '</a></li>');
+                }
 
-                $('#species-dropdown-menu').append('<li><a href="#" data-target="#id_species">' + data[i]['species'] + '</a></li>');
-                $('#breed-dropdown-menu').append('<li><a href="#" data-target="#id_breed">' + data[i]['breed'] + '</a></li>');
+                if ($.inArray(data[i]['breed'], breed) < 0) {
+                    breed.push(data[i]['breed']);
+                    $('#breed-dropdown-menu').append('<li><a href="#" data-target="#id_breed">' + data[i]['breed'] + '</a></li>');
+                }
+
+                if (data[i]['remark'] != '' && $.inArray(data[i]['remark'], remark) < 0) {
+                    remark.push(data[i]['remark']);
+                    $('#remark-dropdown-menu').append('<li><a href="#" data-target="#id_remark">' + data[i]['remark'] + '</a></li>');
+                }
             }
 
             $('#id_species').typeahead({ source: species, items: 5 });
             $('#id_breed').typeahead({ source: breed, items: 5 });
+            $('#id_remark').typeahead({ source: remark, items: 5 });
 
             $('.dropdown-menu li a').on('click', function (e) {
                 e.preventDefault();
@@ -121,6 +133,7 @@ $(function () {
         }).done(function (data, status, xhr) {
             $('#unit-price-register-modal').modal('hide');
             $('#unit-price-register-modal').on('hidden.bs.modal', function () {
+                form_reset('#form-unit-price-register');
                 async_unit_price();
             });
         }).fail(function (res, status, xhr) {
@@ -152,16 +165,15 @@ var async_unit_price = function (callback) {
                         <th scope="row">' + (price_table.rows().count() + 1) + '</th>\
                         <td>' + data[i]['creature__species'] + '</td>\
                         <td>' + data[i]['creature__breed'] + '</td>\
+                        <td>' + data[i]['creature__remark'] + '</td>\
                         <td>' + data[i]['min_size'] + ' cm</td>\
                         <td>' + data[i]['max_size'] + ' cm</td>\
                         <td>' + conv_stages_of_development(data[i]['stages_of_development']) + '</td>\
                         <td>' + conv_unit(data[i]['unit']) + '</td>\
                         <td>' + data[i]['price'].toLocaleString() + ' 원</td>\
+                        <td>' + conv_scope_of_sales(data[i]['scope_of_sales']) + '</td>\
                         <td class="min col-btn">\
-                            <div class="btn-group d-flex">\
-                                <button type="button" class="btn btn-default"><i class="fas fa-pen fa-fw"></i></button>\
-                                <button type="button" class="btn btn-default"><i class="fas fa-trash-alt fa-fw"></i></button>\
-                            </div>\
+                            <button type="button" class="btn btn-default"><i class="fas fa-pen fa-fw"></i></button>\
                         </td>\
                     </tr>'
                 )

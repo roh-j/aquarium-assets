@@ -34,7 +34,7 @@ class RegisterView(APIView):
         serializer = BusinessSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.set_FK(request.user.id)
+            serializer.set_foreign_key(request.user.id)
             serializer.save()
             return JsonResponse(serializer.data, status=201)
 

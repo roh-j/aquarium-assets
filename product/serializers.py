@@ -12,12 +12,13 @@ class CreatureSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Creature
-        fields = ('species', 'breed',)
+        fields = ('species', 'breed', 'remark',)
 
 
 class UnitPriceSerializer(serializers.Serializer):
     species = serializers.CharField(write_only=True, required=True)
     breed = serializers.CharField(write_only=True, required=True)
+    remark = serializers.CharField(allow_blank=True, required=False)
     min_size = serializers.FloatField(required=True)
     max_size = serializers.FloatField(required=True)
     stages_of_development = serializers.ChoiceField(required=True, choices=STAGES_OF_DEVELOPMENT_CHOICES)
@@ -25,19 +26,19 @@ class UnitPriceSerializer(serializers.Serializer):
     scope_of_sales = serializers.ChoiceField(required=True, choices=SCOPE_OF_SALES_CHOICES)
     price = serializers.FloatField(required=True)
 
-    def set_FK(self, key):
+    def set_foreign_key(self, key):
         self.FK = key
 
-    def get_creature(self, species, breed):
+    def get_creature(self, species, breed, remark):
         try:
-            creature = Creature.objects.get(species=species, breed=breed, console=self.FK)
+            creature = Creature.objects.get(species=species, breed=breed, remark=remark, console=self.FK)
         except ObjectDoesNotExist:
             creature = None
 
         return creature
 
     def validate(self, data):
-        creature = self.get_creature(data['species'], data['breed'])
+        creature = self.get_creature(data['species'], data['breed'], data['remark'])
 
         if creature is not None:
             unit_price = UnitPrice.objects.filter(
@@ -57,13 +58,14 @@ class UnitPriceSerializer(serializers.Serializer):
         return data
 
     def create(self, validated_data):
-        creature = self.get_creature(validated_data['species'], validated_data['breed'])
+        creature = self.get_creature(validated_data['species'], validated_data['breed'], validated_data['remark'])
 
         if creature is None:
             creature = Creature.objects.create(
                 console=Console.objects.get(id=self.FK),
                 species=validated_data['species'],
                 breed=validated_data['breed'],
+                remark=validated_data['remark'],
             )
             creature.save()
 

@@ -49,7 +49,7 @@
                 </div>
                 <div class="modal-body text-center"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">확인</button>
                 </div>
             </div>
         </div>
@@ -70,7 +70,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">등록</button>
+                        <button type="reset" class="btn btn-default"><i class="fas fa-redo-alt fa-fw"></i></button>
+                        <button type="submit" class="btn btn-default">등록</button>
                     </div>
                 </form>
             </div>
@@ -95,10 +96,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="btn-group">
-                            <button type="button" id="storage-room-delete" class="btn btn-default">삭제</button>
-                            <button type="submit" class="btn btn-primary">변경</button>
-                        </div>
+                        <button type="button" id="storage-room-delete" class="btn btn-default">삭제</button>
+                        <button type="submit" class="btn btn-default">변경</button>
                     </div>
                 </form>
             </div>
@@ -123,40 +122,40 @@
                                 <label for="id_aquarium_num_of_columns" class="control-label">가로</label>
                                 <div class="input-group">
                                     <span class="input-group-btn input-spinner">
-                                        <button type="button" class="btn btn-default" data-spinner-value="-1" data-spinner-target="#id_aquarium_num_of_columns">
+                                        <button type="button" class="btn btn-default" data-spinner-value="-1">
                                             <i class="fas fa-angle-left fa-fw"></i>
                                         </button>
                                     </span>
                                     <input type="text" class="form-control text-center" id="id_aquarium_num_of_columns" name="aquarium_num_of_columns" data-input-type="int" value="0">
                                     <span class="input-group-btn input-spinner">
-                                        <button type="button" class="btn btn-default" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_columns">
+                                        <button type="button" class="btn btn-default" data-spinner-value="+1">
                                             <i class="fas fa-angle-right fa-fw"></i>
                                         </button>
                                     </span>
                                 </div>
                                 <div class="btn-group input-spinner">
-                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10" data-spinner-target="#id_aquarium_num_of_columns">10</button>
-                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_columns">1</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1">+1</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10">+10</button>
                                 </div>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="id_aquarium_num_of_rows" class="control-label">높이 (층)</label>
                                 <div class="input-group">
                                     <span class="input-group-btn input-spinner">
-                                        <button type="button" class="btn btn-default" data-spinner-value="-1" data-spinner-target="#id_aquarium_num_of_rows">
+                                        <button type="button" class="btn btn-default" data-spinner-value="-1">
                                             <i class="fas fa-angle-left fa-fw"></i>
                                         </button>
                                     </span>
                                     <input type="text" class="form-control text-center" id="id_aquarium_num_of_rows" name="aquarium_num_of_rows" data-input-type="int" value="0">
                                     <span class="input-group-btn input-spinner">
-                                        <button type="button" class="btn btn-default" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_rows">
+                                        <button type="button" class="btn btn-default" data-spinner-value="+1">
                                             <i class="fas fa-angle-right fa-fw"></i>
                                         </button>
                                     </span>
                                 </div>
                                 <div class="btn-group input-spinner">
-                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10" data-spinner-target="#id_aquarium_num_of_rows">10</button>
-                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_rows">1</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1">+1</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10">+10</button>
                                 </div>
                             </div>
                         </div>
@@ -186,7 +185,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">등록</button>
+                        <button type="submit" class="btn btn-default">등록</button>
                     </div>
                 </form>
             </div>
@@ -229,10 +228,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div class="btn-group">
-                            <button type="button" id="aquarium-section-delete" class="btn btn-default">삭제</button>
-                            <button type="submit" class="btn btn-primary">변경</button>
-                        </div>
+                        <button type="button" id="aquarium-section-delete" class="btn btn-default">삭제</button>
+                        <button type="submit" class="btn btn-default">변경</button>
                     </div>
                 </form>
             </div>
@@ -369,7 +366,7 @@
                     </div>
                     <div class="tab-pane" id="store-layout">
                         <button type="button" id="redo-aquarium-section" class="btn btn-default">이전</button>
-                        <span id="guide-store-layout" class="ml-3"></span>
+                        <span id="guide-store-layout" class="ml-2"></span>
                         <hr>
                         <div class="table-responsive">
                             <div id="store-layout-canvas">

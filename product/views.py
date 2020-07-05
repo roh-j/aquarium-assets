@@ -22,7 +22,7 @@ class IndexView(APIView):
 
     def post(self, request, control_number, format=None):
         serializer = UnitPriceSerializer(data=request.data)
-        serializer.set_FK(control_number)
+        serializer.set_foreign_key(control_number)
 
         if serializer.is_valid():
             serializer.save()
@@ -43,8 +43,8 @@ class UnitPriceView(APIView):
 
     def get(self, request, control_number, format=None):
         queryset = UnitPrice.objects.filter(console=control_number).select_related('creature').order_by('-id')
-        context = list(queryset.values('creature__species', 'creature__breed', 'id',
-                                       'min_size', 'max_size', 'stages_of_development', 'unit', 'price'))
+        context = list(queryset.values('creature__species', 'creature__breed', 'creature__remark',
+                                       'id', 'min_size', 'max_size', 'stages_of_development', 'unit', 'price', 'scope_of_sales'))
         return JsonResponse(context, safe=False, status=200)
 
 
@@ -52,9 +52,10 @@ class StockView(APIView):
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, control_number, format=None):
-        queryset = AquariumStock.objects.values('unit_price', 'remark').annotate(
+        queryset = AquariumStock.objects.values('unit_price').annotate(
             creature__species=F('unit_price__creature__species'),
             creature__breed=F('unit_price__creature__breed'),
+            creature__remark=F('unit_price__creature__remark'),
             unit_price__min_size=F('unit_price__min_size'),
             unit_price__max_size=F('unit_price__max_size'),
             unit_price__stages_of_development=F('unit_price__stages_of_development'),
@@ -62,7 +63,7 @@ class StockView(APIView):
             unit_price__price=F('unit_price__price'),
             remaining_quantity=Sum('quantity') - F('unit_price__order_quantity'),
         ).filter(
-            Q(unit_price__scope_of_sales='delivery_and_pickup') | Q(unit_price__scope_of_sales='pickup_only'),
+            Q(unit_price__scope_of_sales='store_and_online') | Q(unit_price__scope_of_sales='store_only'),
             console=control_number,
             unit_price__isnull=False,
             remaining_quantity__gte=1,

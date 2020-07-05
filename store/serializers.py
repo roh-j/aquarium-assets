@@ -13,7 +13,7 @@ class StorageRoomSerializer(serializers.ModelSerializer):
         model = StorageRoom
         fields = ('storage_room_name', 'last_modified_date',)
 
-    def set_FK(self, key):
+    def set_foreign_key(self, key):
         self.FK = key
 
     def create(self, validated_data):
@@ -38,7 +38,7 @@ class AquariumSectionSerializer(serializers.ModelSerializer):
         fields = ('id', 'section_name', 'section_color',
                   'aquarium_num_of_rows', 'aquarium_num_of_columns',)
 
-    def set_FK(self, key):
+    def set_foreign_key(self, key):
         self.FK = key
 
     def create(self, validated_data):
@@ -90,7 +90,7 @@ class StoreLayoutSerializer(serializers.ModelSerializer):
         model = StoreLayout
         fields = ('row', 'column',)
 
-    def set_FK(self, key1, key2):
+    def set_foreign_key(self, key1, key2):
         self.FK1 = key1  # StorageRoom
         self.FK2 = key2  # AquariumSection
 

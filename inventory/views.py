@@ -98,12 +98,12 @@ class AquariumStockView(APIView):
             )
         ).filter(aquarium=request.query_params.get('FK')).order_by('-id')
         context = list(queryset.values('creature__species', 'creature__breed',
-                                       'size', 'gender', 'quantity', 'remark', 'status'))
+                                       'creature__remark', 'size', 'gender', 'quantity', 'status'))
         return JsonResponse(context, safe=False, status=200)
 
     def post(self, request, control_number, format=None):
         serializer = AquariumStockSerializer(data=request.data)
-        serializer.set_FK(control_number, request.data['FK'])
+        serializer.set_foreign_key(control_number, request.data['FK'])
 
         if serializer.is_valid():
             serializer.save()

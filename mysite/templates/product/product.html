@@ -72,47 +72,59 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="id_remark" class="control-label">특이사항</label>
+                            <div class="input-group dropdown-wide">
+                                <input type="text" class="form-control" id="id_remark" name="remark">
+                                <div class="dropdown-addon">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fas fa-caret-down fa-fw"></i>
+                                    </button>
+                                    <ul id="remark-dropdown-menu" class="dropdown-menu"></ul>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="form-group col-sm-6">
                                 <label for="id_min_size" class="control-label">최소 크기 (cm)</label>
                                 <div class="input-group">
                                     <span class="input-group-btn input-spinner">
-                                        <button type="button" class="btn btn-default" data-spinner-value="-0.1" data-spinner-target="#id_min_size">
+                                        <button type="button" class="btn btn-default" data-spinner-value="-0.1">
                                             <i class="fas fa-angle-left fa-fw"></i>
                                         </button>
                                     </span>
                                     <input type="text" class="form-control text-center" id="id_min_size" name="min_size" data-input-type="float" value="0.0">
                                     <span class="input-group-btn input-spinner">
-                                        <button type="button" class="btn btn-default" data-spinner-value="+0.1" data-spinner-target="#id_min_size">
+                                        <button type="button" class="btn btn-default" data-spinner-value="+0.1">
                                             <i class="fas fa-angle-right fa-fw"></i>
                                         </button>
                                     </span>
                                 </div>
                                 <div class="btn-group input-spinner">
-                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10.0" data-spinner-target="#id_min_size">10 cm</button>
-                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1.0" data-spinner-target="#id_min_size">1 cm</button>
-                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+0.1" data-spinner-target="#id_min_size">0.1 cm</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+0.1">0.1 cm</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1.0">1 cm</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10.0">10 cm</button>
                                 </div>
                             </div>
                             <div class="form-group col-sm-6">
                                 <label for="id_max_size" class="control-label">최대 크기 (cm)</label>
                                 <div class="input-group">
                                     <span class="input-group-btn input-spinner">
-                                        <button type="button" class="btn btn-default" data-spinner-value="-0.1" data-spinner-target="#id_max_size">
+                                        <button type="button" class="btn btn-default" data-spinner-value="-0.1">
                                             <i class="fas fa-angle-left fa-fw"></i>
                                         </button>
                                     </span>
                                     <input type="text" class="form-control text-center" id="id_max_size" name="max_size" data-input-type="float" value="0.0">
                                     <span class="input-group-btn input-spinner">
-                                        <button type="button" class="btn btn-default" data-spinner-value="+0.1" data-spinner-target="#id_max_size">
+                                        <button type="button" class="btn btn-default" data-spinner-value="+0.1">
                                             <i class="fas fa-angle-right fa-fw"></i>
                                         </button>
                                     </span>
                                 </div>
                                 <div class="btn-group input-spinner">
-                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10.0" data-spinner-target="#id_max_size">10 cm</button>
-                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1.0" data-spinner-target="#id_max_size">1 cm</button>
-                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+0.1" data-spinner-target="#id_max_size">0.1 cm</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+0.1">0.1 cm</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1.0">1 cm</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10.0">10 cm</button>
                                 </div>
                             </div>
                         </div>
@@ -153,13 +165,13 @@
                             <label for="id_scope_of_sales" class="control-label d-block">판매 범위</label>
                             <div id="id_scope_of_sales" class="btn-group d-flex" data-toggle="buttons">
                                 <label class="btn btn-default w-100 active">
-                                    <input type="radio" name="scope_of_sales" value="delivery_and_pickup" checked> 모두
+                                    <input type="radio" name="scope_of_sales" value="store_and_online" checked> 모두
                                 </label>
                                 <label class="btn btn-default w-100">
-                                    <input type="radio" name="scope_of_sales" value="pickup_only"> 택배
+                                    <input type="radio" name="scope_of_sales" value="store_only"> 매장
                                 </label>
                                 <label class="btn btn-default w-100">
-                                    <input type="radio" name="scope_of_sales" value="delivery_only"> 매장
+                                    <input type="radio" name="scope_of_sales" value="online_only"> 온라인
                                 </label>
                                 <label class="btn btn-default w-100">
                                     <input type="radio" name="scope_of_sales" value="not_for_sale"> 없음
@@ -170,26 +182,27 @@
                             <label for="id_price" class="control-label">가격</label>
                             <div class="input-group">
                                 <span class="input-group-btn input-spinner">
-                                    <button type="button" class="btn btn-default" data-spinner-value="-100" data-spinner-target="#id_price">
+                                    <button type="button" class="btn btn-default" data-spinner-value="-100">
                                         <i class="fas fa-angle-left fa-fw"></i>
                                     </button>
                                 </span>
                                 <input type="text" class="form-control text-center" id="id_price" name="price" data-input-type="int" value="0">
                                 <span class="input-group-btn input-spinner">
-                                    <button type="button" class="btn btn-default" data-spinner-value="+100" data-spinner-target="#id_price">
+                                    <button type="button" class="btn btn-default" data-spinner-value="+100">
                                         <i class="fas fa-angle-right fa-fw"></i>
                                     </button>
                                 </span>
                             </div>
                             <div class="btn-group input-spinner">
-                                <button type="button" class="btn btn-default w-100" data-spinner-value="+100000" data-spinner-target="#id_price">10 만</button>
-                                <button type="button" class="btn btn-default w-100" data-spinner-value="+10000" data-spinner-target="#id_price">1 만</button>
-                                <button type="button" class="btn btn-default w-100" data-spinner-value="+1000" data-spinner-target="#id_price">천</button>
-                                <button type="button" class="btn btn-default w-100" data-spinner-value="+100" data-spinner-target="#id_price">백</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+100">백</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+1000">천</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+10000">1 만</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+100000">10 만</button>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="reset" class="btn btn-default"><i class="fas fa-redo-alt fa-fw"></i></button>
                         <button type="submit" class="btn btn-default">등록</button>
                     </div>
                 </form>
@@ -270,7 +283,7 @@
                     <div class="tab-pane active" id="unit-price">
                         <div id="unit-price-menu">
                             <button type="button" id="unit-price-register" class="btn btn-default">단가 추가</button>
-                            <button type="button" class="wide-screen btn btn-default ml-3">넓게</button>
+                            <button type="button" class="wide-screen btn btn-default ml-2">넓게</button>
                         </div>
                         <hr>
                         <div class="panel panel-default">
@@ -282,11 +295,13 @@
                                             <th>번호</th>
                                             <th>어종</th>
                                             <th>품종</th>
+                                            <th>특이사항</th>
                                             <th>최소</th>
                                             <th>최대</th>
                                             <th>단계</th>
                                             <th>단위</th>
                                             <th>단가</th>
+                                            <th>판매</th>
                                             <th>동작</th>
                                         </tr>
                                     </thead>

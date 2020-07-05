@@ -8,14 +8,14 @@ table.dataTable {
 table.dataTable tbody tr {
     height: 51px;
 }
-.dataTables_length {
-    margin-right: 1rem;
+.dataTables_filter {
+    margin-left: calc(0.5rem + 4px);
 }
 .dt-buttons {
-    margin-left: 1rem;
+    margin-left: 0.5rem;
 }
 .dataTables_filter {
-    width: 196px;
+    max-width: 196px;
 }
 .dataTables_filter > label,
 .dataTables_length > label {

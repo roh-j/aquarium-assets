@@ -13,25 +13,25 @@ from inventory.models import AquariumStock, GENDER_CHOICES
 class AquariumStockSerializer(serializers.Serializer):
     species = serializers.CharField(write_only=True, required=True)
     breed = serializers.CharField(write_only=True, required=True)
+    remark = serializers.CharField(allow_blank=True, required=False)
     gender = serializers.ChoiceField(required=True, choices=GENDER_CHOICES)
     size = serializers.FloatField(required=True)
     quantity = serializers.IntegerField(required=True)
-    remark = serializers.CharField(allow_blank=True, required=False)
 
-    def set_FK(self, key1, key2):
+    def set_foreign_key(self, key1, key2):
         self.FK1 = key1  # Console
         self.FK2 = key2  # Aquarium
 
-    def get_creature(self, species, breed):
+    def get_creature(self, species, breed, remark):
         try:
-            creature = Creature.objects.get(species=species, breed=breed, console=self.FK1)
+            creature = Creature.objects.get(species=species, breed=breed, remark=remark, console=self.FK1)
         except ObjectDoesNotExist:
             creature = None
 
         return creature
 
     def validate(self, data):
-        creature = self.get_creature(data['species'], data['breed'])
+        creature = self.get_creature(data['species'], data['breed'], data['remark'])
 
         if creature is not None:
             aquarium_stock = AquariumStock.objects.filter(
@@ -40,7 +40,6 @@ class AquariumStockSerializer(serializers.Serializer):
                 creature=creature,
                 gender=data['gender'],
                 size=data['size'],
-                remark=data['remark'],
             )
 
             if aquarium_stock.exists():
@@ -49,13 +48,14 @@ class AquariumStockSerializer(serializers.Serializer):
         return data
 
     def create(self, validated_data):
-        creature = self.get_creature(validated_data['species'], validated_data['breed'])
+        creature = self.get_creature(validated_data['species'], validated_data['breed'], validated_data['remark'])
 
         if creature is None:
             creature = Creature.objects.create(
                 console=Console.objects.get(id=self.FK1),
                 species=validated_data['species'],
                 breed=validated_data['breed'],
+                remark=validated_data['remark'],
             )
             creature.save()
 
@@ -66,7 +66,6 @@ class AquariumStockSerializer(serializers.Serializer):
             gender=validated_data['gender'],
             size=validated_data['size'],
             quantity=validated_data['quantity'],
-            remark=validated_data['remark'],
         )
 
         try:
@@ -85,3 +84,17 @@ class AquariumStockSerializer(serializers.Serializer):
         aquarium_stock.save()
 
         return aquarium_stock
+
+
+class ShippingSerializer(serializers.Serializer):
+    def set_foreign_key(self, key1, key2):
+        self.FK1 = key1  # Console
+        self.FK2 = key2  # Aquarium
+    pass
+
+
+class ReceivingSerializer(serializers.Serializer):
+    def set_foreign_key(self, key1, key2):
+        self.FK1 = key1  # Console
+        self.FK2 = key2  # Aquarium
+    pass

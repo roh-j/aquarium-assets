@@ -29,7 +29,7 @@ class RegisterView(APIView):
 
     def post(self, request, control_number, format=None):
         serializer = OrderSerializer(data=request.data)
-        serializer.set_FK(control_number)
+        serializer.set_foreign_key(control_number)
 
         if serializer.is_valid():
             serializer.save()
