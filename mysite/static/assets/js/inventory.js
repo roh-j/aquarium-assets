@@ -1,7 +1,5 @@
-var DJANGO_STATIC_URL = "/static";
-var CSRF_TOKEN = Cookies.get("csrftoken");
-
 var storage_room_id;
+var aquarium_section_id;
 
 var draw_store_layout = function (url) {
     var params = {
@@ -50,9 +48,8 @@ var draw_store_layout = function (url) {
                             "fill": data[idx]["color"],
                             "x": (j * width_interval + 1 + width_interval),
                             "y": (i * height_interval + 1 + height_interval),
-                            "data-store-layout-row": i,
-                            "data-store-layout-column": j,
-                            "data-store-layout-selected": "true"
+                            "data-store-layout-selected": true,
+                            "data-store-layout-section-id": data[idx]["section_id"]
                         });
                         idx++;
                     }
@@ -62,13 +59,15 @@ var draw_store_layout = function (url) {
                             "fill": "#E7E7E7",
                             "x": (j * width_interval + 1 + width_interval),
                             "y": (i * height_interval + 1 + height_interval),
-                            "data-store-layout-row": i,
-                            "data-store-layout-column": j,
-                            "data-store-layout-selected": "false"
+                            "data-store-layout-selected": false
                         });
                     }
                 }
             }
+            $("rect.store-layout-button").on("click", function () {
+                aquarium_section_id = $(this).data("store-layout-section-id");
+                draw_aquarium("../store/ajax/async-from-inventory/aquarium-section/");
+            });
             $(".nav-tabs a[href='#store-layout']").tab("show");
         }
         else {
@@ -78,44 +77,51 @@ var draw_store_layout = function (url) {
     });
 }
 
-var draw_aquarium = function () {
-    if (SVG.supported) {
-        var tmp_x = 10;
-        var tmp_y = 3;
+var draw_aquarium = function (url) {
+    var params = {
+        "csrfmiddlewaretoken": CSRF_TOKEN,
+        "PK": aquarium_section_id
+    };
 
-        var aquarium = SVG("aquarium-canvas").size(60 * tmp_x + 21, 60 * tmp_y + 21);
+    $.ajax({
+        url: url,
+        method: "POST",
+        data: params,
+        dataType: "json",
+    }).done(function (data) {
+        if (SVG.supported) {
+            $("#aquarium-canvas").empty();
 
-        for (i = tmp_y; i > 0; i--) {
-            for (j = 0; j < tmp_x; j++) {
-                if (i == 2 && j == 6) {
-                    continue;
+            var aquarium = SVG("aquarium-canvas").size(60 * data[0]["fields"]["aquarium_num_of_columns"] + 21, 60 * data[0]["fields"]["aquarium_num_of_rows"] + 21);
+
+            for (i = data[0]["fields"]["aquarium_num_of_rows"]; i > 0; i--) {
+                for (j = 0; j < data[0]["fields"]["aquarium_num_of_columns"]; j++) {
+                    var group = aquarium.group();
+
+                    group.add(aquarium.rect(60, 60).attr({
+                        'class': 'aquarium-front-grid',
+                        'x': 1,
+                        'y': 20
+                    }));
+                    group.add(aquarium.rect(60, 60).attr({
+                        'class': 'aquarium-front-button',
+                        'x': 1,
+                        'y': 20
+                    }));
+                    group.add(aquarium.polygon('20,1 1,20 61,20 80,1').attr({ 'class': 'aquarium-grid' }));
+                    group.add(aquarium.polygon('20,1 1,20 61,20 80,1').attr({ 'class': 'aquarium-plane' }));
+                    group.add(aquarium.polygon('80,1 61,20 61,80 80,61').attr({ 'class': 'aquarium-grid' }));
+                    group.add(aquarium.polygon('80,1 61,20 61,80 80,61').attr({ 'class': 'aquarium-plane' }));
+
+                    group.move(60 * j, 60 * (i - 1));
+                    aquarium.plain((data[0]["fields"]["aquarium_num_of_rows"] - i + 1) + "-" + (j + 1)).attr({ "text-anchor": "middle", "x": 60 * j + 30, "y": 40 + (60 * (i - 1)) });
                 }
-                if (i == 1 && j == 6) {
-                    continue;
-                }
-                var group = aquarium.group();
-
-                group.add(aquarium.rect(60, 60).attr({
-                    'class': 'aquarium-front-grid',
-                    'x': 1,
-                    'y': 20
-                }));
-                group.add(aquarium.rect(60, 60).attr({
-                    'class': 'aquarium-front-button',
-                    'x': 1,
-                    'y': 20
-                }));
-                group.add(aquarium.polygon('20,1 1,20 61,20 80,1').attr({ 'class': 'aquarium-grid' }));
-                group.add(aquarium.polygon('20,1 1,20 61,20 80,1').attr({ 'class': 'aquarium-plane' }));
-                group.add(aquarium.polygon('80,1 61,20 61,80 80,61').attr({ 'class': 'aquarium-grid' }));
-                group.add(aquarium.polygon('80,1 61,20 61,80 80,61').attr({ 'class': 'aquarium-plane' }));
-
-                group.move(60 * j, 60 * (i - 1));
-                aquarium.plain((tmp_y - i + 1) + "-" + (j + 1)).attr({ "text-anchor": "middle", "x": 60 * j + 30, "y": 40 + (60 * (i - 1)) });
             }
+            $(".nav-tabs a[href='#aquarium']").tab("show");
         }
-    }
-    else {
-        alert("SVG를 지원하지 않는 브라우저입니다.");
-    }
+        else {
+            alert("SVG를 지원하지 않는 브라우저입니다.");
+        }
+    }).fail(function (data) {
+    });
 }

@@ -42,11 +42,18 @@
     <!-- Javascript Cookie -->
     <script src="{% static 'assets/js/lib/js.cookie.js' %}"></script>
     <!-- Custom Scripts -->
+    <script src="{% static 'assets/js/common.js' %}"></script>
     <script src="{% static 'assets/js/inventory.js' %}"></script>
 
     <title>Aquarium Assets</title>
     <script>
         $(function () {
+            standby_store_layout();
+            standby_aquarium();
+
+            $("#redo-store-layout").click(function (e) {
+                $(".nav-tabs a[href='#store-layout']").tab("show");
+            });
             $("#storage-room-list > a").click(function (e) {
                 e.preventDefault();
 
@@ -59,12 +66,12 @@
                         "<span class='text-primary pull-right'><i class='fas fa-check'></i></span>"
                     );
 
-                    storage_room_id = $(this).data("storage-room-id");
+                    storage_room_id = $("div.media > span.data-binding", this).data("storage-room-id");
+                    storage_room_name = $("div.media > span.data-binding", this).data("storage-room-name");
 
-                    draw_store_layout("../store/ajax/async/store-layout/");
+                    draw_store_layout("../store/ajax/async-from-inventory/store-layout/");
                 }
             });
-            draw_aquarium();
         });
     </script>
 </head>
@@ -131,6 +138,9 @@
                                             {% for list in storage_room_list %}
                                             <a href="#" class="list-group-item" data-storage-room-id="{{ list.id }}">
                                                 <div class="media">
+                                                    <span class="data-binding d-none"
+                                                        data-storage-room-id="{{ list.id }}"
+                                                        data-storage-room-name="{{ list.storage_room_name }}"></span>
                                                     <div class="media-left">
                                                         <img class="media-object" src="{% static 'assets/img/Mimetypes-application-x-tar-icon-64x64.png' %}">
                                                     </div>
@@ -150,11 +160,27 @@
                                 <div class="table-responsive">
                                     <div id="store-layout-canvas" class="text-center"></div>
                                 </div>
+                                <hr>
+                                <div id="store-layout-console" class="text-center">창고/섹션을 먼저 선택해주세요.</div>
+                                <hr>
+                                <div class="text-center">
+                                    <a href="" class="btn btn-default"><i class="fas fa-redo-alt"></i> 다시 선택</a>
+                                </div>
                             </div>
                             <div class="tab-pane" id="aquarium">
                                 <div class="table-responsive">
                                     <div id="aquarium-canvas" class="text-center"></div>
                                 </div>
+                                <hr>
+                                <div class="text-center">창고/섹션을 먼저 선택해주세요.</div>
+                                <hr>
+                                <div class="text-center">
+                                    <div class="btn-group">
+                                        <a href="" class="btn btn-default"><i class="fas fa-redo-alt"></i> 다시 선택</a>
+                                        <button type="button" id="redo-store-layout" class="btn btn-default">매장 레이아웃</button>
+                                    </div>
+                                </div>
+                                <hr>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-hover">
                                         <thead>

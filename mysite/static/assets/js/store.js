@@ -1,15 +1,17 @@
-var DJANGO_STATIC_URL = "/static";
-var CSRF_TOKEN = Cookies.get("csrftoken");
-
 var storage_room_id = null;
+var section_id = null;
+var section_color = null;
+
 var storage_room_name = null;
-var aquarium_section_id = null;
-var aquarium_section_color = null;
+var section_name = null;
+var aquarium_num_of_rows = null;
+var aquarium_num_of_columns = null;
 
 var draw_store_layout = function (url) {
     var params = {
         "csrfmiddlewaretoken": CSRF_TOKEN,
-        "FK": storage_room_id
+        "FK": storage_room_id,
+        "section_id": section_id
     };
 
     $.ajax({
@@ -55,7 +57,9 @@ var draw_store_layout = function (url) {
                             "y": (i * height_interval + 1 + height_interval),
                             "data-store-layout-row": i,
                             "data-store-layout-column": j,
-                            "data-store-layout-selected": "true"
+                            "data-store-layout-selected": true,
+                            "data-store-layout-id": data[idx]["id"],
+                            "data-store-layout-modify-permission": data[idx]["permission"]
                         });
                         idx++;
                     }
@@ -67,20 +71,42 @@ var draw_store_layout = function (url) {
                             "y": (i * height_interval + 1 + height_interval),
                             "data-store-layout-row": i,
                             "data-store-layout-column": j,
-                            "data-store-layout-selected": "false"
+                            "data-store-layout-selected": false
                         });
                     }
                 }
             }
             $("rect.store-layout-button").on("click", function () {
-                $(this).css({
-                    "fill": aquarium_section_color,
-                    "stroke": "none"
-                });
-                save_store_layout($(this).data("store-layout-row"), $(this).data("store-layout-column"));
+                if ($(this).data("store-layout-selected") && $(this).data("store-layout-modify-permission")) {
+                    var params = {
+                        "csrfmiddlewaretoken": CSRF_TOKEN,
+                        "PK": $(this).data("store-layout-id")
+                    };
+
+                    $.ajax({
+                        url: "ajax/delete/store-layout/",
+                        method: "POST",
+                        data: params,
+                        dataType: "json",
+                    }).done(function (data) {
+                        if (data["state"] == "success") {
+                            draw_store_layout("ajax/async/store-layout/");
+                        }
+                        else if (data["state"] == "error") {
+                        }
+                    }).fail(function (data) {
+                    });
+                }
+                else if ($(this).data("store-layout-selected")) {
+                    $("#alert-modal-content").html("이미 다른 섹션이 선택되어있습니다.");
+                    $("#alert-modal").modal("show");
+                }
+                else {
+                    save_store_layout($(this).data("store-layout-row"), $(this).data("store-layout-column"));
+                }
             });
             $("#store-layout-console").html(
-                "<i class='fas fa-circle' style='color: " + aquarium_section_color + ";'></i> 섹션을 추가합니다."
+                "<i class='fas fa-circle' style='color: " + section_color + ";'></i> 섹션을 추가/삭제합니다."
             );
         }
         else {
@@ -94,7 +120,7 @@ var save_store_layout = function (row, column) {
     var params = {
         "csrfmiddlewaretoken": CSRF_TOKEN,
         "FK1": storage_room_id,
-        "FK2": aquarium_section_id,
+        "FK2": section_id,
         "row": row,
         "column": column
     };
@@ -105,6 +131,11 @@ var save_store_layout = function (row, column) {
         data: params,
         dataType: "json",
     }).done(function (data) {
+        if (data["state"] == "success") {
+            draw_store_layout("ajax/async/store-layout/");
+        }
+        else if (data["state"] == "error") {
+        }
     }).fail(function (data) {
     });
 }
@@ -136,8 +167,14 @@ var async_aquarium_section = function () {
 
             for (i = 0; i < data.length; i++) {
                 $("#async-aquarium-section > #aquarium-section-list").append("\
-                    <a href='#' class='list-group-item' data-aquarium-section-id='" + data[i]['pk'] + "' data-aquarium-section-color='" + data[i]['fields']['section_color'] + "'>\
+                    <a href='#' class='list-group-item'>\
                         <div class='media'>\
+                            <span class='data-binding d-none'\
+                                data-section-id='" + data[i]['pk'] + "'\
+                                data-section-name='" + data[i]['fields']['section_name'] + "'\
+                                data-section-color='" + data[i]['fields']['section_color'] + "'\
+                                data-aquarium-num-of-rows='" + data[i]['fields']['aquarium_num_of_rows'] + "'\
+                                data-aquarium-num-of-columns='" + data[i]['fields']['aquarium_num_of_columns'] + "'></span>\
                             <div class='media-left'>\
                                 <img class='media-object' src='" + DJANGO_STATIC_URL + "/assets/img/Mimetypes-application-x-tar-icon-64x64.png'>\
                             </div>\
@@ -163,8 +200,21 @@ var async_aquarium_section = function () {
                     $("div.media > div.media-body > p", this).append(
                         "<span class='text-primary pull-right'><i class='fas fa-check'></i></span>"
                     );
-                    aquarium_section_id = $(this).data("aquarium-section-id");
-                    aquarium_section_color = $(this).data("aquarium-section-color");
+                    section_id = $("div.media > span.data-binding", this).data("section-id");
+                    section_color = $("div.media > span.data-binding", this).data("section-color");
+
+                    $("#aquarium-section-edit").removeAttr("disabled");
+                    $("#move-store-layout").removeAttr("disabled");
+
+                    section_name = $("div.media > span.data-binding", this).data("section-name");
+                    aquarium_num_of_rows = $("div.media > span.data-binding", this).data("aquarium-num-of-rows");
+                    aquarium_num_of_columns = $("div.media > span.data-binding", this).data("aquarium-num-of-columns");
+
+                    $("form#aquarium-section-edit-form input#id_section_name").val(section_name);
+                    $("form#aquarium-section-edit-form input#id_aquarium_num_of_rows").val(aquarium_num_of_rows);
+                    $("form#aquarium-section-edit-form input#id_aquarium_num_of_columns").val(aquarium_num_of_columns);
+                    $("form#aquarium-section-edit-form input#id_section_color").val(section_color);
+                    $("#aquarium-section-edit-color-selected").css({ "background": section_color });
 
                     draw_store_layout("ajax/async/store-layout/");
                 }

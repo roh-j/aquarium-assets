@@ -68,15 +68,14 @@ class StoreLayoutForm(forms.ModelForm):
         fields = ('row', 'column',)
 
     def set_FK(self, key1, key2):
-        self.FK1 = key1
-        self.FK2 = key2
+        self.FK1 = key1  # StorageRoom
+        self.FK2 = key2  # AquariumSection
 
     def save(self, commit=True):
         store_layout = super(StoreLayoutForm, self).save(commit=False)
 
         store_layout.storage_room = StorageRoom.objects.get(id=self.FK1)
-        store_layout.aquarium_section = AquariumSection.objects.get(
-            id=self.FK2)
+        store_layout.aquarium_section = AquariumSection.objects.get(id=self.FK2)
         store_layout.row = self.cleaned_data['row']
         store_layout.column = self.cleaned_data['column']
 

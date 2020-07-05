@@ -48,13 +48,39 @@
     <title>Aquarium Assets</title>
     <script>
         $(function () {
-            init_store_layout();
+            standby_store_layout();
 
-            $(".color-picker > ul li").click(function (e) {
-                $("#color-selected").css({ "background": $(this).data("section-color") });
-                $("input#id_section_color").val($(this).data("section-color"));
+            $("#aquarium-section-color-picker > ul li").click(function (e) {
+                $("#aquarium-section-color-selected").css({ "background": $(this).data("section-color") });
+                $("form#aquarium-section-form input#id_section_color").val($(this).data("section-color"));
             });
-
+            $("#aquarium-section-edit-color-picker > ul li").click(function (e) {
+                $("#aquarium-section-edit-color-selected").css({ "background": $(this).data("section-color") });
+                $("form#aquarium-section-edit-form input#id_section_color").val($(this).data("section-color"));
+            });
+            $("#storage-room-edit").click(function (e) {
+                if (storage_room_id) {
+                    $("#storage-room-edit-modal").modal("show");
+                }
+            });
+            $("#aquarium-section-edit").click(function (e) {
+                if (section_id && section_color) {
+                    $("#aquarium-section-edit-modal").modal("show");
+                }
+            });
+            $("#move-aquarium-section").click(function (e) {
+                if (storage_room_id) {
+                    $(".nav-tabs a[href='#aquarium-section']").tab("show");
+                }
+            });
+            $("#move-store-layout").click(function (e) {
+                if (section_id && section_color) {
+                    $(".nav-tabs a[href='#store-layout']").tab("show");
+                }
+            });
+            $("#redo-aquarium-section").click(function (e) {
+                $(".nav-tabs a[href='#aquarium-section']").tab("show");
+            });
             $("#storage-room-list > a").click(function (e) {
                 e.preventDefault();
 
@@ -71,11 +97,20 @@
                     $("input#id_aquarium_num_of_rows").attr("readonly", false);
                     $("input#id_aquarium_num_of_columns").attr("readonly", false);
 
-                    storage_room_id = $(this).data("storage-room-id");
-                    aquarium_section_id = null;
-                    aquarium_section_color = null;
+                    storage_room_id = $("div.media > span.data-binding", this).data("storage-room-id");
+                    section_id = null;
+                    section_color = null;
+                    
+                    $("#storage-room-edit").removeAttr("disabled");
+                    $("#move-aquarium-section").removeAttr("disabled");
+                    $("#aquarium-section-edit").attr("disabled", "disabled");
+                    $("#move-store-layout").attr("disabled", "disabled");
+
+                    storage_room_name = $("div.media > span.data-binding", this).data("storage-room-name");
+                    $("form#storage-room-edit-form input#id_storage_room_name").val(storage_room_name);
 
                     async_aquarium_section();
+                    standby_store_layout();
                 }
             });
 
@@ -96,6 +131,55 @@
                     }
                 }).fail(function (data) {
                 });
+            });
+
+            $("form#storage-room-edit-form button").click(function (e) {
+                if ($(this).data("edit-type") == "update") {
+                    var params = $("form#storage-room-edit-form").serializeArray();
+                    params.push({
+                        name: "PK", value: storage_room_id
+                    });
+
+                    $.ajax({
+                        url: "ajax/update/storage-room/",
+                        method: "POST",
+                        data: params,
+                        dataType: "json",
+                    }).done(function (data) {
+                        if (data["state"] == "success") {
+                            $("#storage-room-edit-modal").modal("hide");
+                            $("#storage-room-edit-modal").on("hidden.bs.modal", function (e) {
+                                location.reload(true);
+                            });
+                        }
+                        else if (data["state"] == "error") {
+                        }
+                    }).fail(function (data) {
+                    });
+                }
+                else if ($(this).data("edit-type") == "delete") {
+                    var params = {
+                        "csrfmiddlewaretoken": CSRF_TOKEN,
+                        "PK": storage_room_id
+                    };
+
+                    $.ajax({
+                        url: "ajax/delete/storage-room/",
+                        method: "POST",
+                        data: params,
+                        dataType: "json",
+                    }).done(function (data) {
+                        if (data["state"] == "success") {
+                            $("#storage-room-edit-modal").modal("hide");
+                            $("#storage-room-edit-modal").on("hidden.bs.modal", function (e) {
+                                location.reload(true);
+                            });
+                        }
+                        else if (data["state"] == "error") {
+                        }
+                    }).fail(function (data) {
+                    });
+                }
             });
 
             $("form#aquarium-section-form").submit(function (e) {
@@ -120,44 +204,174 @@
                 });
             });
 
-            $("#storage-room-edit").click(function (e) {
-                if (storage_room_id) {
+            $("form#aquarium-section-edit-form button").click(function (e) {
+                if ($(this).data("edit-type") == "update") {
+                    var params = $("form#aquarium-section-edit-form").serializeArray();
+                    params.push(
+                        { name: "PK", value: section_id },
+                        { name: "FK", value: storage_room_id }
+                    );
+
+                    $.ajax({
+                        url: "ajax/update/aquarium-section/",
+                        method: "POST",
+                        data: params,
+                        dataType: "json",
+                    }).done(function (data) {
+                        if (data["state"] == "success") {
+                            $("#aquarium-section-edit-modal").modal("hide");
+                            $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
+                                async_aquarium_section();
+                            });
+                        }
+                        else if (data["state"] == "error") {
+                        }
+                    }).fail(function (data) {
+                    });
                 }
-                else {
-                    $("#edit-modal-content").html("<p>창고를 선택해주세요.</p>");
-                    $("#edit-modal").modal("show");
+                else if ($(this).data("edit-type") == "delete") {
+                    var params = {
+                        "csrfmiddlewaretoken": CSRF_TOKEN,
+                        "PK": section_id
+                    };
+
+                    $.ajax({
+                        url: "ajax/delete/aquarium-section/",
+                        method: "POST",
+                        data: params,
+                        dataType: "json",
+                    }).done(function (data) {
+                        if (data["state"] == "success") {
+                            $("#aquarium-section-edit-modal").modal("hide");
+                            $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
+                                async_aquarium_section();
+                            });
+                        }
+                        else if (data["state"] == "error") {
+                        }
+                    }).fail(function (data) {
+                    });
                 }
             });
-
-            $("#move-aquarium-section").click(function (e) {
-                if (storage_room_id) {
-                    $(".nav-tabs a[href='#aquarium-section']").tab("show");
-                }
-            });
-
-            $("#move-store-layout").click(function (e) {
-                if (aquarium_section_id && aquarium_section_color) {
-                    $(".nav-tabs a[href='#store-layout']").tab("show");
-                }
-            });
-
-            $("#redo-aquarium-section").click(function (e) {
-                $(".nav-tabs a[href='#aquarium-section']").tab("show");
-            })
         });
     </script>
 </head>
 
 <body>
-    <div id="edit-modal" class="modal fade" tabindex="-1">
+    <div id="alert-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 id="edit-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
+                    <h5 id="alert-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
                 </div>
-                <div id="edit-modal-content" class="modal-body"></div>
+                <div id="alert-modal-content" class="modal-body text-center"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="storage-room-edit-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="storage-room-edit-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
+                </div>
+                <div id="storage-room-edit-modal-content" class="modal-body">
+                    <form id="storage-room-edit-form" class="form-horizontal clearfix" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ storage_room_form.storage_room_name.id_for_label }}" class="col-sm-4 control-label">창고 레이블</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="{{ storage_room_form.storage_room_name.id_for_label }}"
+                                    name="{{ storage_room_form.storage_room_name.html_name }}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="btn-group pull-right">
+                            <button type="button" data-edit-type="delete" class="btn btn-default"><i class="far fa-trash-alt"></i> 창고 삭제</button>
+                            <button type="button" data-edit-type="update" class="btn btn-default">레이블 변경</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="aquarium-section-edit-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="aquarium-section-edit-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
+                </div>
+                <div id="aquarium-section-edit-modal-content" class="modal-body">
+                    <form id="aquarium-section-edit-form" class="form-horizontal clearfix" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ aquarium_section_form.section_name.id_for_label }}" class="col-sm-4 control-label">섹션 레이블</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="{{ aquarium_section_form.section_name.id_for_label }}"
+                                    name="{{ aquarium_section_form.section_name.html_name }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ aquarium_section_form.aquarium_num_of_columns.id_for_label }}" class="col-sm-4 control-label">가로</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" id="{{ aquarium_section_form.aquarium_num_of_columns.id_for_label }}"
+                                    name="{{ aquarium_section_form.aquarium_num_of_columns.html_name }}" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}" class="col-sm-4 control-label">높이</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" id="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}"
+                                    name="{{ aquarium_section_form.aquarium_num_of_rows.html_name }}" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-8">
+                                <div class="alert border-secondary mb-0">
+                                    <i class="fas fa-exclamation-circle"></i> 섹션 안, 수조의 개수를 입력하세요.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="{{ aquarium_section_form.section_color.id_for_label }}" class="col-sm-4 control-label">섹션 색상</label>
+                            <input type="hidden" id="{{ aquarium_section_form.section_color.id_for_label }}"
+                                name="{{ aquarium_section_form.section_color.html_name }}">
+                            <div class="col-sm-8">
+                                <div id="aquarium-section-edit-color-selected" class="color-selected"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-8">
+                                <div id="aquarium-section-edit-color-picker" class="color-picker clearfix">
+                                    <ul>
+                                        <li style="background: #CD5C5C;" data-section-color="#CD5C5C"></li>
+                                        <li style="background: #FF4500;" data-section-color="#FF4500"></li>
+                                        <li style="background: #008B8B;" data-section-color="#008B8B"></li>
+                                        <li style="background: #B8860B;" data-section-color="#B8860B"></li>
+                                        <li style="background: #32CD32;" data-section-color="#32CD32"></li>
+                                        <li style="background: #FFD700;" data-section-color="#FFD700"></li>
+                                        <li style="background: #48D1CC;" data-section-color="#48D1CC"></li>
+                                        <li style="background: #FF69B4;" data-section-color="#FF69B4"></li>
+                                        <li style="background: #87CEFA;" data-section-color="#87CEFA"></li>
+                                        <li style="background: #6495ED;" data-section-color="#6495ED"></li>
+                                        <li style="background: #DC143C;" data-section-color="#DC143C"></li>
+                                        <li style="background: #FF8C00;" data-section-color="#FF8C00"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pull-right">
+                            <button type="button" data-edit-type="delete" class="btn btn-default"><i class="far fa-trash-alt"></i> 섹션 삭제</button>
+                            <button type="button" data-edit-type="update" class="btn btn-default">섹션 수정</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
@@ -233,8 +447,11 @@
                                         {% else %}
                                         <div id="storage-room-list" class="list-group">
                                             {% for list in storage_room_list %}
-                                            <a href="#" class="list-group-item" data-storage-room-id="{{ list.id }}">
+                                            <a href="#" class="list-group-item">
                                                 <div class="media">
+                                                    <span class="data-binding d-none"
+                                                        data-storage-room-id="{{ list.id }}"
+                                                        data-storage-room-name="{{ list.storage_room_name }}"></span>
                                                     <div class="media-left">
                                                         <img class="media-object" src="{% static 'assets/img/Mimetypes-application-x-tar-icon-64x64.png' %}">
                                                     </div>
@@ -250,9 +467,8 @@
                                     </div>
                                     <div class="panel-footer bg-white clearfix">
                                         <div class="btn-group pull-right">
-                                            <a href="" class="btn btn-default"><i class="fas fa-redo-alt"></i> 다시 선택</a>
-                                            <button type="button" id="storage-room-edit" class="btn btn-default">변경</button>
-                                            <button type="button" id="move-aquarium-section" class="btn btn-default">섹션 관리</button>
+                                            <button type="button" id="storage-room-edit" class="btn btn-default" disabled="disabled">변경</button>
+                                            <button type="button" id="move-aquarium-section" class="btn btn-default" disabled="disabled">섹션 관리</button>
                                         </div>
                                     </div>
                                 </div>
@@ -271,17 +487,17 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}" class="col-sm-4 control-label">가로</label>
+                                                <label for="{{ aquarium_section_form.aquarium_num_of_columns.id_for_label }}" class="col-sm-4 control-label">가로</label>
                                                 <div class="col-sm-8">
-                                                    <input type="number" class="form-control" id="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}"
-                                                        name="{{ aquarium_section_form.aquarium_num_of_rows.html_name }}" min="0" readonly="true">
+                                                    <input type="number" class="form-control" id="{{ aquarium_section_form.aquarium_num_of_columns.id_for_label }}"
+                                                        name="{{ aquarium_section_form.aquarium_num_of_columns.html_name }}" value="0" min="0" readonly="true">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="{{ aquarium_section_form.aquarium_num_of_columns.id_for_label }}" class="col-sm-4 control-label">높이</label>
+                                                <label for="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}" class="col-sm-4 control-label">높이</label>
                                                 <div class="col-sm-8">
-                                                    <input type="number" class="form-control" id="{{ aquarium_section_form.aquarium_num_of_columns.id_for_label }}"
-                                                        name="{{ aquarium_section_form.aquarium_num_of_columns.html_name }}" min="0" readonly="true">
+                                                    <input type="number" class="form-control" id="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}"
+                                                        name="{{ aquarium_section_form.aquarium_num_of_rows.html_name }}" value="0" min="0" readonly="true">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -296,12 +512,12 @@
                                                 <input type="hidden" id="{{ aquarium_section_form.section_color.id_for_label }}"
                                                     name="{{ aquarium_section_form.section_color.html_name }}" value="#CD5C5C">
                                                 <div class="col-sm-8">
-                                                    <div id="color-selected" style="background: #CD5C5C;"></div>
+                                                    <div id="aquarium-section-color-selected" class="color-selected" style="background: #CD5C5C;"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-offset-4 col-sm-8">
-                                                    <div class="color-picker clearfix">
+                                                    <div id="aquarium-section-color-picker" class="color-picker clearfix">
                                                         <ul>
                                                             <li style="background: #CD5C5C;" data-section-color="#CD5C5C"></li>
                                                             <li style="background: #FF4500;" data-section-color="#FF4500"></li>
@@ -335,9 +551,9 @@
                                     <div class="panel-footer bg-white clearfix">
                                         <div class="btn-group pull-right">
                                             <a href="" class="btn btn-default"><i class="fas fa-redo-alt"></i> 다시 선택</a>
-                                            <button type="button" id="aquarium-section-edit" class="btn btn-default">변경</button>
-                                            <button type="button" id="move-aquarium" class="btn btn-default">수조 관리</button>
-                                            <button type="button" id="move-store-layout" class="btn btn-default">매장 레이아웃</button>
+                                            <button type="button" id="aquarium-section-edit" class="btn btn-default" disabled="disabled">변경</button>
+                                            <button type="button" id="move-aquarium" class="btn btn-default" disabled="disabled">수조 관리</button>
+                                            <button type="button" id="move-store-layout" class="btn btn-default" disabled="disabled">매장 레이아웃</button>
                                         </div>
                                     </div>
                                 </div>
@@ -347,7 +563,7 @@
                                     <div id="store-layout-canvas" class="text-center"></div>
                                 </div>
                                 <hr>
-                                <div id="store-layout-console" class="text-center">창고를 먼저 선택해주세요.</div>
+                                <div id="store-layout-console" class="text-center">창고/섹션을 먼저 선택해주세요.</div>
                                 <hr>
                                 <div class="text-center">
                                     <div class="btn-group">

@@ -41,7 +41,7 @@
                         location.replace("../");
                     }
                     else if (data["state"] == "error") {
-                        $("#alert-modal-content").html("<p>" + data["messages"] + "</p>");
+                        $("#alert-modal-content").html(data["messages"]);
                         $("#alert-modal").modal("show");
                     }
                 }).fail(function (data) {
