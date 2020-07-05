@@ -52,6 +52,7 @@ table.table-align-middle tbody tr td {
     font-size: 14px;
     line-height: 1.42857143;
     color: #555;
+    border: none;
 }
 .table-cell-regular {
     padding: 8px 15px !important;

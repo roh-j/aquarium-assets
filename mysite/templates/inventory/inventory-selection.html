@@ -21,9 +21,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/dataTables-customize.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/aquarium.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/colorpicker.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/button.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/component.css' %}">
 
     <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -42,10 +40,9 @@
     <!-- Fake Smile (SVG) -->
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
-    <!-- Javascript Cookie -->
-    <script src="{% static 'assets/js/lib/js.cookie.js' %}"></script>
     <!-- serializeObject -->
-    <script src="{% static 'assets/js/lib/serializeObject.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
+    <!-- Bootstrap Typeahead -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
     <!-- Scripts -->
     <script src="{% static 'assets/js/common.js' %}"></script>
@@ -139,12 +136,19 @@
                 <ul id="management-menu" class="nav">
                     <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
+                    <li><a href="../../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
                     <li><a href="../../store/"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
-                    <li><a href="../../accounting/"><i class="fas fa-chart-bar fa-fw"></i>매출관리</a></li>
+                    <li><a href="../../price/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
+                    <li>
+                        <a href="#"><i class="fas fa-shopping-basket fa-fw"></i>주문관리 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level d-none">
+                            <li><a href="../../order/register/"><i class="fas fa-feather-alt fa-fw"></i>주문서 작성</a></li>
+                            <li><a href="../../order/list/"><i class="far fa-clone fa-fw"></i>주문 목록</a></li>
+                        </ul>
+                    </li>
                     <li class="mm-active">
                         <a href="#" aria-expanded="true"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a href="../price/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
                             <li><a href="" class="active-menu"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
                             <li><a href="../order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
                         </ul>
@@ -180,21 +184,21 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
                         <ul id="store-tabs" class="nav nav-tabs">
-                            <li class="active"><a href="#storage-room" data-toggle="tab">창고 선택</a></li>
+                            <li class="active"><a href="#storage-room" data-toggle="tab">생물실 선택</a></li>
                             <li><a href="#store-layout" data-toggle="tab">매장 레이아웃</a></li>
                             <li><a href="#aquarium" data-toggle="tab">수조 선택</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="storage-room">
                                 <div class="panel panel-default border-dark max-600 mx-auto">
-                                    <div class="panel-heading border-dark">창고 선택</div>
+                                    <div class="panel-heading border-dark">생물실 선택</div>
                                     <div class="panel-body">
                                         {% if not storage_room_list %}
                                         <div class="standby">
                                             <img src="{% static 'assets/img/icon/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
                                             <hr>
                                             <p class="text-center">
-                                                <a href="../store/">매장관리</a>에서 창고를 등록해주세요.
+                                                <a href="../../store/">매장관리</a>에서 생물실를 등록해주세요.
                                             </p>
                                         </div>
                                         {% else %}
@@ -255,13 +259,13 @@
                                                 <thead>
                                                     <tr>
                                                         <th></th>
-                                                        <th class="text-center text-nowrap">열대어 종</th>
-                                                        <th></th>
-                                                        <th class="text-center text-nowrap">이름</th>
+                                                        <th class="text-center text-nowrap">열대어 품종</th>
                                                         <th></th>
                                                         <th class="text-center text-nowrap">크기 (cm)</th>
                                                         <th></th>
                                                         <th class="text-center text-nowrap">마릿수</th>
+                                                        <th></th>
+                                                        <th class="text-center text-nowrap">암수 구별</th>
                                                         <th></th>
                                                         <th class="text-center text-nowrap">자동 성장</th>
                                                     </tr>
@@ -271,19 +275,25 @@
                                                         <td class="min-table-cell bg-default">
                                                             <div class="form-control-hidden"><i class="fas fa-anchor"></i></div>
                                                         </td>
-                                                        <td><input type="text" id="states_search" class="form-control min-215"></td>
+                                                        <td><input type="text" id="states_search" class="form-control-hidden min-215"></td>
                                                         <td class="min-table-cell bg-default">
                                                             <div class="form-control-hidden"><i class="fas fa-anchor"></i></div>
                                                         </td>
-                                                        <td><input type="text" id="city" class="form-control min-215"></td>
+                                                        <td><input type="number" class="form-control-hidden min-215" value="0" min="0"></td>
                                                         <td class="min-table-cell bg-default">
                                                             <div class="form-control-hidden"><i class="fas fa-anchor"></i></div>
                                                         </td>
-                                                        <td><input type="number" class="form-control min-215" value="0" min="0"></td>
+                                                        <td><input type="number" class="form-control-hidden min-215" value="0" min="0"></td>
                                                         <td class="min-table-cell bg-default">
                                                             <div class="form-control-hidden"><i class="fas fa-anchor"></i></div>
                                                         </td>
-                                                        <td><input type="number" class="form-control min-215" value="0" min="0"></td>
+                                                        <td class="min-table-cell table-cell-regular">
+                                                            <div class="btn-group d-flex">
+                                                                <button type="button" class="btn btn-default">암컷</button>
+                                                                <button type="button" class="btn btn-default">수컷</button>
+                                                                <button type="button" class="btn btn-default">없음</button>
+                                                            </div>
+                                                        </td>
                                                         <td class="min-table-cell bg-default">
                                                             <div class="form-control-hidden"><i class="fas fa-anchor"></i></div>
                                                         </td>
@@ -314,8 +324,8 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center text-nowrap">번호</th>
-                                                    <th class="text-center text-nowrap">열대어 종</th>
-                                                    <th class="text-center text-nowrap">이름</th>
+                                                    <th class="text-center text-nowrap">열대어 분류</th>
+                                                    <th class="text-center text-nowrap">열대어 품종</th>
                                                     <th class="text-center text-nowrap">크기 (cm)</th>
                                                     <th class="text-center text-nowrap">마릿수</th>
                                                     <th class="text-center text-nowrap">상태</th>

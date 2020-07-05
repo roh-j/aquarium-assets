@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse, Http404
+from django.http import JsonResponse, HttpResponse
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 from django.contrib.auth.models import User
-from .serializers import BusinessSerializer
-from .models import Business
+import business.serializers as BusinessSerializers
+import business.models as BusinessModels
 
 # Create your views here.
 
@@ -16,10 +15,11 @@ class IndexView(APIView):
 
     def get(self, request, format=None):
         if request.user.is_authenticated:
-            business_list = Business.objects.filter(user=request.user.id).order_by('-id')
+            business_list = BusinessModels.Business.objects.filter(
+                user=request.user.id).order_by('-id')
             return Response({'business_list': business_list}, template_name='business/business.html')
         else:
-            return redirect('main:SignInView')
+            return redirect('Main:SignInView')
 
 
 class RegisterView(APIView):
@@ -29,10 +29,10 @@ class RegisterView(APIView):
         if request.user.is_authenticated:
             return Response(template_name='business/business-register.html')
         else:
-            return redirect('main:SignInView')
+            return redirect('Main:SignInView')
 
     def post(self, request, format=None):
-        serializer = BusinessSerializer(data=request.data)
+        serializer = BusinessSerializers.BusinessSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.set_FK(request.user.id)

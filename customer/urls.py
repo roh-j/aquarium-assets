@@ -16,7 +16,7 @@ Including another URLconf
 from django.urls import path
 from . import views
 
-app_name = 'customer'
+app_name = 'Customer'
 
 urlpatterns = [
     path('list/', views.ListView.as_view(), name='ListView'),

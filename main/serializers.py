@@ -1,9 +1,8 @@
 from rest_framework import serializers
 from django.core import exceptions
 from django.contrib.auth.models import User
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import authenticate
 import django.contrib.auth.password_validation as validators
-from django.conf import settings
 
 # Create your serializers here.
 
@@ -25,13 +24,13 @@ class UserSerializer(serializers.ModelSerializer):
         try:
             validators.validate_password(value)
         except exceptions.ValidationError:
-            raise serializers.ValidationError("비밀번호")
+            raise serializers.ValidationError("입력오류")
 
         return value
 
     def validate(self, data):
         if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError("비밀번호")
+            raise serializers.ValidationError("입력오류")
 
         return data
 
@@ -53,9 +52,10 @@ class AuthSerializer(serializers.Serializer):
     password = serializers.CharField(required=True, write_only=True)
 
     def validate(self, data):
-        self.user = authenticate(username=data['username'], password=data['password'])
+        self.user = authenticate(
+            username=data['username'], password=data['password'])
 
         if self.user is None:
-            raise serializers.ValidationError("비밀번호")
+            raise serializers.ValidationError("입력오류")
 
         return data

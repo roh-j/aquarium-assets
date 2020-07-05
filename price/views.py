@@ -7,21 +7,11 @@ from rest_framework.response import Response
 # Create your views here.
 
 
-class ListView(APIView):
+class IndexView(APIView):
     renderer_classes = (TemplateHTMLRenderer,)
 
     def get(self, request, control_number, format=None):
         if request.user.is_authenticated:
-            return Response(template_name='customer/customer-list.html')
-        else:
-            return redirect('Main:SignInView')
-
-
-class ServiceView(APIView):
-    renderer_classes = (TemplateHTMLRenderer,)
-
-    def get(self, request, control_number, format=None):
-        if request.user.is_authenticated:
-            return Response(template_name='customer/customer-service.html')
+            return Response(template_name='price/price.html')
         else:
             return redirect('Main:SignInView')

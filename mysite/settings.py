@@ -37,16 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',  # rest framework
-    'main.apps.MainConfig',  # main app
-    'business.apps.BusinessConfig',  # business app
-    'management.apps.ManagementConfig',  # management app
-    'dashboard.apps.DashboardConfig',  # dashboard app
-    'store.apps.StoreConfig',  # store app
-    'inventory.apps.InventoryConfig',  # inventory app
-    'customer.apps.CustomerConfig',  # customer app
-    'accounting.apps.AccountingConfig',  # accounting app
-    'page.apps.PageConfig',  # page app
+    'rest_framework',
+    'main.apps.MainConfig',
+    'business.apps.BusinessConfig',
+    'dashboard.apps.DashboardConfig',
+    'store.apps.StoreConfig',
+    'inventory.apps.InventoryConfig',
+    'customer.apps.CustomerConfig',
+    'page.apps.PageConfig',
+    'price.apps.PriceConfig',
+    'order.apps.OrderConfig',
+    'report.apps.ReportConfig',
 ]
 
 MIDDLEWARE = [
@@ -141,7 +142,6 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.TemplateHTMLRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
     ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',

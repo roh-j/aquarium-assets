@@ -17,8 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('business/', include('business.urls')),
-    path('management/', include('management.urls')),
-    path('admin/', admin.site.urls),
+    path('console/<int:control_number>/dashboard/', include('dashboard.urls')),
+    path('console/<int:control_number>/store/', include('store.urls')),
+    path('console/<int:control_number>/price/', include('price.urls')),
+    path('console/<int:control_number>/order/', include('order.urls')),
+    path('console/<int:control_number>/inventory/', include('inventory.urls')),
+    path('console/<int:control_number>/customer/', include('customer.urls')),
 ]

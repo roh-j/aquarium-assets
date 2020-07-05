@@ -1,47 +1,35 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse, Http404
-from django.contrib.auth import authenticate
+from django.http import JsonResponse, HttpResponse
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from store.models import StorageRoom, AquariumSection, StoreLayout, Aquarium
-from store.serializers import AquariumSectionSerializer, AquariumSerializer
+import store.models as StoreModels
+import store.serializers as StoreSerializers
 
 # Create your views here.
-
-
-class PriceView(APIView):
-    renderer_classes = (TemplateHTMLRenderer,)
-
-    def get(self, request, management_id, format=None):
-        if request.user.is_authenticated:
-            return Response(template_name='inventory/inventory-price.html')
-        else:
-            return redirect('main:SignInView')
 
 
 class SelectionView(APIView):
     renderer_classes = (TemplateHTMLRenderer,)
 
-    def get(self, request, management_id, format=None):
+    def get(self, request, control_number, format=None):
         if request.user.is_authenticated:
-            queryset = StorageRoom.objects.filter(
-                business=management_id).order_by('-id')
+            queryset = StoreModels.StorageRoom.objects.filter(
+                business=control_number).order_by('-id')
             return Response({'storage_room_list': queryset}, template_name='inventory/inventory-selection.html')
         else:
-            return redirect('main:SignInView')
+            return redirect('Main:SignInView')
 
 
 class StoreLayoutView(APIView):
     renderer_classes = (JSONRenderer,)
 
-    def get(self, request, management_id, format=None):
+    def get(self, request, control_number, format=None):
         row, column, context = [], [], []
         sorted_id, sorted_color = [], []
         match = {}
 
-        queryset = StoreLayout.objects.filter(
+        queryset = StoreModels.StoreLayout.objects.filter(
             storage_room=request.query_params.get('FK')
         )
 
@@ -49,9 +37,9 @@ class StoreLayoutView(APIView):
             for data in queryset:
                 # Nested Dict.
                 match[str(data.row)+','+str(data.column)] = {}
-                match[str(data.row)+','+str(data.column)]['section_id'] = AquariumSection.objects.get(
+                match[str(data.row)+','+str(data.column)]['section_id'] = StoreModels.AquariumSection.objects.get(
                     pk=str(data.aquarium_section.pk)).pk
-                match[str(data.row)+','+str(data.column)]['section_color'] = AquariumSection.objects.get(
+                match[str(data.row)+','+str(data.column)]['section_color'] = StoreModels.AquariumSection.objects.get(
                     pk=str(data.aquarium_section.pk)).section_color
 
                 row.append(data.row)
@@ -80,19 +68,20 @@ class StoreLayoutView(APIView):
 class AquariumSectionView(APIView):
     renderer_classes = (JSONRenderer,)
 
-    def get(self, request, management_id, format=None):
-        queryset = AquariumSection.objects.get(pk=request.query_params.get("PK"))
+    def get(self, request, control_number, format=None):
+        queryset = StoreModels.AquariumSection.objects.get(
+            pk=request.query_params.get("PK"))
 
-        serializer = AquariumSectionSerializer(queryset)
+        serializer = StoreSerializers.AquariumSectionSerializer(queryset)
         return JsonResponse(serializer.data, safe=False, status=200)
 
 
 class AquariumView(APIView):
     renderer_classes = (JSONRenderer,)
 
-    def get(self, request, management_id, format=None):
-        queryset = Aquarium.objects.get(
+    def get(self, request, control_number, format=None):
+        queryset = StoreModels.Aquarium.objects.get(
             aquarium_section=request.query_params.get("FK"), row=request.query_params.get("row"), column=request.query_params.get("column"))
 
-        serializer = AquariumSerializer(queryset)
+        serializer = StoreSerializers.AquariumSerializer(queryset)
         return JsonResponse(serializer.data, safe=False, status=200)

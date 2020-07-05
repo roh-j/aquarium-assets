@@ -16,11 +16,10 @@ Including another URLconf
 from django.urls import path
 from . import views
 
-app_name = 'store'
-
 urlpatterns = [
     path('', views.IndexView.as_view(), name='IndexView'),
     path('storage-room/', views.StorageRoomView.as_view(), name='StorageRoomView'),
-    path('aquarium-section/', views.AquariumSectionView.as_view(), name='AquariumSectionView'),
+    path('aquarium-section/', views.AquariumSectionView.as_view(),
+         name='AquariumSectionView'),
     path('store-layout/', views.StoreLayoutView.as_view(), name='StoreLayoutView'),
 ]

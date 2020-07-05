@@ -20,7 +20,7 @@
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <!-- serializeObject -->
-    <script src="{% static 'assets/js/lib/serializeObject.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
     <!-- Scripts -->
     <script src="{% static 'assets/js/common.js' %}"></script>
 
@@ -74,26 +74,45 @@
     </nav>
     <div class="container-fluid mt-5">
         <div class="panel panel-default border-dark max-360 mx-auto">
-            <div class="panel-heading border-dark">환영합니다.</div>
+            <div class="panel-heading border-dark">계정 등록</div>
             <div class="panel-body">
                 <img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive">
-                <hr>
                 <form method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="id_username">사용자 계정</label>
                         <input type="text" id="id_username" name="username" class="form-control" autofocus>
                     </div>
+                    <div class="alert bg-default border-secondary">
+                        <i class="fas fa-exclamation-circle"></i> 문자, 숫자, 마침표를 사용할 수 있습니다.
+                    </div>
+                    <div class="form-group">
+                        <label for="id_first_name">성 (이름)</label>
+                        <input type="text" id="id_first_name" name="first_name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_last_name">이름</label>
+                        <input type="text" id="id_last_name" name="last_name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_email">이메일 주소</label>
+                        <input type="text" id="id_email" name="email" class="form-control">
+                    </div>
                     <div class="form-group">
                         <label for="id_password">비밀번호</label>
                         <input type="password" id="id_password" name="password" class="form-control">
                     </div>
-                    <div class="text-right">
-                        <a href="../register/">회원이 아니십니까?</a>
+                    <div class="alert bg-default border-secondary">
+                        <i class="fas fa-exclamation-circle"></i> 문자, 숫자, 기호를 조합하여 8자 이상을 사용하세요.
+                    </div>
+                    <div class="form-group">
+                        <label for="id_confirm_password">비밀번호 재확인</label>
+                        <input type="password" id="id_confirm_password" name="confirm_password" class="form-control">
                     </div>
                     <hr>
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-default">로그인</button>
+                    <div class="btn-group pull-right">
+                        <a href="../" class="btn btn-default">메인화면</a>
+                        <button type="submit" class="btn btn-default">회원가입</button>
                     </div>
                 </form>
             </div>

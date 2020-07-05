@@ -16,7 +16,7 @@ Including another URLconf
 from django.urls import path
 from . import views
 
-app_name = 'dashboard'
+app_name = 'Dashboard'
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='IndexView'),

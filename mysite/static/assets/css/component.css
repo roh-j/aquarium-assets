@@ -1,0 +1,163 @@
+/* the switch - the box around the slider */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin-bottom: 0 !important;
+}
+
+/* hide default html checkbox */
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* the slider */
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #fff;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+input:checked + .slider {
+    background-color: #428bca;
+}
+input:focus + .slider {
+    box-shadow: 0 0 1px #428bca;
+}
+input:checked + .slider:before {
+    -webkit-transform: translatex(26px);
+    -ms-transform: translatex(26px);
+    transform: translatex(26px);
+}
+
+/* rounded sliders */
+
+.slider.round {
+    border-radius: 34px;
+}
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* store layout */
+
+rect.store-layout-grid {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+}
+rect.store-layout-button {
+    stroke: none;
+}
+
+/* aquarium */
+
+polygon.aquarium-grid {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linejoin: bevel;
+}
+rect.aquarium-front-grid {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linejoin: bevel;
+}
+polygon.aquarium-plane {
+    fill: #e7e7e7;
+    stroke: none;
+}
+rect.aquarium-front-button {
+    fill: #fff;
+    stroke: none;
+    cursor: pointer;
+}
+rect.aquarium-front-button:hover {
+    fill: #badefc;
+}
+
+/* effect */
+
+polygon.effect-aquarium-grid {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linejoin: bevel;
+}
+
+rect.effect-aquarium-front-grid {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linejoin: bevel;
+}
+
+polygon.effect-aquarium-plane {
+    fill: #e7e7e7;
+    stroke: none;
+}
+
+rect.effect-aquarium-front-button {
+    fill: #fff;
+    stroke: none;
+}
+
+/* color picker */
+
+div.color-picker {
+    width: 187px;
+    padding: 5px;
+    border: 1px solid #343a40;
+    border-radius: 4px;
+}
+div.color-picker ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    float: left;
+}
+div.color-picker ul li {
+    display: block;
+    float: left;
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #343a40;
+    cursor: pointer;
+}
+div.color-picker ul li:nth-child( 6n ) {
+    margin: 0;
+}
+div.color-picker ul li:nth-child( n + 7 ) {
+    margin-bottom: 0;
+}
+div.color-selected {
+    width: 34px;
+    height: 34px;
+    border: 1px solid #343a40;
+    border-radius: 4px;
+}

@@ -1,12 +1,12 @@
 from django.db import models
-from business.models import Business
+import business.models as BusinessModels
 
 # Create your models here.
 
 
 class StorageRoom(models.Model):
     business = models.ForeignKey(
-        Business,
+        BusinessModels.Business,
         on_delete=models.CASCADE
     )
     storage_room_name = models.CharField(max_length=20)
