@@ -3,34 +3,38 @@ from django.core import exceptions
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 import django.contrib.auth.password_validation as validators
+from main.models import MEMBERSHIP_CHOICES, Profile
+from console.models import Console
 
 # Create your serializers here.
 
 
-class UserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True)
+class UserSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
     password = serializers.CharField(required=True, write_only=True)
     confirm_password = serializers.CharField(required=True, write_only=True)
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'first_name',
-                  'last_name', 'password', 'confirm_password')
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
+    membership = serializers.ChoiceField(required=True, write_only=True, choices=MEMBERSHIP_CHOICES)
 
     def validate_password(self, value):
         try:
             validators.validate_password(value)
         except exceptions.ValidationError:
-            raise serializers.ValidationError("입력오류")
+            raise serializers.ValidationError()
+
+        return value
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError()
 
         return value
 
     def validate(self, data):
         if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError("입력오류")
+            raise serializers.ValidationError()
 
         return data
 
@@ -43,28 +47,32 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
         user.set_password(validated_data['password'])
+
+        profile = Profile.objects.create(
+            user=user,
+            membership=validated_data['membership'],
+        )
+
+        console = Console.objects.create(
+            user=user
+        )
+
         user.save()
+        profile.save()
+        console.save()
+
         return user
 
 
 class AuthSerializer(serializers.Serializer):
-    error_messages = {
-        'invalid': '유효한 문자열이 아닙니다.',
-        'blank': '이 입력란은 비워둘 수 없습니다.',
-        'max_length': '이 입력란의 길이가 {max_length} 이하 여야 합니다.',
-        'min_length': '이 입력란의 길이가 {min_length} 이상인지 확인하십시오.'
-    }
-
-    username = serializers.CharField(
-        error_messages=error_messages, required=True)
-    password = serializers.CharField(
-        error_messages=error_messages, required=True, write_only=True)
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
 
     def validate(self, data):
         self.user = authenticate(
             username=data['username'], password=data['password'])
 
         if self.user is None:
-            raise serializers.ValidationError("아이디 또는 비밀번호를 다시 확인하세요.")
+            raise serializers.ValidationError()
 
         return data

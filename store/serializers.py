@@ -1,7 +1,7 @@
 from rest_framework import serializers
-import business.models as BusinessModels
-import store.models as StoreModels
-import datetime
+from django.utils import timezone
+from console.models import Console
+from store.models import StorageRoom, AquariumSection, StoreLayout, Aquarium
 
 # Create your serializers here.
 
@@ -10,17 +10,17 @@ class StorageRoomSerializer(serializers.ModelSerializer):
     storage_room_name = serializers.CharField(required=True)
 
     class Meta:
-        model = StoreModels.StorageRoom
-        fields = ('storage_room_name',)
+        model = StorageRoom
+        fields = ('storage_room_name', 'last_modified_date',)
 
     def set_FK(self, key):
         self.FK = key
 
     def create(self, validated_data):
-        storage_room = StoreModels.StorageRoom.objects.create(
-            business=BusinessModels.Business.objects.get(pk=self.FK),
+        storage_room = StorageRoom.objects.create(
+            console=Console.objects.get(id=self.FK),
             storage_room_name=validated_data['storage_room_name'],
-            modified_date=datetime.datetime.now(),
+            last_modified_date=timezone.now(),
         )
 
         storage_room.save()
@@ -34,43 +34,52 @@ class AquariumSectionSerializer(serializers.ModelSerializer):
     aquarium_num_of_columns = serializers.IntegerField(required=True)
 
     class Meta:
-        model = StoreModels.AquariumSection
-        fields = ('pk', 'section_name', 'section_color',
+        model = AquariumSection
+        fields = ('id', 'section_name', 'section_color',
                   'aquarium_num_of_rows', 'aquarium_num_of_columns',)
 
     def set_FK(self, key):
         self.FK = key
 
     def create(self, validated_data):
-        aquarium_section = StoreModels.AquariumSection.objects.create(
-            storage_room=StoreModels.StorageRoom.objects.get(pk=self.FK),
+        aquarium_section = AquariumSection.objects.create(
+            storage_room=StorageRoom.objects.get(id=self.FK),
             section_name=validated_data['section_name'],
             section_color=validated_data['section_color'],
             aquarium_num_of_rows=validated_data['aquarium_num_of_rows'],
             aquarium_num_of_columns=validated_data['aquarium_num_of_columns'],
-            modified_date=datetime.datetime.now(),
         )
+
+        aquarium_section.last_modified_date = timezone.now()
 
         aquarium_section.save()
 
-        for i in range(validated_data['aquarium_num_of_rows']):
-            for j in range(validated_data['aquarium_num_of_columns']):
-                aquarium = StoreModels.Aquarium.objects.create(
+        for row in range(validated_data['aquarium_num_of_rows']):
+            for column in range(validated_data['aquarium_num_of_columns']):
+                aquarium = Aquarium.objects.create(
                     aquarium_section=aquarium_section,
-                    row=i,
-                    column=j,
-                    config_date=datetime.datetime.now(),
-                    modified_date=datetime.datetime.now(),
+                    row=row,
+                    column=column,
                 )
                 aquarium.save()
+
         return aquarium_section
+
+    def update(self, instance, validated_data):
+        instance.section_name = validated_data.get('section_name', instance.section_name)
+        instance.section_color = validated_data.get('section_color', instance.section_color)
+        instance.last_modified_date = timezone.now()
+
+        instance.save()
+
+        return instance
 
 
 class AquariumSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = StoreModels.Aquarium
-        fields = ('pk', 'row', 'column', 'alias', 'state', 'memo', 'ph', )
+        model = Aquarium
+        fields = ('id', 'row', 'column', 'alias', 'memo', 'setup_date', 'last_modified_date', 'creation_date',)
 
 
 class StoreLayoutSerializer(serializers.ModelSerializer):
@@ -78,7 +87,7 @@ class StoreLayoutSerializer(serializers.ModelSerializer):
     column = serializers.IntegerField(required=True)
 
     class Meta:
-        model = StoreModels.StoreLayout
+        model = StoreLayout
         fields = ('row', 'column',)
 
     def set_FK(self, key1, key2):
@@ -86,10 +95,9 @@ class StoreLayoutSerializer(serializers.ModelSerializer):
         self.FK2 = key2  # AquariumSection
 
     def create(self, validated_data):
-        store_layout = StoreModels.StoreLayout.objects.create(
-            storage_room=StoreModels.StorageRoom.objects.get(pk=self.FK1),
-            aquarium_section=StoreModels.AquariumSection.objects.get(
-                pk=self.FK2),
+        store_layout = StoreLayout.objects.create(
+            storage_room=StorageRoom.objects.get(id=self.FK1),
+            aquarium_section=AquariumSection.objects.get(id=self.FK2),
             row=validated_data['row'],
             column=validated_data['column'],
         )

@@ -9,35 +9,45 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
+    <script src="{% static 'assets/js/messages.js' %}"></script>
 
     <title>Aquarium Assets</title>
     <script>
         $(function () {
-            $("form").submit(function (e) {
+            init_toast();
+
+            $('form').submit(function (e) {
                 e.preventDefault();
-                var params = $("form").serializeObject();
+                var params = $('form').serializeObject();
 
                 $.ajax({
-                    url: "",
-                    method: "post",
+                    url: '',
+                    method: 'post',
                     headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     },
                     data: JSON.stringify(params),
-                    dataType: "json",
-                }).done(function (res, status, xhr) {
-                    location.replace("../business/");
+                    dataType: 'json',
+                }).done(function (data, status, xhr) {
+                    location.replace('../console/');
                 }).fail(function (res, status, xhr) {
+                    $.each(res.responseJSON, function (key, value) {
+                        toastr.remove();
+                        toastr.warning(error_messages['main_register'][key][value]);
+                        return false;
+                    });
                 });
             });
         });
@@ -50,9 +60,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title"><i class="fas fa-exclamation-circle fa-fw text-primary"></i> 알림</h5>
+                    <h5 class="modal-title">알림</h5>
                 </div>
-                <div id="alert-modal-body" class="modal-body text-center"></div>
+                <div class="modal-body text-center"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
                 </div>
@@ -89,8 +99,9 @@
                         <label for="id_username">사용자 계정</label>
                         <input type="text" id="id_username" name="username" class="form-control" autofocus>
                     </div>
-                    <div class="alert alert-explain">
-                        <i class="fas fa-exclamation-circle fa-fw"></i> 문자, 숫자, 마침표를 사용할 수 있습니다.
+                    <div class="form-group">
+                        <label for="id_email">이메일 주소</label>
+                        <input type="text" id="id_email" name="email" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="id_first_name">성 (이름)</label>
@@ -99,10 +110,6 @@
                     <div class="form-group">
                         <label for="id_last_name">이름</label>
                         <input type="text" id="id_last_name" name="last_name" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="id_email">이메일 주소</label>
-                        <input type="text" id="id_email" name="email" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="id_password">비밀번호</label>

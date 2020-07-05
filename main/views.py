@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout, authenticate
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-import main.serializers as MainSerializers
+from main.serializers import UserSerializer, AuthSerializer
 
 # Create your views here.
 
@@ -20,10 +20,13 @@ class RegisterView(APIView):
     renderer_classes = (JSONRenderer, TemplateHTMLRenderer,)
 
     def get(self, request, format=None):
-        return Response(template_name='main/main-register.html')
+        if request.user.is_authenticated:
+            return redirect('Console:IndexView')
+        else:
+            return Response(template_name='main/main-register.html')
 
     def post(self, request, format=None):
-        serializer = MainSerializers.UserSerializer(data=request.data)
+        serializer = UserSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -37,12 +40,12 @@ class SignInView(APIView):
 
     def get(self, request, format=None):
         if request.user.is_authenticated:
-            return redirect('Business:IndexView')
+            return redirect('Console:IndexView')
         else:
             return Response(template_name='main/main-login.html')
 
     def post(self, request, format=None):
-        serializer = MainSerializers.AuthSerializer(data=request.data)
+        serializer = AuthSerializer(data=request.data)
 
         if serializer.is_valid():
             login(request, serializer.user)

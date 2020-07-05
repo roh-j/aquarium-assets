@@ -1,9 +1,9 @@
 from django.contrib import admin
-import store.models as StoreModels
+from store.models import StorageRoom, AquariumSection, StoreLayout, Aquarium
 
 # Register your models here.
 
-admin.site.register(StoreModels.StorageRoom)
-admin.site.register(StoreModels.AquariumSection)
-admin.site.register(StoreModels.StoreLayout)
-admin.site.register(StoreModels.Aquarium)
+admin.site.register(StorageRoom)
+admin.site.register(AquariumSection)
+admin.site.register(StoreLayout)
+admin.site.register(Aquarium)

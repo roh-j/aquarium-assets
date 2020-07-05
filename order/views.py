@@ -15,13 +15,3 @@ class RegisterView(APIView):
             return Response(template_name='order/order-register.html')
         else:
             return redirect('Main:SignInView')
-
-
-class ListView(APIView):
-    renderer_classes = (TemplateHTMLRenderer,)
-
-    def get(self, request, control_number, format=None):
-        if request.user.is_authenticated:
-            return Response(template_name='order/order-list.html')
-        else:
-            return redirect('Main:SignInView')

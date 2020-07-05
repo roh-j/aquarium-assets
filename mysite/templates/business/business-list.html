@@ -45,19 +45,19 @@
             <div class="panel-body">
                 <img src="{% static 'assets/img/icon/Actions-view-pim-contacts-icon-128x128.png' %}" class="primary-image img-responsive">
                 <hr>
-                {% if not business_list %}
+                {% if not items %}
                 <div class="alert alert-explain">
                     <i class="fas fa-exclamation-circle fa-fw"></i> 비즈니스 등록이 필요합니다.
                 </div>
                 {% else %}
                 <div class="list-group">
-                    {% for list in business_list %}
-                    <a href="../console/{{ list.pk }}/dashboard/" class="list-group-item">
+                    {% for item in items %}
+                    <a href="../console/{{ item.pk }}/dashboard/" class="list-group-item">
                         <dl class="mb-0">
-                            <dt>{{ list.name_of_company }}</dt>
+                            <dt>{{ item.business.name_of_company }}</dt>
                             <dd>
-                                Alias: {{ list.alias }}<br>
-                                Registration: {{ list.registration_number }}
+                                Alias: {{ item.business.alias }}<br>
+                                Registration: {{ item.business.registration_number }}
                             </dd>
                         </dl>
                     </a>

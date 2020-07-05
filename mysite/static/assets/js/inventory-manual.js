@@ -1,44 +1,131 @@
 /**
- * Inventory JS
+ * inventory - manual javascript
  * @author roh-j
- * @version 2019-07-26, 코드 표준화.
+ * @version 2019-08-11
  */
 
+var storage_room_id = null;
+var aquarium_section_id = null;
 var storage_room_name = null;
-var storage_room_pk = null;
-var aquarium_section_pk = null;
-var aquarium_selection_row = null;
-var aquarium_selection_column = null;
 
-var table = null;
+var aquarium_id = null;
+var aquarium_row = null;
+var aquarium_column = null;
+
+var inventory_table = null;
 var coordinate = null;
 
 $(function () {
-
     $('#console-menu').metisMenu();
     $('.nav-second-level').removeClass('d-none');
 
-    load_complete();
+    init_toast();
+    init_horizontal_spinner();
 
-    table = $('#inventory_table').DataTable({
-        buttons: [
+    $('span.relative-time').each(function () {
+        var conv = moment($(this).text(), 'YYYY-MM-DD HH:mm:ss').fromNow();
+        $(this).text(conv);
+    });
+
+    $('#aquarium-stock-register').on('click', function (e) {
+        $.ajax({
+            url: '../../product/creature/',
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            dataType: 'json',
+        }).done(function (data, status, xhr) {
+            var species = [];
+            var breed = [];
+
+            $('#species-dropdown-menu').empty();
+            $('#breed-dropdown-menu').empty();
+
+            for (i = 0; i < data.length; i++) {
+                species.push(data[i]['species']);
+                breed.push(data[i]['breed']);
+
+                $('#species-dropdown-menu').append(
+                    '<li><a href="#" data-target="#id_species">' + data[i]['species'] + '</a></li>'
+                );
+                $('#breed-dropdown-menu').append(
+                    '<li><a href="#" data-target="#id_breed">' + data[i]['breed'] + '</a></li>'
+                );
+            }
+
+            $('#id_species').typeahead({
+                source: species,
+                items: 5
+            });
+            $('#id_breed').typeahead({
+                source: breed,
+                items: 5
+            });
+
+            $('.dropdown-menu li a').on('click', function (e) {
+                e.preventDefault();
+
+                target = $(this).data('target');
+                $(target).val($(this).text());
+            });
+
+            $('#aquarium-stock-register-modal').modal('show');
+        }).fail(function (res, status, xhr) {
+        });
+    });
+
+    $('#form-aquarium-stock-register').on('submit', function (e) {
+        e.preventDefault();
+        var params = $('#form-aquarium-stock-register').serializeObject();
+        params = $.extend(
+            params,
             {
-                extend: 'csv',
-                text: '<i class="far fa-save fa-fw"></i> CSV',
-                filename: '생물재고 ' + year + '-' + month + '-' + day,
-                exportOptions: {
-                    columns: [1, 2, 3, 4, 5]
+                'FK': aquarium_id
+            }
+        );
+
+        $.ajax({
+            url: 'aquarium-stock/',
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(params),
+            dataType: 'json',
+        }).done(function (data, status, xhr) {
+            $('#aquarium-stock-register-modal').modal('hide');
+            $('#aquarium-stock-register-modal').on('hidden.bs.modal', function (e) {
+                async_aquarium_stock();
+
+                toastr.remove();
+                toastr.success('재고를 등록하였습니다.');
+            });
+        }).fail(function (res, status, xhr) {
+        });
+    });
+
+    inventory_table = $('#inventory_table').DataTable({
+        'buttons': [
+            {
+                'extend': 'csv',
+                'text': '<i class="far fa-save fa-fw"></i> CSV',
+                'filename': '수조 재고 목록표 ' + year + '-' + month + '-' + day,
+                'exportOptions': {
+                    'columns': [1, 2, 3, 4, 5, 6, 7]
                 }
             },
             {
-                extend: 'excel',
-                text: '<i class="far fa-save fa-fw"></i> Excel',
-                filename: '생물재고 ' + year + '-' + month + '-' + day,
-                title: '',
-                exportOptions: {
-                    columns: [1, 2, 3, 4, 5]
+                'extend': 'excel',
+                'text': '<i class="far fa-save fa-fw"></i> Excel',
+                'filename': '수조 재고 목록표 ' + year + '-' + month + '-' + day,
+                'title': '',
+                'exportOptions': {
+                    'columns': [1, 2, 3, 4, 5, 6, 7]
                 },
-                customize: function (xlsx) {
+                'customize': function (xlsx) {
                     var sheet = xlsx.xl.worksheets['sheet1.xml'];
                     var col = $('col', sheet);
 
@@ -48,51 +135,52 @@ $(function () {
                 }
             }
         ],
-        columnDefs: [
+        'columnDefs': [
             {
-                'targets': [6],
+                'targets': [8],
                 'searchable': false,
                 'orderable': false
             }
         ],
-        autoWidth: false,
-        pageLength: 10,
-        lengthMenu: [10, 25, 50],
-        pagingType: 'simple',
-        dom: 'l' + 'B' + 'f' + 't' + 'p' + 'i',
-        language: {
-            emptyTable: '데이터가 존재하지 않습니다.',
-            zeroRecords: '일치하는 레코드가 없습니다.',
-            lengthMenu: '_MENU_',
-            search: '',
-            searchPlaceholder: '\uf002',
-            paginate: {
-                previous: '이전',
-                next: '다음'
+        'autoWidth': false,
+        'pageLength': 10,
+        'lengthMenu': [10, 25, 50],
+        'pagingType': 'simple',
+        'dom': 'l' + 'B' + 'f' + 't' + 'p' + 'i',
+        'language': {
+            'emptyTable': '데이터가 존재하지 않습니다.',
+            'zeroRecords': '일치하는 데이터가 없습니다.',
+            'lengthMenu': '_MENU_',
+            'search': '',
+            'paginate': {
+                'previous': '이전',
+                'next': '다음'
             }
         },
-        initComplete: function () {
+        'initComplete': function () {
             $('.dt-buttons').addClass('btn-group');
             $('.dt-buttons > .dt-button').addClass('btn btn-default');
 
-            $('.dataTables_filter input').removeClass('input-sm').unwrap('label').addClass('fas fa-search');
+            $('.dataTables_filter input').removeClass('input-sm');
             $('.dataTables_length select').removeClass('input-sm');
 
             $('.dataTables_info').detach().appendTo('#inventory-info');
             $('.dataTables_paginate').detach().appendTo('#inventory-pagination');
 
             $('.dt-buttons').detach().appendTo('#inventory-menu');
-            $('.dataTables_length').detach().appendTo('#inventory-tool');
+            $('.dataTables_length').detach().appendTo('#inventory-tool').addClass('ml-auto');
             $('.dataTables_filter').detach().appendTo('#inventory-tool');
         }
     });
+
+    load_complete();
 
     /**
      * 생물실 탭.
      * Event bind.
      */
 
-    $('#storage-room-list > a').click(function (e) {
+    $('#storage-room-list > a').on('click', function (e) {
         e.preventDefault();
 
         if (!$(this).hasClass('selected')) {
@@ -104,10 +192,10 @@ $(function () {
                 '<span class="text-primary pull-right"><i class="fas fa-check fa-fw"></i></span>'
             );
 
-            storage_room_pk = $('div.media > span.data-bind', this).data('storage-room-id');
+            storage_room_id = $('div.media > span.data-bind', this).data('storage-room-id');
             storage_room_name = $('div.media > span.data-bind', this).data('storage-room-name');
 
-            draw_store_layout('store-layout/', function () {
+            draw_store_layout(function () {
                 $('.nav-tabs a[href="#store-layout"]').tab('show');
             });
         }
@@ -118,10 +206,12 @@ $(function () {
      * Event bind.
      */
 
-    $('#redo-store-layout').click(function (e) {
+    $('#redo-store-layout').on('click', function (e) {
         $('.nav-tabs a[href="#store-layout"]').tab('show');
-        aquarium_selection_row = null;
-        aquarium_selection_column = null;
+        $('#aquarium-stock-register').attr('disabled', true);
+        aquarium_row = null;
+        aquarium_column = null;
+        inventory_table.clear().draw();
     });
 });
 
@@ -132,13 +222,13 @@ $(function () {
  * @returns 없음.
  */
 
-var draw_store_layout = function (url, callback) {
+var draw_store_layout = function (callback) {
     var params = {
-        'FK': storage_room_pk
+        'FK': storage_room_id
     };
 
     $.ajax({
-        url: url,
+        url: 'store-layout/',
         method: 'get',
         headers: {
             'Accept': 'application/json',
@@ -204,8 +294,8 @@ var draw_store_layout = function (url, callback) {
 
             $('rect.store-layout-button').on('click', function () {
                 if ($(this).data('store-layout-selected')) {
-                    aquarium_section_pk = $(this).data('store-layout-section-id');
-                    draw_aquarium('aquarium-section/', function () {
+                    aquarium_section_id = $(this).data('store-layout-section-id');
+                    draw_aquarium(function () {
                         $('.nav-tabs a[href="#aquarium"]').tab('show');
                     });
                 }
@@ -218,9 +308,7 @@ var draw_store_layout = function (url, callback) {
         else {
             alert('SVG를 지원하지 않는 브라우저입니다.');
         }
-        if (callback) {
-            callback();
-        }
+        typeof callback === 'function' && callback();
     }).fail(function (data) {
     });
 }
@@ -232,13 +320,13 @@ var draw_store_layout = function (url, callback) {
  * @returns 없음.
  */
 
-var draw_aquarium = function (url, callback) {
+var draw_aquarium = function (callback) {
     var params = {
-        'PK': aquarium_section_pk
+        'PK': aquarium_section_id
     }
 
     $.ajax({
-        url: url,
+        url: 'aquarium-section/',
         method: 'get',
         headers: {
             'Accept': 'application/json',
@@ -269,7 +357,7 @@ var draw_aquarium = function (url, callback) {
                         'y': (height_interval * i + i + 1)
                     });
                     if (idx < coordinate.length && i == coordinate[idx]['row'] && j == coordinate[idx]['column']) {
-                        if (aquarium_section_pk == coordinate[idx]['section_id']) {
+                        if (aquarium_section_id == coordinate[idx]['section_id']) {
                             map.rect(15, 10).attr({
                                 'class': 'mini-map-store-layout-button',
                                 'fill': coordinate[idx]['color'],
@@ -306,7 +394,7 @@ var draw_aquarium = function (url, callback) {
                 for (j = 0; j < data['aquarium_num_of_columns']; j++) {
                     var group = aquarium.group();
 
-                    if (i == (data['aquarium_num_of_rows'] - aquarium_selection_row) && j == aquarium_selection_column) {
+                    if (i == (data['aquarium_num_of_rows'] - aquarium_row) && j == aquarium_column) {
                         group.add(water = aquarium.pattern(.25, 1.1, function (add) {
                             add.path('M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z').fill('#6198b3');
                         }).attr({
@@ -375,17 +463,109 @@ var draw_aquarium = function (url, callback) {
             }
 
             $('rect.aquarium-front-button').on('click', function () {
-                aquarium_selection_row = $(this).data('aquarium-row');
-                aquarium_selection_column = $(this).data('aquarium-column');
-                draw_aquarium('aquarium-section/', null);
+                aquarium_row = $(this).data('aquarium-row');
+                aquarium_column = $(this).data('aquarium-column');
+
+                var params = {
+                    'FK': aquarium_section_id,
+                    'row': aquarium_row,
+                    'column': aquarium_column
+                }
+
+                $.ajax({
+                    url: 'aquarium/',
+                    method: 'get',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: params,
+                    dataType: 'json',
+                }).done(function (data, status, xhr) {
+                    aquarium_id = data['id'];
+                    $('#aquarium-stock-register').attr('disabled', false);
+
+                    async_aquarium_stock();
+                    draw_aquarium();
+
+                    toastr.remove();
+                    toastr.success('수조를 관리할 수 있습니다.');
+                }).fail(function (res, status, xhr) {
+                });
             });
         }
         else {
             alert('SVG를 지원하지 않는 브라우저입니다.');
         }
-        if (callback) {
-            callback();
-        }
+        typeof callback === 'function' && callback();
     }).fail(function (data) {
+    });
+}
+
+var async_aquarium_stock = function (callback) {
+    var params = {
+        'FK': aquarium_id
+    };
+
+    $.ajax({
+        url: 'aquarium-stock/',
+        method: 'get',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: params,
+        dataType: 'json',
+    }).done(function (data, status, xhr) {
+        inventory_table.clear().draw();
+
+        for (i = 0; i < data.length; i++) {
+            var gender = null;
+            var status = null;
+
+            switch (data[i]['gender']) {
+                case 'none':
+                    gender = '<i class="fas fa-genderless fa-fw text-secondary"></i> 없음';
+                    break;
+                case 'female':
+                    gender = '<i class="fas fa-venus fa-fw text-danger"></i> 암컷';
+                    break;
+                case 'male':
+                    gender = '<i class="fas fa-mars fa-fw text-primary"></i> 수컷';
+                    break;
+            }
+
+            switch (data[i]['status']) {
+                case 'available':
+                    status = '<i class="fas fa-lightbulb fa-fw text-success"></i>';
+                    break;
+                case 'unavailable':
+                    status = '<i class="fas fa-lightbulb fa-fw text-warning"></i>';
+                    break;
+            }
+
+            inventory_table.row.add(
+                $('\
+                    <tr>\
+                        <th scope="row">' + (inventory_table.rows().count() + 1) + '</th>\
+                        <td>' + data[i]['creature__species'] + '</td>\
+                        <td>' + data[i]['creature__breed'] + '</td>\
+                        <td>' + data[i]['remark'] + '</td>\
+                        <td>' + data[i]['size'] + ' cm</td>\
+                        <td>' + gender + '</td>\
+                        <td>' + data[i]['quantity'] + '</td>\
+                        <td>' + status + '</td>\
+                        <td class="min col-btn">\
+                            <div class="btn-group d-flex">\
+                                <button type="button" class="btn btn-default"><i class="fas fa-pen fa-fw"></i></button>\
+                                <button type="button" class="btn btn-default"><i class="fas fa-trash-alt fa-fw"></i></button>\
+                            </div>\
+                        </td>\
+                    </tr>\
+                ')
+            ).draw();
+        }
+        typeof callback === 'function' && callback();
+    }).fail(function (res, status, xhr) {
     });
 }

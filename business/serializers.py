@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.core import exceptions
 from django.contrib.auth.models import User
-import business.models as BusinessModels
-import datetime
+from business.models import Business
+from console.models import Console
 
 # Create your serializers here.
 
@@ -15,23 +15,40 @@ class BusinessSerializer(serializers.ModelSerializer):
     alias = serializers.CharField(required=True)
 
     class Meta:
-        model = BusinessModels.Business
+        model = Business
         fields = ('registration_number', 'name_of_company',
                   'address', 'contact', 'alias',)
 
     def set_FK(self, key):
         self.FK = key
 
+    def validate_registration_number(self, value):
+        if Business.objects.filter(registration_number=value).exists():
+            raise serializers.ValidationError()
+
+        return value
+
+    def validate_alias(self, value):
+        if Business.objects.filter(alias=value).exists():
+            raise serializers.ValidationError()
+
+        return value
+
     def create(self, validated_data):
-        business = BusinessModels.Business.objects.create(
-            user=User.objects.get(pk=self.FK),
+        business = Business.objects.create(
+            user=User.objects.get(id=self.FK),
             registration_number=validated_data['registration_number'],
             name_of_company=validated_data['name_of_company'],
             address=validated_data['address'],
             contact=validated_data['contact'],
             alias=validated_data['alias'],
-            publication_date=datetime.datetime.now(),
+        )
+
+        console = Console.objects.create(
+            business=business
         )
 
         business.save()
+        console.save()
+
         return business

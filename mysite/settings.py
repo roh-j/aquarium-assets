@@ -39,15 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'main.apps.MainConfig',
+    'console.apps.ConsoleConfig',
     'business.apps.BusinessConfig',
     'dashboard.apps.DashboardConfig',
     'store.apps.StoreConfig',
-    'inventory.apps.InventoryConfig',
-    'customer.apps.CustomerConfig',
-    'page.apps.PageConfig',
-    'price.apps.PriceConfig',
+    'product.apps.ProductConfig',
     'order.apps.OrderConfig',
-    'report.apps.ReportConfig',
+    'inventory.apps.InventoryConfig',
 ]
 
 MIDDLEWARE = [
@@ -116,13 +114,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
-USE_TZ = True
+USE_TZ = False
+
+DATETIME_FORMAT = 'Y-m-d H:i:s'
 
 
 # Static files (CSS, JavaScript, Images)

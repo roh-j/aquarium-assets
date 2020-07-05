@@ -40,16 +40,25 @@ table tbody tr td {
 .head {
     margin: 0;
 }
-.flex-component {
-    display: flex;
-    justify-content: flex-end;
-}
 .btn-group.input-spinner {
     display: flex;
     margin-top: 15px;
 }
 .dropdown-menu {
     min-width: 110px;
+}
+.list-inline {
+    margin-left: 0;
+}
+.list-inline li:first-child {
+    padding-left: 0;
+}
+.list-inline > li {
+    padding-right: 0;
+}
+.list-inline li + li:before {
+    content: "•";
+    margin-right: 5px;
 }
 /* ui styles */
 .btn,
@@ -100,22 +109,20 @@ table tbody tr td {
     height: 20px;
     text-align: center;
 }
-.bootoast {
-    position: relative;
-    float: right;
-    margin: 0 15px;
-    border: 1px solid;
-}
-.bootoast-container {
-    width: 100%;
-    max-width: 100%;
-}
-.bootoast-container.right {
-    right: 0;
-    left: inherit;
-}
-.bootoast-container.top {
+.toast-top-right {
     top: 65px;
+    right: 15px;
+}
+#toast-container > div,
+#toast-container > div:hover {
+    width: 290px;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+    opacity: .8;
 }
 .container {
     padding-top: 20px;
@@ -155,6 +162,10 @@ footer {
     color: #6c757d;
     text-align: center;
 }
+.navbar-cls-top .nav > li > a:hover,
+.navbar-cls-top .nav > li > a:focus {
+    background-color: #555b69;
+}
 /* component styles */
 table .pretty {
     margin: 0 10px;
@@ -162,7 +173,6 @@ table .pretty {
 .table-heading {
     height: 34px;
     line-height: 34px;
-    margin-right: auto;
     vertical-align: middle;
 }
 .datepicker-days > thead > tr > th {
@@ -246,18 +256,14 @@ table .pretty {
     padding-bottom: 15px;
     padding-left: 10px;
     border-left: 5px solid #ddd;
-    border-bottom: 1px dashed #ddd;
 }
 .dl-order {
     margin-top: 0;
     margin-bottom: 20px;
 }
 .dl-order dt {
-    float: left;
-    width: 160px;
     overflow: hidden;
     clear: left;
-    text-align: right;
     text-overflow: ellipsis;
     white-space: nowrap;
     padding-right: 20px;
@@ -265,7 +271,6 @@ table .pretty {
     padding-bottom: 10px;
 }
 .dl-order dd {
-    margin-left: 180px;
     padding-top: 10px;
     padding-bottom: 10px;
     border-bottom: 1px dashed #ddd;
@@ -368,7 +373,7 @@ table .pretty {
     border-bottom: none !important;
 }
 .nav-second-level li a {
-    padding-left: 37px;
+    padding-left: 47.5px;
     padding-top: 20px;
     padding-bottom: 20px;
 }
@@ -378,15 +383,33 @@ table .pretty {
     padding-bottom: 20px;
 }
 /* media queries */
-@media(min-width: 768px) {
+@media (min-width: 768px) {
     .container > .navbar-header,
     .container-fluid > .navbar-header,
     .container > .navbar-collapse,
     .container-fluid > .navbar-collapse {
         margin-right: -15px;
     }
+    .dl-order dt {
+        float: left;
+        width: 160px;
+        overflow: hidden;
+        clear: left;
+        text-align: right;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-right: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .dl-order dd {
+        margin-left: 180px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed #ddd;
+    }
 }
-@media(min-width: 992px) {
+@media (min-width: 992px) {
     #page-wrapper {
         margin: 0 0 0 230px;
     }
@@ -409,19 +432,13 @@ table .pretty {
         padding-left: 15px;
     }
 }
-@media(min-width: 1200px) {}
-@media(max-width: 767.98px) {
+@media (min-width: 1200px) {}
+@media (max-width: 767.98px) {
     .table-responsive {
         border: none !important;
     }
-    .dl-order dt {
-        width: 100px;
-    }
-    .dl-order dd {
-        margin-left: 100px;
-    }
 }
-@media(max-width: 991.98px) {
+@media (max-width: 991.98px) {
     .navbar-header {
         float: none;
     }
@@ -438,5 +455,10 @@ table .pretty {
         display: block !important
     }
 }
-@media(max-width: 1199.98px) {}
-@media(min-width: 768px) and(max-width: 1199.98px) {}
+@media (max-width: 1199.98px) {}
+@media (min-width: 241px) and (max-width: 480px) {
+    #toast-container > div {
+        padding: 15px 15px 15px 50px;
+        width: 290px;
+    }
+}

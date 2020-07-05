@@ -11,13 +11,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <link rel="stylesheet" href="{% static 'assets/css/lib/bootoast.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/component.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/graphics.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/ko.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap.min.js"></script>
@@ -28,7 +30,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
-    <script src="{% static 'assets/js/lib/bootoast.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
@@ -38,28 +40,36 @@
 </head>
 
 <body>
-    <div id="alert-modal" class="modal fade" tabindex="-1">
+    <div id="storage-room-register-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title"><i class="fas fa-exclamation-circle fa-fw text-primary"></i> 알림</h5>
+                    <h5 class="modal-title">생물실 등록</h5>
                 </div>
-                <div id="alert-modal-body" class="modal-body text-center"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
-                </div>
+                <form id="form-storage-room-register" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="id_storage_room_name" class="control-label">생물실 레이블</label>
+                            <input type="text" class="form-control" id="id_storage_room_name" name="storage_room_name">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <div id="storage-room-modal" class="modal fade" tabindex="-1">
+    <div id="storage-room-modify-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 id="storage-room-modal-title" class="modal-title"></h5>
+                    <h5 class="modal-title">생물실 변경</h5>
                 </div>
-                <form id="form-storage-room" method="POST">
+                <form id="form-storage-room-modify" method="POST">
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="form-group">
@@ -67,22 +77,27 @@
                             <input type="text" class="form-control" id="id_storage_room_name" name="storage_room_name">
                         </div>
                         <div class="alert alert-explain">
-                            <i class="fas fa-exclamation-circle fa-fw"></i> 생물실 레이블을 입력하세요.
+                            <i class="fas fa-exclamation-circle fa-fw"></i> 생물실 레이블을 변경할 수 있습니다.
                         </div>
                     </div>
-                    <div id="storage-room-modal-footer" class="modal-footer"></div>
+                    <div class="modal-footer">
+                        <div class="btn-group">
+                            <button type="button" id="storage-room-delete" class="btn btn-default">삭제</button>
+                            <button type="submit" class="btn btn-primary">변경</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-    <div id="aquarium-section-modal" class="modal fade" tabindex="-1">
+    <div id="aquarium-section-register-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 id="aquarium-section-modal-title" class="modal-title"></h5>
+                    <h5 class="modal-title">섹션 등록</h5>
                 </div>
-                <form id="form-aquarium-section" method="POST">
+                <form id="form-aquarium-section-register" method="POST">
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="form-group">
@@ -90,7 +105,7 @@
                             <input type="text" class="form-control" id="id_section_name" name="section_name">
                         </div>
                         <div class="row">
-                            <div class="form-group col-xs-6">
+                            <div class="form-group col-sm-6">
                                 <label for="id_aquarium_num_of_columns" class="control-label">가로</label>
                                 <div class="input-group">
                                     <span class="input-group-btn input-spinner">
@@ -110,7 +125,7 @@
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_columns">1</button>
                                 </div>
                             </div>
-                            <div class="form-group col-xs-6">
+                            <div class="form-group col-sm-6">
                                 <label for="id_aquarium_num_of_rows" class="control-label">높이 (층)</label>
                                 <div class="input-group">
                                     <span class="input-group-btn input-spinner">
@@ -137,8 +152,8 @@
                         <div class="form-group">
                             <label for="id_section_color" class="control-label">섹션 색상</label>
                             <input type="hidden" id="id_section_color" name="section_color" value="#cd5c5c">
-                            <div id="aquarium-section-edit-color-selected" class="color-selected" style="background: #cd5c5c"></div>
-                            <div id="aquarium-section-edit-color-picker" class="color-picker clearfix">
+                            <div id="register-color-selected" class="color-selected" style="background: #cd5c5c"></div>
+                            <div id="register-color-picker" class="color-picker clearfix">
                                 <ul>
                                     <li style="background: #cd5c5c" data-section-color="#cd5c5c"></li>
                                     <li style="background: #ff4500" data-section-color="#ff4500"></li>
@@ -156,7 +171,55 @@
                             </div>
                         </div>
                     </div>
-                    <div id="aquarium-section-modal-footer" class="modal-footer"></div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="aquarium-section-modify-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">섹션 변경</h5>
+                </div>
+                <form id="form-aquarium-section-modify" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="id_section_name" class="control-label">섹션 레이블</label>
+                            <input type="text" class="form-control" id="id_section_name" name="section_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_section_color" class="control-label">섹션 색상</label>
+                            <input type="hidden" id="id_section_color" name="section_color" value="#cd5c5c">
+                            <div id="modify-color-selected" class="color-selected" style="background: #cd5c5c"></div>
+                            <div id="modify-color-picker" class="color-picker clearfix">
+                                <ul>
+                                    <li style="background: #cd5c5c" data-section-color="#cd5c5c"></li>
+                                    <li style="background: #ff4500" data-section-color="#ff4500"></li>
+                                    <li style="background: #008b8b" data-section-color="#008b8b"></li>
+                                    <li style="background: #b8860b" data-section-color="#b8860b"></li>
+                                    <li style="background: #32cd32" data-section-color="#32cd32"></li>
+                                    <li style="background: #ffd700" data-section-color="#ffd700"></li>
+                                    <li style="background: #48d1cc" data-section-color="#48d1cc"></li>
+                                    <li style="background: #ff69b4" data-section-color="#ff69b4"></li>
+                                    <li style="background: #87cefa" data-section-color="#87cefa"></li>
+                                    <li style="background: #6495ed" data-section-color="#6495ed"></li>
+                                    <li style="background: #dc143c" data-section-color="#dc143c"></li>
+                                    <li style="background: #ff8c00" data-section-color="#ff8c00"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="btn-group">
+                            <button type="button" id="aquarium-section-delete" class="btn btn-default">삭제</button>
+                            <button type="submit" class="btn btn-primary">변경</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -189,35 +252,35 @@
                     </li>
                     <li><a href="../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
-                    <li><a href="" class="active-menu"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
-                    <li><a href="../price/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
+                    <li><a href="" class="active-menu"><i class="fas fa-door-open fa-fw"></i>매장관리</a></li>
+                    <li><a href="../product/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
                     <li>
                         <a href="#"><i class="fas fa-shopping-basket fa-fw"></i>주문관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../order/register/"><i class="fas fa-feather-alt fa-fw"></i>주문서 작성</a></li>
-                            <li><a href="../order/list/"><i class="far fa-clone fa-fw"></i>주문 목록</a></li>
+                            <li><a href="../order/register/">주문서 작성</a></li>
+                            <li><a href="../order/list/">주문처리 현황</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../inventory/manual/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
-                            <li><a href="../inventory/order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
+                            <li><a href="../inventory/manual/">직접 재고관리</a></li>
+                            <li><a href="../inventory/order-sheet/">클레버 재고관리</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-user-friends fa-fw"></i>고객관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../customer/list/"><i class="fas fa-list-ul fa-fw"></i>고객 목록</a></li>
-                            <li><a href="../customer/service/"><i class="fas fa-headphones-alt fa-fw"></i>고객 문의</a></li>
+                            <li><a href="../customer/list/">고객 목록</a></li>
+                            <li><a href="../customer/service/">고객 문의</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-folder-open fa-fw"></i>기타 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href=""><i class="fas fa-desktop fa-fw"></i>페이지 관리</a></li>
-                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>장터 이동</a></li>
-                            <li><a href="/business/"><i class="fas fa-exchange-alt fa-fw"></i>대시보드 전환</a></li>
+                            <li><a href="../page/">페이지 관리</a></li>
+                            <li><a href="/market/">장터로 이동</a></li>
+                            <li><a href="/console/">대시보드 전환</a></li>
                         </ul>
                     </li>
                     <li><a href="/logout/"><i class="fas fa-sign-out-alt fa-fw"></i>로그아웃</a></li>
@@ -238,26 +301,24 @@
                         <div class="panel panel-default max-600 mx-auto">
                             <div class="panel-heading">생물실 관리</div>
                             <div class="panel-body">
-                                <button type="button" id="storage-room-register" class="btn btn-default">생물실 추가</button>
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#storage-room-register-modal">생물실 추가</button>
                                 <hr>
-                                {% if not storage_room_list %}
+                                {% if not items %}
                                 <div class="standby">
                                     <p class="text-center">생물실을 등록해주세요.</p>
                                 </div>
                                 {% else %}
                                 <div id="storage-room-list" class="list-group">
-                                    {% for list in storage_room_list %}
+                                    {% for item in items %}
                                     <a href="#" class="list-group-item">
                                         <div class="media">
-                                            <span class="data-bind"
-                                                data-storage-room-id="{{ list.id }}"
-                                                data-storage-room-name="{{ list.storage_room_name }}"></span>
+                                            <span class="data-bind" data-storage-room-id="{{ item.id }}" data-storage-room-name="{{ item.storage_room_name }}"></span>
                                             <div class="media-left">
                                                 <img class="media-object" src="{% static 'assets/img/icon/Mimetypes-application-x-archive-icon-64x64.png' %}">
                                             </div>
                                             <div class="media-body w-100">
-                                                <p class="font-weight-bold">{{ list.storage_room_name }}</p>
-                                                {{ list.modified_date }}
+                                                <p class="font-weight-bold">{{ item.storage_room_name }}</p>
+                                                <i class="far fa-clock fa-fw text-secondary"></i> <span class="relative-time">{{ item.last_modified_date }}</span>
                                             </div>
                                         </div>
                                     </a>
@@ -267,8 +328,8 @@
                             </div>
                             <div class="panel-footer text-right">
                                 <div class="btn-group">
-                                    <button type="button" id="storage-room-modify" class="btn btn-default" disabled="disabled">변경</button>
-                                    <button type="button" id="move-aquarium-section" class="btn btn-default" disabled="disabled">다음</button>
+                                    <button type="button" id="storage-room-modify" class="btn btn-default" disabled>변경</button>
+                                    <button type="button" id="move-aquarium-section" class="btn btn-default" disabled>다음</button>
                                 </div>
                             </div>
                         </div>
@@ -278,15 +339,15 @@
                         <div class="panel panel-default max-600 mx-auto">
                             <div class="panel-heading">섹션 관리</div>
                             <div class="panel-body">
-                                <button type="button" id="aquarium-section-register" class="btn btn-default">섹션 추가</button>
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#aquarium-section-register-modal">섹션 추가</button>
                                 <hr>
                                 <div id="async-aquarium-section"></div>
                             </div>
                             <div class="panel-footer text-right">
                                 <div class="btn-group">
                                     <a href="" class="btn btn-default">이전</a>
-                                    <button type="button" id="aquarium-section-modify" class="btn btn-default" disabled="disabled">변경</button>
-                                    <button type="button" id="move-store-layout" class="btn btn-default" disabled="disabled">다음</button>
+                                    <button type="button" id="aquarium-section-modify" class="btn btn-default" disabled>변경</button>
+                                    <button type="button" id="move-store-layout" class="btn btn-default" disabled>다음</button>
                                 </div>
                             </div>
                         </div>

@@ -20,9 +20,8 @@ app_name = 'Inventory'
 
 urlpatterns = [
     path('manual/', views.ManualView.as_view(), name='ManualView'),
-    path('manual/store-layout/',
-         views.StoreLayoutView.as_view(), name='StoreLayoutView'),
-    path('manual/aquarium-section/',
-         views.AquariumSectionView.as_view(), name='AquariumSectionView'),
+    path('manual/store-layout/', views.StoreLayoutView.as_view(), name='StoreLayoutView'),
+    path('manual/aquarium-section/', views.AquariumSectionView.as_view(), name='AquariumSectionView'),
     path('manual/aquarium/', views.AquariumView.as_view(), name='AquariumView'),
+    path('manual/aquarium-stock/', views.AquariumStockView.as_view(), name='AquariumStockView'),
 ]

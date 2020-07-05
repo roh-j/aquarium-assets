@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.0.96/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css">
-    <link rel="stylesheet" href="{% static 'assets/css/lib/bootoast.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/dataTables.css' %}">
@@ -28,7 +29,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
-    <script src="{% static 'assets/js/lib/bootoast.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
@@ -47,9 +48,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="panel panel-default">
-                        <div id="customer-tool" class="panel-heading flex-component">
-                            <div class="table-heading">고객</div>
-                        </div>
+                        <div id="customer-tool" class="panel-heading d-flex"></div>
                         <div class="table-responsive">
                             <table id="customer_table" class="table table-bordered table-hover">
                                 <thead>
@@ -67,7 +66,7 @@
                                         <th scope="row" class="min">
                                             <div class="pretty p-default p-round">
                                                 <input type="radio">
-                                                <div class="state p-primary">
+                                                <div class="state p-warning">
                                                     <label></label>
                                                 </div>
                                             </div>
@@ -123,37 +122,37 @@
                     <li class="text-center">
                         <img src="{% static 'assets/img/icon/Places-user-identity-icon-128x128.png' %}" class="primary-image img-responsive">
                     </li>
-                    <li><a href="../../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
+                    <li><a href="../../dashboard"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
-                    <li><a href="../../store/"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
-                    <li><a href="../../price/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
+                    <li><a href="../../store/"><i class="fas fa-door-open fa-fw"></i>매장관리</a></li>
+                    <li><a href="../../product/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
                     <li class="mm-active">
                         <a href="#" aria-expanded="true"><i class="fas fa-shopping-basket fa-fw"></i>주문관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a href="" class="active-menu"><i class="fas fa-feather-alt fa-fw"></i>주문서 작성</a></li>
-                            <li><a href="../list/"><i class="far fa-clone fa-fw"></i>주문 목록</a></li>
+                            <li><a href="" class="active-menu">주문서 작성</a></li>
+                            <li><a href="../list/">주문처리 현황</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../../inventory/manual/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
-                            <li><a href="../../inventory/order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
+                            <li><a href="../../inventory/manual/">직접 재고관리</a></li>
+                            <li><a href="../../inventory/order-sheet/">클레버 재고관리</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-user-friends fa-fw"></i>고객관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../../customer/list/"><i class="fas fa-list-ul fa-fw"></i>고객 목록</a></li>
-                            <li><a href="../../customer/service/"><i class="fas fa-headphones-alt fa-fw"></i>고객 문의</a></li>
+                            <li><a href="../../customer/list/">고객 목록</a></li>
+                            <li><a href="../../customer/service/">고객 문의</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-folder-open fa-fw"></i>기타 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href=""><i class="fas fa-desktop fa-fw"></i>페이지 관리</a></li>
-                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>장터 이동</a></li>
-                            <li><a href="/business/"><i class="fas fa-exchange-alt fa-fw"></i>대시보드 전환</a></li>
+                            <li><a href="../../page/">페이지 관리</a></li>
+                            <li><a href="/market/">장터로 이동</a></li>
+                            <li><a href="/console/">대시보드 전환</a></li>
                         </ul>
                     </li>
                     <li><a href="/logout/"><i class="fas fa-sign-out-alt fa-fw"></i>로그아웃</a></li>
@@ -169,19 +168,19 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="order-sheet">
-                        <h4 class="lead-step">Step 1. <small>상품 선택</small></h4>
-                        <div class="panel panel-success">
-                            <div id="product-tool" class="panel-heading flex-component">
-                                <div class="table-heading">상품</div>
-                            </div>
+                        <div id="order-menu"></div>
+                        <hr><h4 class="lead-step">Step 1. <small>상품 선택</small></h4><hr>
+                        <div class="panel panel-default">
+                            <div id="product-tool" class="panel-heading d-flex"></div>
                             <div class="table-responsive">
                                 <table id="product_table" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th>
-                                                <div class="pretty p-default">
-                                                    <input type="checkbox">
-                                                    <div class="state p-primary">
+                                                <div class="pretty p-icon">
+                                                    <input type="checkbox" class="check-all">
+                                                    <div class="state p-warning">
+                                                        <i class="icon mdi mdi-check-bold"></i>
                                                         <label></label>
                                                     </div>
                                                 </div>
@@ -189,45 +188,26 @@
                                             <th>번호</th>
                                             <th>어종</th>
                                             <th>품종</th>
-                                            <th>크기 (cm)</th>
+                                            <th>특이사항</th>
+                                            <th>단계</th>
                                             <th>단위</th>
+                                            <th>단가</th>
+                                            <th>재고</th>
                                             <th>동작</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row" class="min">
-                                                <div class="pretty p-default">
-                                                    <input type="checkbox">
-                                                    <div class="state p-primary">
-                                                        <label></label>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <th>1</th>
-                                            <td>구피</td>
-                                            <td>알비노풀레드</td>
-                                            <td>1.2 cm</td>
-                                            <td>암컷</td>
-                                            <td class="min col-btn">
-                                                <button type="button" class="btn btn-default">담기</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
                                 </table>
                             </div>
                             <div class="panel-footer text-right">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default">선택 항목 담기</button>
+                                    <button type="button" id="selected-items-to-cart" class="btn btn-default">선택 항목 담기</button>
                                 </div>
                             </div>
                         </div>
                         <div id="product-pagination" class="text-center"></div>
-                        <h4 class="lead-step">Step 2. <small>항목 관리</small></h4>
-                        <div class="panel panel-info">
-                            <div id="cart-tool" class="panel-heading flex-component">
-                                <div class="table-heading">항목</div>
-                            </div>
+                        <hr><h4 class="lead-step">Step 2. <small>항목 관리</small></h4><hr>
+                        <div class="panel panel-default">
+                            <div id="cart-tool" class="panel-heading d-flex"></div>
                             <div class="table-responsive">
                                 <table id="cart_table" class="table table-bordered table-hover">
                                     <thead>
@@ -235,34 +215,14 @@
                                             <th>번호</th>
                                             <th>어종</th>
                                             <th>품종</th>
-                                            <th>크기 (cm)</th>
+                                            <th>특이사항</th>
+                                            <th>단계</th>
                                             <th>단위</th>
-                                            <th>단가</th>
                                             <th>수량</th>
                                             <th>가격</th>
                                             <th>동작</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>구피</td>
-                                            <td>알비노풀레드</td>
-                                            <td>1.2 cm</td>
-                                            <td>암컷</td>
-                                            <td>8000 원</td>
-                                            <td>3</td>
-                                            <td>24000 원</td>
-                                            <td class="min col-btn">
-                                                <div class="btn-group d-flex pull-right">
-                                                    <button type="button" class="btn btn-default"><i class="fas fa-minus fa-fw"></i></button>
-                                                    <button type="button" class="btn btn-default"><i class="fas fa-plus fa-fw"></i></button>
-                                                    <button type="button" class="btn btn-default"><i class="fas fa-pen fa-fw"></i></button>
-                                                    <button type="button" class="btn btn-default"><i class="fas fa-trash-alt fa-fw"></i></button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
                                 </table>
                             </div>
                             <div class="panel-footer text-right">
@@ -273,7 +233,7 @@
                             </div>
                         </div>
                         <div id="cart-pagination" class="text-center"></div>
-                        <h4 class="lead-step">Step 3. <small>주문서 확인</small></h4>
+                        <hr><h4 class="lead-step">Step 3. <small>주문서 확인</small></h4><hr>
                         <div class="dl-order bs-callout bs-callout-warning">
                             <dt>받는 분 </dt>
                             <dd>네이버</dd>
@@ -286,13 +246,13 @@
                             <dt>배송 </dt>
                             <dd>매장</dd>
                             <dt>합계 </dt>
-                            <dd class="text-danger">24000 원</dd>
+                            <dd id="payment" class="text-danger">0 원</dd>
                         </div>
                         <hr>
                         <div class="text-right">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#customer-modal">항목 담기</button>
-                                <button type="button" class="btn btn-default">항목 담기</button>
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#customer-modal">고객 정보 가져오기</button>
+                                <button type="button" class="btn btn-default">신규 고객</button>
                             </div>
                         </div>
                         <hr>

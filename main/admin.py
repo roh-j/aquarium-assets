@@ -1,9 +1,8 @@
 from django.contrib import admin
-import main.models as MainModels
+from main.models import Ticket, PurchaseTicket, Profile
 
 # Register your models here.
 
-admin.site.register(MainModels.UserLog)
-admin.site.register(MainModels.Ticket)
-admin.site.register(MainModels.PurchaseTicket)
-admin.site.register(MainModels.Profile)
+admin.site.register(Ticket)
+admin.site.register(PurchaseTicket)
+admin.site.register(Profile)

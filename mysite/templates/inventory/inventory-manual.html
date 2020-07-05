@@ -11,13 +11,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <link rel="stylesheet" href="{% static 'assets/css/lib/bootoast.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/component.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/graphics.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/dataTables.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/ko.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap.min.js"></script>
@@ -28,7 +31,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
-    <script src="{% static 'assets/js/lib/bootoast.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
@@ -38,6 +41,111 @@
 </head>
 
 <body>
+    <div id="aquarium-stock-register-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">재고 등록</h5>
+                </div>
+                <form id="form-aquarium-stock-register" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="id_species" class="control-label">어종</label>
+                            <div class="input-group dropdown-wide">
+                                <input type="text" class="form-control" id="id_species" name="species">
+                                <div class="dropdown-addon">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fas fa-caret-down fa-fw"></i>
+                                    </button>
+                                    <ul id="species-dropdown-menu" class="dropdown-menu"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_breed" class="control-label">품종</label>
+                            <div class="input-group dropdown-wide">
+                                <input type="text" class="form-control" id="id_breed" name="breed">
+                                <div class="dropdown-addon">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fas fa-caret-down fa-fw"></i>
+                                    </button>
+                                    <ul id="breed-dropdown-menu" class="dropdown-menu"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="id_size" class="control-label">크기 (cm)</label>
+                                <div class="input-group">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="-0.1" data-spinner-target="#id_size">
+                                            <i class="fas fa-angle-left fa-fw"></i>
+                                        </button>
+                                    </span>
+                                    <input type="text" class="form-control text-center" id="id_size" name="size" data-input-type="float" value="0.0">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="+0.1" data-spinner-target="#id_size">
+                                            <i class="fas fa-angle-right fa-fw"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="btn-group input-spinner">
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10.0" data-spinner-target="#id_size">10 cm</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1.0" data-spinner-target="#id_size">1 cm</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+0.1" data-spinner-target="#id_size">0.1 cm</button>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="id_quantity" class="control-label">마릿수</label>
+                                <div class="input-group">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="-1" data-spinner-target="#id_quantity">
+                                            <i class="fas fa-angle-left fa-fw"></i>
+                                        </button>
+                                    </span>
+                                    <input type="text" class="form-control text-center" id="id_quantity" name="quantity" data-input-type="int" value="0">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="+1" data-spinner-target="#id_quantity">
+                                            <i class="fas fa-angle-right fa-fw"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="btn-group input-spinner">
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10" data-spinner-target="#id_quantity">10</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1" data-spinner-target="#id_quantity">1</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_remark" class="control-label">특이사항</label>
+                            <input type="text" class="form-control" id="id_remark" name="remark">
+                        </div>
+                        <div class="form-group">
+                            <div style="width: 75%">
+                                <label for="id_gender" class="control-label d-block">암/수</label>
+                                <div id="id_gender" class="btn-group d-flex" data-toggle="buttons">
+                                    <label class="btn btn-default w-100 active">
+                                        <input type="radio" name="gender" value="none" checked> 없음
+                                    </label>
+                                    <label class="btn btn-default w-100">
+                                        <input type="radio" name="gender" value="female"> 암컷
+                                    </label>
+                                    <label class="btn btn-default w-100">
+                                        <input type="radio" name="gender" value="male"> 수컷
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div id="side-section"></div>
     <div id="content-section">
         <div id="loading">
@@ -64,37 +172,37 @@
                     <li class="text-center">
                         <img src="{% static 'assets/img/icon/Places-user-identity-icon-128x128.png' %}" class="primary-image img-responsive">
                     </li>
-                    <li><a href="../../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
+                    <li><a href="../../dashboard"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
-                    <li><a href="../../store/"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
-                    <li><a href="../../price/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
+                    <li><a href="../../store/"><i class="fas fa-door-open fa-fw"></i>매장관리</a></li>
+                    <li><a href="../../product/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
                     <li>
                         <a href="#"><i class="fas fa-shopping-basket fa-fw"></i>주문관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../../order/register/"><i class="fas fa-feather-alt fa-fw"></i>주문서 작성</a></li>
-                            <li><a href="../../order/list/"><i class="far fa-clone fa-fw"></i>주문 목록</a></li>
+                            <li><a href="../../order/register/">주문서 작성</a></li>
+                            <li><a href="../../order/list/">주문처리 현황</a></li>
                         </ul>
                     </li>
                     <li class="mm-active">
                         <a href="#" aria-expanded="true"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li><a href="" class="active-menu"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
-                            <li><a href="../order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
+                            <li><a href="" class="active-menu">직접 재고관리</a></li>
+                            <li><a href="../order-sheet/">클레버 재고관리</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-user-friends fa-fw"></i>고객관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../../customer/list/"><i class="fas fa-list-ul fa-fw"></i>고객 목록</a></li>
-                            <li><a href="../../customer/service/"><i class="fas fa-headphones-alt fa-fw"></i>고객 문의</a></li>
+                            <li><a href="../../customer/list/">고객 목록</a></li>
+                            <li><a href="../../customer/service/">고객 문의</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-folder-open fa-fw"></i>기타 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href=""><i class="fas fa-desktop fa-fw"></i>페이지 관리</a></li>
-                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>장터 이동</a></li>
-                            <li><a href="/business/"><i class="fas fa-exchange-alt fa-fw"></i>대시보드 전환</a></li>
+                            <li><a href="../../page/">페이지 관리</a></li>
+                            <li><a href="/market/">장터로 이동</a></li>
+                            <li><a href="/console/">대시보드 전환</a></li>
                         </ul>
                     </li>
                     <li><a href="/logout/"><i class="fas fa-sign-out-alt fa-fw"></i>로그아웃</a></li>
@@ -106,10 +214,10 @@
                 <h3 class="head">재고 관리</h3>
                 <hr>
                 <ul class="nav nav-tabs">
+                    <li><a href="#order-sheet" data-toggle="tab">주문서</a></li>
                     <li class="active"><a href="#storage-room" data-toggle="tab">생물실</a></li>
                     <li><a href="#store-layout" data-toggle="tab">매장</a></li>
                     <li><a href="#aquarium" data-toggle="tab">수조</a></li>
-                    <li><a href="#maintenance-log" data-toggle="tab">일지</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="storage-room">
@@ -118,24 +226,20 @@
                             <div class="panel-body">
                                 {% if not storage_room_list %}
                                 <div class="standby">
-                                    <p class="text-center">
-                                        <a href="../../store/">매장관리</a>에서 생물실를 등록해주세요.
-                                    </p>
+                                    <p class="text-center"><a href="../../store/">매장관리</a>에서 생물실를 등록해주세요.</p>
                                 </div>
                                 {% else %}
                                 <div id="storage-room-list" class="list-group">
                                     {% for list in storage_room_list %}
                                     <a href="#" class="list-group-item" data-storage-room-id="{{ list.id }}">
                                         <div class="media">
-                                            <span class="data-bind"
-                                                data-storage-room-id="{{ list.id }}"
-                                                data-storage-room-name="{{ list.storage_room_name }}"></span>
+                                            <span class="data-bind" data-storage-room-id="{{ list.id }}" data-storage-room-name="{{ list.storage_room_name }}"></span>
                                             <div class="media-left">
                                                 <img class="media-object" src="{% static 'assets/img/icon/Mimetypes-application-x-archive-icon-64x64.png' %}">
                                             </div>
                                             <div class="media-body w-100">
                                                 <p class="font-weight-bold">{{ list.storage_room_name }}</p>
-                                                {{ list.modified_date }}
+                                                <i class="far fa-clock fa-fw text-secondary"></i> <span class="relative-time">{{ list.last_modified_date }}</span>
                                             </div>
                                         </div>
                                     </a>
@@ -159,10 +263,7 @@
                     </div>
                     <div class="tab-pane" id="aquarium">
                         <button type="button" id="redo-store-layout" class="btn btn-default">이전</button>
-                        <div class="btn-group ml-3">
-                            <button type="button" class="btn btn-default">수조 정보</button>
-                            <button type="button" class="btn btn-default">일지 관리</button>
-                        </div>
+                        <button type="button" class="btn btn-default ml-3">수조 정보</button>
                         <hr>
                         <div class="mini-map">
                             <div id="svg-mini-map" class="text-center"></div>
@@ -174,19 +275,21 @@
                         </div>
                         <hr>
                         <div id="inventory-menu">
-                            <button type="button" class="btn btn-default">항목 담기</button>
+                            <button type="button" id="aquarium-stock-register" class="btn btn-default" disabled>재고 추가</button>
                         </div>
                         <hr>
                         <div class="panel panel-default">
-                            <div id="inventory-tool" class="panel-heading flex-component"></div>
+                            <div id="inventory-tool" class="panel-heading d-flex"></div>
                             <div class="table-responsive">
                                 <table id="inventory_table" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th>번호</th>
-                                            <th>분류</th>
+                                            <th>어종</th>
                                             <th>품종</th>
+                                            <th>특이사항</th>
                                             <th>크기 (cm)</th>
+                                            <th>암/수</th>
                                             <th>마릿수</th>
                                             <th>상태</th>
                                             <th>동작</th>
@@ -201,7 +304,6 @@
                         <div id="inventory-pagination" class="text-center"></div>
                         <hr>
                     </div>
-                    <div class="tab-pane" id="maintenance-log"></div>
                 </div>
             </div>
             <footer><i>Copyright &copy; roh-j, Licensed under the Apache License</i></footer>

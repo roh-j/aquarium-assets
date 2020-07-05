@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <link rel="stylesheet" href="{% static 'assets/css/lib/bootoast.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
 
@@ -26,7 +26,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
-    <script src="{% static 'assets/js/lib/bootoast.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
@@ -34,14 +34,15 @@
     <title>Aquarium Assets</title>
     <script>
         $(function () {
-            username = '{{ user.username }}';
+            USERNAME = '{{ user.username }}';
 
-            $("#console-menu").metisMenu();
-            $(".nav-second-level").removeClass("d-none");
+            init_toast();
 
-            toast('info', username + '님 환영합니다.');
+            $('#console-menu').metisMenu();
+            $('.nav-second-level').removeClass('d-none');
 
             load_complete();
+            toastr.success(USERNAME + '님 환영합니다.');
         });
     </script>
 </head>
@@ -75,35 +76,35 @@
                     </li>
                     <li><a href="" class="active-menu"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
-                    <li><a href="../store/"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
-                    <li><a href="../price/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
+                    <li><a href="../store/"><i class="fas fa-door-open fa-fw"></i>매장관리</a></li>
+                    <li><a href="../product/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
                     <li>
                         <a href="#"><i class="fas fa-shopping-basket fa-fw"></i>주문관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../order/register/"><i class="fas fa-feather-alt fa-fw"></i>주문서 작성</a></li>
-                            <li><a href="../order/list/"><i class="far fa-clone fa-fw"></i>주문 목록</a></li>
+                            <li><a href="../order/register/">주문서 작성</a></li>
+                            <li><a href="../order/list/">주문처리 현황</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../inventory/manual/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
-                            <li><a href="../inventory/order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
+                            <li><a href="../inventory/manual/">직접 재고관리</a></li>
+                            <li><a href="../inventory/order-sheet/">클레버 재고관리</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-user-friends fa-fw"></i>고객관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../customer/list/"><i class="fas fa-list-ul fa-fw"></i>고객 목록</a></li>
-                            <li><a href="../customer/service/"><i class="fas fa-headphones-alt fa-fw"></i>고객 문의</a></li>
+                            <li><a href="../customer/list/">고객 목록</a></li>
+                            <li><a href="../customer/service/">고객 문의</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-folder-open fa-fw"></i>기타 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href=""><i class="fas fa-desktop fa-fw"></i>페이지 관리</a></li>
-                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>장터 이동</a></li>
-                            <li><a href="/business/"><i class="fas fa-exchange-alt fa-fw"></i>대시보드 전환</a></li>
+                            <li><a href="../page/">페이지 관리</a></li>
+                            <li><a href="/market/">장터로 이동</a></li>
+                            <li><a href="/console/">대시보드 전환</a></li>
                         </ul>
                     </li>
                     <li><a href="/logout/"><i class="fas fa-sign-out-alt fa-fw"></i>로그아웃</a></li>

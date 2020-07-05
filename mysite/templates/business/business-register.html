@@ -9,16 +9,49 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
+    <script src="{% static 'assets/js/messages.js' %}"></script>
 
     <title>Aquarium Assets</title>
+    <script>
+        $(function () {
+            init_toast();
+
+            $('form').submit(function (e) {
+                e.preventDefault();
+                var params = $('form').serializeObject();
+
+                $.ajax({
+                    url: '',
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify(params),
+                    dataType: 'json',
+                }).done(function (res, status, xhr) {
+                    location.replace('../');
+                }).fail(function (res, status, xhr) {
+                    $.each(res.responseJSON, function (key, value) {
+                        toastr.remove();
+                        toastr.warning(error_messages['business_register'][key][value]);
+                        return false;
+                    });
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -26,10 +59,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-exclamation-circle fa-fw text-primary"></i> 알림</h5>
+                    <h5 class="modal-title">알림</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <div id="alert-modal-body" class="modal-body text-center"></div>
+                <div class="modal-body text-center"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
                 </div>
@@ -48,7 +81,7 @@
             </div>
             <div class="collapse navbar-collapse navbar-menu">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="../logout/">로그아웃</a></li>
+                    <li><a href="../../logout/">로그아웃</a></li>
                 </ul>
             </div>
         </div>
@@ -62,22 +95,15 @@
                     <img src="{% static 'assets/img/icon/Actions-view-pim-contacts-icon-128x128.png' %}" class="primary-image img-responsive">
                     <hr>
                     <div class="form-group">
-                        <label for="id_name_of_company">상호</label>
-                        <input type="text" id="id_name_of_company" name="name_of_company" class="form-control" autofocus>
-                    </div>
-                    <div class="form-group">
                         <label for="id_registration_number">사업자등록번호</label>
-                        <input type="text" id="id_registration_number" name="registration_number" class="form-control">
+                        <input type="text" id="id_registration_number" name="registration_number" class="form-control" autofocus>
                     </div>
                     <div class="alert alert-explain">
-                        <i class="fas fa-exclamation-circle fa-fw"></i> (-)를 제외하고 사업자등록번호를 입력해주세요.
+                        <i class="fas fa-exclamation-circle fa-fw"></i> - 를 제외하고 사업자등록번호를 입력해주세요.
                     </div>
                     <div class="form-group">
-                        <label for="id_alias">매장 URL</label>
-                        <input type="text" id="id_alias" name="alias" class="form-control">
-                    </div>
-                    <div class="alert alert-explain">
-                        <i class="fas fa-exclamation-circle fa-fw"></i> 비즈니스 회원만 등록가능합니다.
+                        <label for="id_name_of_company">상호</label>
+                        <input type="text" id="id_name_of_company" name="name_of_company" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="id_address">소재지</label>
@@ -86,6 +112,13 @@
                     <div class="form-group">
                         <label for="id_contact">대표전화</label>
                         <input type="text" id="id_contact" name="contact" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_alias">매장 URL</label>
+                        <input type="text" id="id_alias" name="alias" class="form-control">
+                    </div>
+                    <div class="alert alert-explain">
+                        <i class="fas fa-exclamation-circle fa-fw"></i> 비즈니스 회원만 등록가능합니다.
                     </div>
                 </div>
                 <div class="panel-footer text-right">

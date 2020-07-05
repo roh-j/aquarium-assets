@@ -1,12 +1,11 @@
 /**
- * Common JS
+ * common javascript
  * @author roh-j
- * @version 2019-07-31, 코드 표준화, 모듈 추가.
+ * @version 2019-08-10
  */
 
 var DJANGO_STATIC_URL = '/static';
-
-var username = null;
+var USERNAME = null;
 
 var date = new Date();
 var year = date.getFullYear();
@@ -53,36 +52,25 @@ $(function () {
     });
 });
 
-var toast = function (type, message) {
-    bootoast.toast({
-        'message': message,
-        'type': type,
-        'position': 'right-top',
-        'icon': null,
-        'timeout': '3',
-        'dismissable': true
-    });
-}
-
-/**
- * loading - load_complete.
- * 로드 중 화면 생성과 로드 완료 처리.
- */
-
 var loading = function () {
     $('#page-wrapper').addClass('d-none');
     $('#content-section').removeClass('d-none');
-}
+};
 
 var load_complete = function () {
     $('#page-wrapper').removeClass('d-none');
     $('#content-section').addClass('d-none');
-}
+};
 
-/**
- * Input Spinner.
- * Float, Int 형 지원.
- */
+var init_toast = function () {
+    toastr.options = {
+        "closeButton": true,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "timeOut": "3000",
+    };
+};
 
 var init_horizontal_spinner = function () {
     $('.input-spinner > button').on('click', function () {
@@ -112,9 +100,9 @@ var init_horizontal_spinner = function () {
             }
         }
     });
-}
+};
 
-var init_vertical_spinner = function (callback) {
+var init_vertical_spinner = function () {
     $('.spinner .btn:first-of-type').on('click', function () {
         var target = $(this).closest('div.spinner').find('input[type=text]');
         var pre_value = parseInt(target.val());
@@ -133,31 +121,39 @@ var init_vertical_spinner = function (callback) {
             $(target).val(res_value);
         }
     });
-}
+};
 
-/**
- * Custom Radio Button Reset.
- */
-
-var init_radio_reset = function () {
+var init_custom_radio_reset = function () {
     $('button[type=reset]').closest('form').on('reset', function (e) {
         form = $(this);
 
         setTimeout(function () {
-            form.find('input[type=radio]').parents().removeClass('active');
-            form.find('input[type=radio]:checked').parents().addClass('active');
+            form.find('input[type=radio]').closest('label').removeClass('active');
+            form.find('input[type=radio]:checked').closest('label').addClass('active');
         });
     });
-}
-
-/**
- * 테이블 체크박스 모두 선택 / 해제 기능
- */
+};
 
 var init_checkbox_select_all = function () {
-    $('table thead input[type=checkbox]').on('click', function () {
+    $('table thead .check-all').on('click', function () {
         target = $(this).closest('table');
 
         $('input:checkbox', target).not(this).prop('checked', this.checked);
     })
+};
+
+var entity_map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+};
+function escape_html(string) {
+    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+        return entity_map[s];
+    });
 }

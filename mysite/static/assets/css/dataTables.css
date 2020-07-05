@@ -14,8 +14,8 @@ table.dataTable tbody tr {
 .dt-buttons {
     margin-left: 1rem;
 }
-.dataTables_filter > input {
-    max-width: 196px;
+.dataTables_filter {
+    width: 196px;
 }
 .dataTables_filter > label,
 .dataTables_length > label {

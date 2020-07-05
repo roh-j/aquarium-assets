@@ -3,8 +3,11 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-import store.models as StoreModels
-import store.serializers as StoreSerializers
+from django.db.models import Case, When, CharField, Value
+from store.models import StorageRoom, AquariumSection, StoreLayout, Aquarium
+from inventory.models import AquariumStock
+from store.serializers import StorageRoomSerializer, AquariumSectionSerializer, StoreLayoutSerializer, AquariumSerializer
+from inventory.serializers import AquariumStockSerializer
 
 # Create your views here.
 
@@ -14,8 +17,7 @@ class ManualView(APIView):
 
     def get(self, request, control_number, format=None):
         if request.user.is_authenticated:
-            queryset = StoreModels.StorageRoom.objects.filter(
-                business=control_number).order_by('-id')
+            queryset = StorageRoom.objects.filter(console=control_number).order_by('-id')
             return Response({'storage_room_list': queryset}, template_name='inventory/inventory-manual.html')
         else:
             return redirect('Main:SignInView')
@@ -29,18 +31,14 @@ class StoreLayoutView(APIView):
         sorted_id, sorted_color = [], []
         match = {}
 
-        queryset = StoreModels.StoreLayout.objects.filter(
-            storage_room=request.query_params.get('FK')
-        )
+        queryset = StoreLayout.objects.filter(storage_room=request.query_params.get('FK'))
 
         if queryset.exists():
             for data in queryset:
                 # Nested Dict.
                 match[str(data.row)+','+str(data.column)] = {}
-                match[str(data.row)+','+str(data.column)]['section_id'] = StoreModels.AquariumSection.objects.get(
-                    pk=str(data.aquarium_section.pk)).pk
-                match[str(data.row)+','+str(data.column)]['section_color'] = StoreModels.AquariumSection.objects.get(
-                    pk=str(data.aquarium_section.pk)).section_color
+                match[str(data.row)+','+str(data.column)]['section_id'] = AquariumSection.objects.get(id=str(data.aquarium_section.id)).id
+                match[str(data.row)+','+str(data.column)]['section_color'] = AquariumSection.objects.get(id=str(data.aquarium_section.id)).section_color
 
                 row.append(data.row)
                 column.append(data.column)
@@ -69,10 +67,9 @@ class AquariumSectionView(APIView):
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, control_number, format=None):
-        queryset = StoreModels.AquariumSection.objects.get(
-            pk=request.query_params.get("PK"))
+        queryset = AquariumSection.objects.get(id=request.query_params.get('PK'))
 
-        serializer = StoreSerializers.AquariumSectionSerializer(queryset)
+        serializer = AquariumSectionSerializer(queryset)
         return JsonResponse(serializer.data, safe=False, status=200)
 
 
@@ -80,8 +77,36 @@ class AquariumView(APIView):
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, control_number, format=None):
-        queryset = StoreModels.Aquarium.objects.get(
-            aquarium_section=request.query_params.get("FK"), row=request.query_params.get("row"), column=request.query_params.get("column"))
+        queryset = Aquarium.objects.get(aquarium_section=request.query_params.get('FK'), row=request.query_params.get('row'), column=request.query_params.get('column'))
 
-        serializer = StoreSerializers.AquariumSerializer(queryset)
+        serializer = AquariumSerializer(queryset)
         return JsonResponse(serializer.data, safe=False, status=200)
+
+
+class AquariumStockView(APIView):
+    renderer_classes = (JSONRenderer,)
+
+    def get(self, request, control_number, format=None):
+        queryset = AquariumStock.objects.select_related('creature').annotate(
+            status=Case(
+                When(
+                    unit_price__isnull=True,
+                    then=Value('unavailable')
+                ),
+                default=Value('available'),
+                output_field=CharField(),
+            )
+        ).filter(aquarium=request.query_params.get('FK')).order_by('-id')
+        context = list(queryset.values('creature__species', 'creature__breed',
+                                       'size', 'gender', 'quantity', 'remark', 'status'))
+        return JsonResponse(context, safe=False, status=200)
+
+    def post(self, request, control_number, format=None):
+        serializer = AquariumStockSerializer(data=request.data)
+        serializer.set_FK(control_number, request.data['FK'])
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+
+        return JsonResponse(serializer.errors, status=400)
