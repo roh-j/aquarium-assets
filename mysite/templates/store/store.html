@@ -42,9 +42,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
     <!-- Scripts -->
     <script src="{% static 'assets/js/common.js' %}"></script>
-    <script src="{% static 'assets/js/store-base.js' %}"></script>
-    <script src="{% static 'assets/js/store-core.js' %}"></script>
-    <script src="{% static 'assets/js/store-processing.js' %}"></script>
+    <script src="{% static 'assets/js/store.js' %}"></script>
 
     <title>Aquarium Assets</title>
 </head>
@@ -55,7 +53,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
+                    <h5 class="modal-title"><i class="fas fa-exclamation-circle fa-fw text-primary"></i> 알림</h5>
                 </div>
                 <div id="alert-modal-body" class="modal-body text-center"></div>
                 <div class="modal-footer">
@@ -79,7 +77,7 @@
                             <input type="text" class="form-control" id="id_storage_room_name" name="storage_room_name">
                         </div>
                         <div class="alert bg-default border-secondary">
-                            <i class="fas fa-exclamation-circle"></i> 생물실 레이블을 입력하세요.
+                            <i class="fas fa-exclamation-circle fa-fw"></i> 생물실 레이블을 입력하세요.
                         </div>
                     </div>
                     <div id="storage-room-modal-footer" class="modal-footer"></div>
@@ -112,7 +110,7 @@
                             </div>
                         </div>
                         <div class="alert bg-default border-secondary">
-                            <i class="fas fa-exclamation-circle"></i> 섹션 안에 있는 수조의 개수를 입력하세요.
+                            <i class="fas fa-exclamation-circle fa-fw"></i> 섹션 안에 있는 수조의 개수를 입력하세요.
                         </div>
                         <div class="alert bg-default border-secondary">
                             <div class="text-center">
@@ -191,8 +189,15 @@
             </div>
         </div>
     </div>
+    <div id="side-section"></div>
+    <div id="content-section">
+        <div id="loading">
+            <div class="icon"><i class="fas fa-circle-notch fa-fw fa-3x fa-spin"></i></div>
+            <div class="text">Loading</div>
+        </div>
+    </div>
     <div id="wrapper">
-        <nav class="navbar navbar-default navbar-cls-top mb-0">
+        <nav class="navbar navbar-cls-top">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">Aquarium Assets</a>
@@ -204,7 +209,7 @@
                 </div>
             </div>
         </nav>
-        <nav class="navbar-default navbar-side">
+        <nav class="navbar-side">
             <div class="collapse sidebar-collapse">
                 <ul id="console-menu" class="nav">
                     <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
@@ -245,103 +250,100 @@
                 </ul>
             </div>
         </nav>
-        <div id="page-wrapper">
-            <div id="page-inner" class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <h2>매장관리</h2>
-                        <h5>Welcome Jhon Deo , Love to see you back.</h5>
-                    </div>
-                </div>
+        <div id="page-wrapper" class="d-none">
+            <div class="page-inner container-fluid">
+                <h2>매장관리</h2>
+                <h5>Welcome Jhon Deo , Love to see you back.</h5>
                 <hr>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <ul class="nav nav-tabs">
-                            <li class="disabled active"><a href="#storage-room">생물실 관리</a></li>
-                            <li class="disabled"><a href="#aquarium-section">섹션 / 수조 관리</a></li>
-                            <li class="disabled"><a href="#store-layout">매장 레이아웃</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="storage-room">
-                                <div class="panel panel-default border-dark max-600 mx-auto">
-                                    <div class="panel-heading border-dark">생물실 관리</div>
-                                    <div class="panel-body">
-                                        <button type="button" id="storage-room-register" class="btn btn-default">생물실 추가</button>
-                                        <hr>
-                                        {% if not storage_room_list %}
-                                        <div class="standby">
-                                            <img src="{% static 'assets/img/icon/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
-                                            <hr>
-                                            <p class="text-center">생물실을 등록해주세요.</p>
+                <ul class="nav nav-tabs">
+                    <li class="disabled active"><a href="#storage-room">생물실 관리</a></li>
+                    <li class="disabled"><a href="#aquarium-section">섹션 / 수조 관리</a></li>
+                    <li class="disabled"><a href="#store-layout">매장 레이아웃</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="storage-room">
+                        <div class="panel panel-default border-dark max-600 mx-auto">
+                            <div class="panel-heading border-dark">생물실 관리</div>
+                            <div class="panel-body">
+                                <button type="button" id="storage-room-register" class="btn btn-default">생물실 추가</button>
+                                <hr>
+                                {% if not storage_room_list %}
+                                <div class="standby">
+                                    <img src="{% static 'assets/img/icon/Apps-utilities-file-archiver-icon.png' %}"
+                                        class="img-responsive mx-auto">
+                                    <hr>
+                                    <p class="text-center">생물실을 등록해주세요.</p>
+                                </div>
+                                {% else %}
+                                <div id="storage-room-list" class="list-group">
+                                    {% for list in storage_room_list %}
+                                    <a href="#" class="list-group-item">
+                                        <div class="media">
+                                            <span class="data-binding" data-storage-room-id="{{ list.id }}"
+                                                data-storage-room-name="{{ list.storage_room_name }}"></span>
+                                            <div class="media-left">
+                                                <img class="media-object"
+                                                    src="{% static 'assets/img/icon/Mimetypes-application-x-tar-icon-64x64.png' %}">
+                                            </div>
+                                            <div class="media-body w-100">
+                                                <p class="font-weight-bold">{{ list.storage_room_name }}</p>
+                                                {{ list.modified_date }}
+                                            </div>
                                         </div>
-                                        {% else %}
-                                        <div id="storage-room-list" class="list-group">
-                                            {% for list in storage_room_list %}
-                                            <a href="#" class="list-group-item">
-                                                <div class="media">
-                                                    <span class="data-binding d-none"
-                                                        data-storage-room-id="{{ list.id }}"
-                                                        data-storage-room-name="{{ list.storage_room_name }}"></span>
-                                                    <div class="media-left">
-                                                        <img class="media-object" src="{% static 'assets/img/icon/Mimetypes-application-x-tar-icon-64x64.png' %}">
-                                                    </div>
-                                                    <div class="media-body w-100">
-                                                        <p class="font-weight-bold">{{ list.storage_room_name }}</p>
-                                                        {{ list.modified_date }}
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            {% endfor %}
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                    <div class="panel-footer bg-white text-right">
-                                        <div class="btn-group">
-                                            <button type="button" id="storage-room-modify" class="btn btn-default" disabled="disabled">변경</button>
-                                            <button type="button" id="move-aquarium-section" class="btn btn-default" disabled="disabled">다음</button>
-                                        </div>
-                                    </div>
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="panel-footer bg-white text-right">
+                                <div class="btn-group">
+                                    <button type="button" id="storage-room-modify" class="btn btn-default"
+                                        disabled="disabled">변경</button>
+                                    <button type="button" id="move-aquarium-section" class="btn btn-default"
+                                        disabled="disabled">다음</button>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="aquarium-section">
-                                <div class="panel panel-default border-dark max-600 mx-auto">
-                                    <div class="panel-heading border-dark">섹션 / 수조 관리</div>
-                                    <div class="panel-body">
-                                        <button type="button" id="aquarium-section-register" class="btn btn-default">섹션 추가</button>
-                                        <hr>
-                                        <div id="async-aquarium-section"></div>
-                                    </div>
-                                    <div class="panel-footer bg-white text-right">
-                                        <div class="btn-group">
-                                            <a href="" class="btn btn-default">처음으로</a>
-                                            <button type="button" id="aquarium-section-modify" class="btn btn-default" disabled="disabled">변경</button>
-                                            <button type="button" id="move-store-layout" class="btn btn-default" disabled="disabled">다음</button>
-                                        </div>
-                                    </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="aquarium-section">
+                        <div class="panel panel-default border-dark max-600 mx-auto">
+                            <div class="panel-heading border-dark">섹션 / 수조 관리</div>
+                            <div class="panel-body">
+                                <button type="button" id="aquarium-section-register" class="btn btn-default">섹션 추가</button>
+                                <hr>
+                                <div id="async-aquarium-section"></div>
+                            </div>
+                            <div class="panel-footer bg-white text-right">
+                                <div class="btn-group">
+                                    <a href="" class="btn btn-default">처음으로</a>
+                                    <button type="button" id="aquarium-section-modify" class="btn btn-default"
+                                        disabled="disabled">변경</button>
+                                    <button type="button" id="move-store-layout" class="btn btn-default"
+                                        disabled="disabled">다음</button>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="store-layout">
-                                <div class="table-responsive">
-                                    <div id="store-layout-canvas">
-                                        <div id="svg-store-layout" class="text-center"></div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div id="store-layout-console" class="text-center"></div>
-                                <hr>
-                                <div class="text-center">
-                                    <div class="btn-group">
-                                        <button type="button" id="redo-aquarium-section" class="btn btn-default">이전</button>
-                                        <a href="" class="btn btn-default">처음으로</a>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="store-layout">
+                        <div class="table-responsive">
+                            <div id="store-layout-canvas">
+                                <div id="svg-store-layout" class="text-center"></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div id="store-layout-console" class="text-center"></div>
+                        <hr>
+                        <div class="text-center mb-section">
+                            <div class="btn-group">
+                                <button type="button" id="redo-aquarium-section" class="btn btn-default">이전</button>
+                                <a href="" class="btn btn-default">처음으로</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <footer class="my-4 text-muted text-center text-small">
-                <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
+            <footer class="text-muted text-small text-center my-section">
+                <i>Copyright &copy; roh-j, Licensed under the Apache License</i>
             </footer>
         </div>
     </div>

@@ -1,3 +1,9 @@
+/**
+ * Common JS
+ * @author roh-j
+ * @version 2019-07-26, 코드 표준화, 모듈 추가.
+ */
+
 var DJANGO_STATIC_URL = '/static';
 
 var date = new Date();
@@ -44,3 +50,101 @@ $(function () {
         }
     });
 });
+
+/**
+ * loading - load_complete.
+ * 로드 중 화면 생성과 로드 완료 처리.
+ */
+
+var loading = function () {
+    $("#page-wrapper").addClass("d-none");
+    $("#content-section").removeClass("d-none");
+}
+
+var load_complete = function () {
+    $("#page-wrapper").removeClass("d-none");
+    $("#content-section").addClass("d-none");
+}
+
+/**
+ * Input Spinner.
+ * Float, Int 형 지원.
+ */
+
+var init_horizontal_spinner = function () {
+    $(".input-spinner > button").on("click", function () {
+        value = $(this).data("spinner-value");
+        target = $(this).data("spinner-target");
+        type = $(target).data("input-type");
+        pre_value = $(target).val();
+
+        if (type == "float") {
+            pre_value = parseFloat(pre_value);
+            value = parseFloat(value);
+
+            res_value = (pre_value + value).toFixed(1);
+
+            if (res_value >= 0.0) {
+                $(target).val(res_value);
+            }
+        }
+        else if (type == "int") {
+            pre_value = parseInt(pre_value);
+            value = parseInt(value);
+
+            res_value = pre_value + value;
+
+            if (res_value >= 0) {
+                $(target).val(res_value);
+            }
+        }
+    });
+}
+
+var init_vertical_spinner = function (callback) {
+    $(".spinner .btn:first-of-type").on("click", function () {
+        var target = $(this).closest("div.spinner").find("input[type=text]");
+        var pre_value = parseInt(target.val());
+        var res_value = pre_value + 1;
+
+        if (res_value >= 1) {
+            $(target).val(res_value);
+        }
+    });
+    $(".spinner .btn:last-of-type").on("click", function () {
+        var target = $(this).closest("div.spinner").find("input[type=text]");
+        var pre_value = parseInt(target.val());
+        var res_value = pre_value - 1;
+
+        if (res_value >= 1) {
+            $(target).val(res_value);
+        }
+    });
+}
+
+/**
+ * Custom Radio Button Reset.
+ */
+
+var init_radio_reset = function () {
+    $("button[type=reset]").closest("form").on("reset", function (e) {
+        form = $(this);
+
+        setTimeout(function () {
+            form.find("input[type=radio]").parents().removeClass("active");
+            form.find("input[type=radio]:checked").parents().addClass("active");
+        });
+    });
+}
+
+/**
+ * 테이블 체크박스 모두 선택 / 해제 기능
+ */
+
+var init_checkbox_select_all = function () {
+    $("table thead input[type=checkbox]").on("click", function () {
+        target = $(this).closest("table");
+
+        $("input:checkbox", target).not(this).prop("checked", this.checked);
+    })
+}

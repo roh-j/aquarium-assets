@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+    <!-- Pretty Checkbox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css">
     <!-- Styles -->
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/dataTables-customize.css' %}">
@@ -50,7 +52,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
     <!-- Scripts -->
     <script src="{% static 'assets/js/common.js' %}"></script>
-    <script src="{% static 'assets/js/order-register-base.js' %}"></script>
+    <script src="{% static 'assets/js/order-register.js' %}"></script>
 
     <title>Aquarium Assets</title>
 </head>
@@ -61,18 +63,18 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 id="add-order-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 단가 등록</h5>
+                    <h5 id="add-order-modal-title" class="modal-title"><i class="fas fa-exclamation-circle fa-fw text-primary"></i> 단가 등록</h5>
                 </div>
                 <form id="form-add-order" method="POST">
                     {% csrf_token %}
                     <div id="add-order-modal-body" class="modal-body">
                         <div class="form-group">
-                            <label for="id_species" class="control-label">열대어 어종</label>
+                            <label for="id_species" class="control-label">어종</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="id_species" name="species">
                                 <div class="input-group-btn">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
+                                        <i class="fas fa-caret-down fa-fw"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li><a href="#">Action</a></li>
@@ -85,34 +87,77 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="id_breed" class="control-label">열대어 품종</label>
+                            <label for="id_breed" class="control-label">품종</label>
                             <input type="text" class="form-control" id="id_breed" name="breed">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_unit" class="control-label d-block">단위</label>
+                            <div id="id_unit" class="btn-group d-flex" data-toggle="buttons">
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="unit" value="couple"><i class="fas fa-seedling fa-fw text-success"></i> 한쌍
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="unit" value="female"><i class="fas fa-venus fa-fw text-danger"></i> 암컷
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="unit" value="male"><i class="fas fa-mars fa-fw text-primary"></i> 수컷
+                                </label>
+                                <label class="btn btn-default w-100 active">
+                                    <input type="radio" name="unit" value="none" checked><i class="fas fa-genderless fa-fw text-secondary"></i>
+                                    없음
+                                </label>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-xs-6">
                                 <label for="id_size" class="control-label">크기 (cm)</label>
-                                <input type="text" class="form-control" id="id_size" name="size">
+                                <div class="input-group">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="-0.1" data-spinner-target="#id_size">
+                                            <i class="fas fa-angle-left fa-fw"></i>
+                                        </button>
+                                    </span>
+                                    <input type="text" class="form-control text-center" id="id_size" name="size" data-input-type="float"
+                                        value="0.0">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="+0.1" data-spinner-target="#id_size">
+                                            <i class="fas fa-angle-right fa-fw"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="btn-group input-spinner d-flex mt-3">
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10.0"
+                                        data-spinner-target="#id_size">10 cm</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1.0"
+                                        data-spinner-target="#id_size">1 cm</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+0.1"
+                                        data-spinner-target="#id_size">0.1 cm</button>
+                                </div>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="id_price" class="control-label">가격</label>
-                                <input type="text" class="form-control" id="id_price" name="price">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="id_unit" class="control-label d-block">단위</label>
-                            <div id="id_unit" class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-default">
-                                    <input type="radio" name="unit" value="couple"> 한쌍
-                                </label>
-                                <label class="btn btn-default">
-                                    <input type="radio" name="unit" value="female"> 암컷
-                                </label>
-                                <label class="btn btn-default">
-                                    <input type="radio" name="unit" value="male"> 수컷
-                                </label>
-                                <label class="btn btn-default active">
-                                    <input type="radio" name="unit" value="none" checked> 없음
-                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="-100" data-spinner-target="#id_price">
+                                            <i class="fas fa-angle-left fa-fw"></i>
+                                        </button>
+                                    </span>
+                                    <input type="text" class="form-control text-center" id="id_price" name="price" data-input-type="int"
+                                        value="0">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="+100" data-spinner-target="#id_price">
+                                            <i class="fas fa-angle-right fa-fw"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="btn-group input-spinner d-flex mt-3">
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10000"
+                                        data-spinner-target="#id_price">만</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1000"
+                                        data-spinner-target="#id_price">천</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+100"
+                                        data-spinner-target="#id_price">백</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -123,8 +168,15 @@
             </div>
         </div>
     </div>
+    <div id="side-section"></div>
+    <div id="content-section">
+        <div id="loading">
+            <div class="icon"><i class="fas fa-circle-notch fa-fw fa-3x fa-spin"></i></div>
+            <div class="text">Loading</div>
+        </div>
+    </div>
     <div id="wrapper">
-        <nav class="navbar navbar-default navbar-cls-top mb-0">
+        <nav class="navbar navbar-cls-top">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">Aquarium Assets</a>
@@ -136,10 +188,10 @@
                 </div>
             </div>
         </nav>
-        <nav class="navbar-default navbar-side">
+        <nav class="navbar-side">
             <div class="collapse sidebar-collapse">
                 <ul id="console-menu" class="nav">
-                    <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
+                    <li><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
                     <li><a href="../../store/"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
@@ -178,93 +230,213 @@
                 </ul>
             </div>
         </nav>
-        <div id="page-wrapper">
-            <div id="page-inner" class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <h2>주문관리</h2>
-                        <h5>Welcome Jhon Deo , Love to see you back.</h5>
-                    </div>
-                </div>
+        <div id="page-wrapper" class="d-none">
+            <div class="page-inner container-fluid">
+                <h2>주문관리</h2>
+                <h5>Welcome Jhon Deo , Love to see you back.</h5>
                 <hr>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <ul class="nav nav-tabs">
-                            <li class="disabled active"><a href="#order-sheet">주문서 작성</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="order-sheet">
-                                <div id="order-sheet-menu">
-                                    <div class="btn-group">
-                                        <button type="button" id="add-order" class="btn btn-default">주문 추가</button>
-                                        <button type="button" class="btn btn-default">받는 분 입력</button>
-                                        <button type="button" class="btn btn-default">배송 변경</button>
+                <ul class="nav nav-tabs">
+                    <li class="disabled active"><a href="#order-sheet">주문서 작성</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="order-sheet">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="panel panel-info border-dark">
+                                    <div id="customer-tool" class="panel-heading border-dark clearfix">
+                                        <div class="table-heading">고객</div>
                                     </div>
-                                </div>
-                                <hr>
-                                <div class="panel panel-default border-dark mb-0">
-                                    <div id="order-sheet-tool" class="panel-heading border-dark">주문 항목</div>
                                     <div class="table-responsive">
-                                        <table class="table table-align-middle table-bordered table-hover">
+                                        <table id="customer_table" class="table table-bordered table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center text-nowrap">번호</th>
-                                                    <th class="text-center text-nowrap">열대어 어종</th>
-                                                    <th class="text-center text-nowrap">열대어 품종</th>
-                                                    <th class="text-center text-nowrap">크기 (cm)</th>
-                                                    <th class="text-center text-nowrap">단위</th>
-                                                    <th class="text-center text-nowrap">수량</th>
-                                                    <th class="text-center text-nowrap">가격</th>
+                                                    <th></th>
+                                                    <th>번호</th>
+                                                    <th>이름</th>
+                                                    <th>연락처</th>
+                                                    <th>주소</th>
                                                 </tr>
                                             </thead>
-                                            <tbody class="text-right">
+                                            <tbody>
                                                 <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>구피</td>
-                                                    <td>알비노풀레드</td>
-                                                    <td>1.2 cm</td>
-                                                    <td>암컷</td>
-                                                    <td>3</td>
-                                                    <td>24000 원</td>
+                                                    <th scope="row" class="min">
+                                                        <div class="pretty p-default p-round">
+                                                            <input type="radio">
+                                                            <div class="state p-primary">
+                                                                <label></label>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th>1</th>
+                                                    <td>철수</td>
+                                                    <td>010-1234-1234</td>
+                                                    <td>서울특별시</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row" class="min">
+                                                        <div class="pretty p-default p-round">
+                                                            <input type="radio">
+                                                            <div class="state p-primary">
+                                                                <label></label>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th>2</th>
+                                                    <td>철수</td>
+                                                    <td>010-1234-1234</td>
+                                                    <td>서울특별시</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row" class="min">
+                                                        <div class="pretty p-default p-round">
+                                                            <input type="radio">
+                                                            <div class="state p-primary">
+                                                                <label></label>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th>3</th>
+                                                    <td>철수</td>
+                                                    <td>010-1234-1234</td>
+                                                    <td>서울특별시</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div id="order-sheet-info" class="panel-footer bg-white"></div>
+                                    <div class="panel-footer bg-white text-right">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default">받는 사람으로</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <hr>
-                                <div class="clearfix">
-                                    <dl class="dl-order-horizontal bs-callout bs-callout-primary pull-right">
-                                        <dt>받는 분 :</dt>
-                                        <dd class="text-right">(없음)</dd>
-                                        <dt>휴대전화 :</dt>
-                                        <dd class="text-right">(없음)</dd>
-                                        <dt>기본주소 :</dt>
-                                        <dd class="text-right">(없음)</dd>
-                                        <dt>상세주소 :</dt>
-                                        <dd class="text-right">(없음)</dd>
-                                    </dl>
-                                </div>
-                                <hr>
-                                <div class="clearfix">
-                                    <dl class="dl-order-horizontal bs-callout bs-callout-primary pull-right">
-                                        <dt>배송 :</dt>
-                                        <dd class="text-right">매장</dd>
-                                        <dt>합계 :</dt>
-                                        <dd class="text-right">(없음)</dd>
-                                    </dl>
-                                </div>
-                                <hr>
-                                <div class="text-right">
-                                    <button type="button" class="btn btn-default">주문</button>
-                                </div>
+                                <div id="customer-pagination" class="text-center"></div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="panel panel-success border-dark">
+                                    <div id="product-tool" class="panel-heading border-dark clearfix">
+                                        <div class="table-heading">상품</div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table id="product_table" class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <div class="pretty p-default">
+                                                            <input type="checkbox">
+                                                            <div class="state p-primary">
+                                                                <label></label>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th>번호</th>
+                                                    <th>어종</th>
+                                                    <th>품종</th>
+                                                    <th>크기 (cm)</th>
+                                                    <th>단위</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row" class="min">
+                                                        <div class="pretty p-default">
+                                                            <input type="checkbox">
+                                                            <div class="state p-primary">
+                                                                <label></label>
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <th>1</th>
+                                                    <td>구피</td>
+                                                    <td>알비노풀레드</td>
+                                                    <td>1.2 cm</td>
+                                                    <td>암컷</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="panel-footer bg-white text-right">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default">항목 담기</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="product-pagination" class="text-center"></div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default border-dark">
+                            <div id="cart-tool" class="panel-heading border-dark clearfix">
+                                <div class="table-heading">주문 항목</div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="cart_table" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>번호</th>
+                                            <th>어종</th>
+                                            <th>품종</th>
+                                            <th>크기 (cm)</th>
+                                            <th>단위</th>
+                                            <th>단가</th>
+                                            <th>수량</th>
+                                            <th>가격</th>
+                                            <th>동작</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>구피</td>
+                                            <td>알비노풀레드</td>
+                                            <td>1.2 cm</td>
+                                            <td>암컷</td>
+                                            <td>8000 원</td>
+                                            <td>3</td>
+                                            <td>24000 원</td>
+                                            <td class="min col-btn">
+                                                <div class="btn-group d-flex pull-right">
+                                                    <button type="button" class="btn btn-default">
+                                                        <i class="fas fa-pen fa-fw"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-default">
+                                                        <i class="fas fa-trash-alt fa-fw"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="panel-footer bg-white text-right">
+                                <button type="button" id="add-order" class="btn btn-default">항목 직접 입력</button>
+                            </div>
+                        </div>
+                        <div id="cart-pagination" class="text-center"></div>
+                        <hr>
+                        <div class="clearfix">
+                            <dl class="dl-order bs-callout bs-callout-warning pull-right">
+                                <dt>받는 분 :</dt>
+                                <dd>네이버</dd>
+                                <dt>전화번호 :</dt>
+                                <dd>1588-3830</dd>
+                                <dt>기본주소 :</dt>
+                                <dd>경기도 성남시 분당구 불정로 6</dd>
+                                <dt>상세주소 :</dt>
+                                <dd>NAVER그린팩토리</dd>
+                                <dt>배송 :</dt>
+                                <dd>매장</dd>
+                                <dt>합계 :</dt>
+                                <dd>24000 원</dd>
+                            </dl>
+                        </div>
+                        <hr>
+                        <div class="text-right mb-section">
+                            <button type="button" class="btn btn-default">주문</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <footer class="my-4 text-muted text-center text-small">
-                <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
+            <footer class="text-muted text-small text-center my-section">
+                <i>Copyright &copy; roh-j, Licensed under the Apache License</i>
             </footer>
         </div>
     </div>

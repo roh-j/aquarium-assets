@@ -1,5 +1,61 @@
-/* custom styles */
-
+/* overflow */
+.overflow-auto {
+    overflow: auto !important;
+}
+.overflow-scroll {
+    overflow: scroll !important;
+}
+.overflow-visible {
+    overflow: visible !important;
+}
+/* min - max */
+.min-145 {
+    min-width: 145px !important;
+}
+.min-215 {
+    min-width: 215px !important;
+}
+.max-380 {
+    max-width: 380px !important;
+}
+.max-600 {
+    max-width: 600px !important;
+}
+/* table-hover (rowspan) */
+.table-merge-hover > tbody.active {
+    background-color: #f5f5f5;
+}
+.table-merge-hover > tbody.success {
+    background-color: #dff0d8;
+}
+.table-merge-hover > tbody.info {
+    background-color: #d9edf7;
+}
+.table-merge-hover > tbody.warning {
+    background-color: #fcf8e3;
+}
+.table-merge-hover > tbody.danger {
+    background-color: #f2dede;
+}
+.table-merge-hover > tbody:hover {
+    background-color: #f5f5f5;
+}
+.table-merge-hover > tbody.active:hover {
+    background-color: #e8e8e8;
+}
+.table-merge-hover > tbody.success:hover {
+    background-color: #d0e9c6;
+}
+.table-merge-hover > tbody.info:hover {
+    background-color: #c4e3f3;
+}
+.table-merge-hover > tbody.warning:hover {
+    background-color: #faf2cc;
+}
+.table-merge-hover > tbody.danger:hover {
+    background-color: #ebcccc;
+}
+/* custom badge */
 .badge-danger {
     background-color: #d9534f;
 }
@@ -30,46 +86,7 @@
 .badge-primary:hover {
     background-color: #286090;
 }
-
-/* table-hover (rowspan) */
-
-.table-merge-hover > tbody.active {
-    background-color: #f5f5f5;
-}
-.table-merge-hover > tbody.success {
-    background-color: #dff0d8;
-}
-.table-merge-hover > tbody.info {
-    background-color: #d9edf7;
-}
-.table-merge-hover > tbody.warning {
-    background-color: #fcf8e3;
-}
-.table-merge-hover > tbody.danger {
-    background-color: #f2dede;
-}
-
-.table-merge-hover > tbody:hover {
-    background-color: #f5f5f5;
-}
-.table-merge-hover > tbody.active:hover {
-    background-color: #e8e8e8;
-}
-.table-merge-hover > tbody.success:hover {
-    background-color: #d0e9c6;
-}
-.table-merge-hover > tbody.info:hover {
-    background-color: #c4e3f3;
-}
-.table-merge-hover > tbody.warning:hover {
-    background-color: #faf2cc;
-}
-.table-merge-hover > tbody.danger:hover {
-    background-color: #ebcccc;
-}
-
 /* callout */
-
 .bs-callout {
     padding: 20px;
     margin: 20px 0;
@@ -126,9 +143,7 @@
 .bs-callout-info h4 {
     color: #5bc0de;
 }
-
 /* bootstrap 4 */
-
 .shadow-sm {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
@@ -477,9 +492,7 @@ button.bg-dark:focus {
     display: -ms-inline-flexbox !important;
     display: inline-flex !important;
 }
-
 /* bootstrap 4 spacing */
-
 .w-25 {
     width: 25% !important;
 }
@@ -538,6 +551,25 @@ button.bg-dark:focus {
     pointer-events: auto;
     content: "";
     background-color: rgba(0, 0, 0, 0);
+}
+.m-section {
+    margin: 20px !important;
+}
+.mt-section,
+.my-section {
+    margin-top: 20px !important;
+}
+.mr-section,
+.mx-section {
+    margin-right: 20px !important;
+}
+.mb-section,
+.my-section {
+    margin-bottom: 20px !important;
+}
+.ml-section,
+.mx-section {
+    margin-left: 20px !important;
 }
 .m-0 {
     margin: 0 !important;

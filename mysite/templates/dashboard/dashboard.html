@@ -34,19 +34,29 @@
     <!-- metisMenu (A jQuery menu plugin) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
     <!-- Scripts -->
+    <script src="{% static 'assets/js/common.js' %}"></script>
 
     <title>Aquarium Assets</title>
     <script>
         $(function () {
             $("#console-menu").metisMenu();
             $(".nav-second-level").removeClass("d-none");
+
+            //load_complete();
         });
     </script>
 </head>
 
 <body>
+    <div id="side-section"></div>
+    <div id="content-section">
+        <div id="loading">
+            <div class="icon"><i class="fas fa-circle-notch fa-fw fa-3x fa-spin"></i></div>
+            <div class="text">Loading</div>
+        </div>
+    </div>
     <div id="wrapper">
-        <nav class="navbar navbar-default navbar-cls-top mb-0">
+        <nav class="navbar navbar-cls-top">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">Aquarium Assets</a>
@@ -58,7 +68,7 @@
                 </div>
             </div>
         </nav>
-        <nav class="navbar-default navbar-side">
+        <nav class="navbar-side">
             <div class="collapse sidebar-collapse">
                 <ul id="console-menu" class="nav">
                     <li class="text-center">
@@ -101,18 +111,14 @@
                 </ul>
             </div>
         </nav>
-        <div id="page-wrapper">
-            <div id="page-inner" class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <h2>대시보드</h2>
-                        <h5>Welcome Jhon Deo , Love to see you back.</h5>
-                    </div>
-                </div>
+        <div id="page-wrapper" class="d-none">
+            <div class="page-inner container-fluid">
+                <h2>대시보드</h2>
+                <h5>Welcome Jhon Deo , Love to see you back.</h5>
                 <hr>
             </div>
-            <footer class="my-4 text-muted text-center text-small">
-                <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
+            <footer class="text-muted text-small text-center my-section">
+                <i>Copyright &copy; roh-j, Licensed under the Apache License</i>
             </footer>
         </div>
     </div>

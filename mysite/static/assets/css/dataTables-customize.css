@@ -5,11 +5,23 @@ table.dataTable {
     max-width: none !important;
     border-collapse: collapse !important;
 }
+.dataTables_filter,
+.dataTables_length {
+    float: right;
+}
+.dataTables_length {
+    margin-right: 1rem;
+}
+.dt-buttons {
+    margin-left: 1rem;
+}
+.dataTables_filter > input {
+    width: 196px;
+}
 .dataTables_filter > label,
 .dataTables_length > label {
     margin: 0;
 }
-
 .panel > .dt-bootstrap > .table,
 .panel > .table-responsive > .dt-bootstrap > .table,
 .panel > .panel-collapse > .table {

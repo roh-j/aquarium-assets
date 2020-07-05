@@ -1,4 +1,135 @@
+/**
+ * Inventory JS
+ * @author roh-j
+ * @version 2019-07-26, 코드 표준화.
+ */
+
+var storage_room_pk = null;
+var aquarium_section_pk = null;
+var aquarium_selection_row = null;
+var aquarium_selection_column = null;
+
+var table = null;
 var coordinate = null;
+
+$(function () {
+
+    $("#console-menu").metisMenu();
+    $(".nav-second-level").removeClass("d-none");
+
+    load_complete();
+
+    table = $("#inventory_table").DataTable({
+        buttons: [
+            {
+                extend: "csv",
+                text: "<i class='far fa-save fa-fw'></i> CSV",
+                filename: "생물재고 " + year + "-" + month + "-" + day,
+                exportOptions: {
+                    columns: [1, 2, 3, 4, 5]
+                }
+            },
+            {
+                extend: "excel",
+                text: "<i class='far fa-save fa-fw'></i> Excel",
+                filename: "생물재고 " + year + "-" + month + "-" + day,
+                title: "",
+                exportOptions: {
+                    columns: [1, 2, 3, 4, 5]
+                },
+                customize: function (xlsx) {
+                    var sheet = xlsx.xl.worksheets["sheet1.xml"];
+                    var col = $("col", sheet);
+
+                    col.each(function () {
+                        $(this).attr("width", 35);
+                    });
+                }
+            }
+        ],
+        columnDefs: [
+            {
+                "targets": [6],
+                "searchable": false,
+                "orderable": false
+            }
+        ],
+        autoWidth: false,
+        pageLength: 10,
+        lengthMenu: [10, 25, 50],
+        pagingType: "simple",
+        dom: "l" + "B" + "f" + "t" + "p" + "i",
+        language: {
+            emptyTable: "데이터가 존재하지 않습니다.",
+            zeroRecords: "일치하는 레코드가 없습니다.",
+            lengthMenu: "_MENU_",
+            search: "",
+            searchPlaceholder: "\uf002",
+            paginate: {
+                previous: "이전",
+                next: "다음"
+            }
+        },
+        initComplete: function () {
+            $(".dt-buttons").addClass("btn-group");
+            $(".dt-buttons > .dt-button").addClass("btn btn-default");
+
+            $(".dataTables_filter input").removeClass("input-sm").unwrap("label").addClass("fas fa-search");
+            $(".dataTables_length select").removeClass("input-sm");
+
+            $(".dataTables_info").detach().appendTo("#inventory-info");
+            $(".dataTables_paginate").detach().appendTo("#inventory-pagination");
+
+            $(".dt-buttons").detach().appendTo("#inventory-menu");
+            $(".dataTables_filter").detach().appendTo("#inventory-tool");
+            $(".dataTables_length").detach().appendTo("#inventory-tool");
+        }
+    });
+
+    /**
+     * 생물실 탭.
+     * Event Binding.
+     */
+
+    $("#storage-room-list > a").click(function (e) {
+        e.preventDefault();
+
+        if (!$(this).hasClass("selected")) {
+            $("#storage-room-list > a").removeClass("selected");
+            $("#storage-room-list > a > div.media > div.media-body > p > span").remove();
+
+            $(this).addClass("selected");
+            $("div.media > div.media-body > p", this).append(
+                "<span class='text-primary pull-right'><i class='fas fa-check fa-fw'></i></span>"
+            );
+
+            storage_room_pk = $("div.media > span.data-binding", this).data("storage-room-id");
+            storage_room_name = $("div.media > span.data-binding", this).data("storage-room-name");
+
+            draw_store_layout("store-layout/", function () {
+                $(".nav-tabs a[href='#store-layout']").tab("show");
+            });
+        }
+    });
+
+    /**
+     * 수족관 탭.
+     * Event Binding.
+     */
+
+    $("#redo-store-layout").click(function (e) {
+        $(".nav-tabs a[href='#store-layout']").tab("show");
+        aquarium_selection_row = null;
+        aquarium_selection_column = null;
+    });
+});
+
+/**
+ * 매장 레이아웃을 그림.
+ * @param {string} url 데이터를 가져오기 위한 경로 지정.
+ * @param {string} callback 콜백 처리 변수.
+ * @returns 없음.
+ */
 
 var draw_store_layout = function (url, callback) {
     var params = {
@@ -88,6 +219,13 @@ var draw_store_layout = function (url, callback) {
     }).fail(function (data) {
     });
 }
+
+/**
+ * 섹션 안에 있는 수조를 그림.
+ * @param {string} url 데이터를 가져오기 위한 경로 지정.
+ * @param {string} callback 콜백 처리 변수.
+ * @returns 없음.
+ */
 
 var draw_aquarium = function (url, callback) {
     var params = {

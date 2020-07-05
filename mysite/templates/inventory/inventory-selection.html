@@ -50,8 +50,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
     <!-- Scripts -->
     <script src="{% static 'assets/js/common.js' %}"></script>
-    <script src="{% static 'assets/js/inventory-base.js' %}"></script>
-    <script src="{% static 'assets/js/inventory-core.js' %}"></script>
+    <script src="{% static 'assets/js/inventory.js' %}"></script>
 
     <title>Aquarium Assets</title>
 </head>
@@ -62,13 +61,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
+                    <h5 class="modal-title"><i class="fas fa-exclamation-circle fa-fw text-primary"></i> 알림</h5>
                 </div>
                 <form id="" method="POST">
                     {% csrf_token %}
                     <div id="alert-modal-body" class="modal-body">
                         <div class="form-group">
-                            <label for="id_species" class="control-label">열대어 품종</label>
+                            <label for="id_species" class="control-label">품종</label>
                             <input type="text" class="form-control" id="id_species" name="species">
                         </div>
                         <div class="form-group">
@@ -102,8 +101,15 @@
             </div>
         </div>
     </div>
+    <div id="side-section"></div>
+    <div id="content-section">
+        <div id="loading">
+            <div class="icon"><i class="fas fa-circle-notch fa-fw fa-3x fa-spin"></i></div>
+            <div class="text">Loading</div>
+        </div>
+    </div>
     <div id="wrapper">
-        <nav class="navbar navbar-default navbar-cls-top mb-0">
+        <nav class="navbar navbar-cls-top">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">Aquarium Assets</a>
@@ -115,7 +121,7 @@
                 </div>
             </div>
         </nav>
-        <nav class="navbar-default navbar-side">
+        <nav class="navbar-side">
             <div class="collapse sidebar-collapse">
                 <ul id="console-menu" class="nav">
                     <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
@@ -156,148 +162,114 @@
                 </ul>
             </div>
         </nav>
-        <div id="page-wrapper">
-            <div id="page-inner" class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <h2>재고관리</h2>
-                        <h5>Welcome Jhon Deo , Love to see you back.</h5>
-                    </div>
-                </div>
+        <div id="page-wrapper" class="d-none">
+            <div class="page-inner container-fluid">
+                <h2>재고관리</h2>
+                <h5>Welcome Jhon Deo , Love to see you back.</h5>
                 <hr>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <ul class="nav nav-tabs">
-                            <li class="active"><a href="#storage-room" data-toggle="tab">생물실 선택</a></li>
-                            <li><a href="#store-layout" data-toggle="tab">매장 레이아웃</a></li>
-                            <li><a href="#aquarium" data-toggle="tab">수조 선택</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="storage-room">
-                                <div class="panel panel-default border-dark max-600 mx-auto">
-                                    <div class="panel-heading border-dark">생물실 선택</div>
-                                    <div class="panel-body">
-                                        {% if not storage_room_list %}
-                                        <div class="standby">
-                                            <img src="{% static 'assets/img/icon/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
-                                            <hr>
-                                            <p class="text-center">
-                                                <a href="../../store/">매장관리</a>에서 생물실를 등록해주세요.
-                                            </p>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#storage-room" data-toggle="tab">생물실 선택</a></li>
+                    <li><a href="#store-layout" data-toggle="tab">매장 레이아웃</a></li>
+                    <li><a href="#aquarium" data-toggle="tab">수조 선택</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="storage-room">
+                        <div class="panel panel-default border-dark max-600 mx-auto">
+                            <div class="panel-heading border-dark">생물실 선택</div>
+                            <div class="panel-body">
+                                {% if not storage_room_list %}
+                                <div class="standby">
+                                    <img src="{% static 'assets/img/icon/Apps-utilities-file-archiver-icon.png' %}"
+                                        class="img-responsive mx-auto">
+                                    <hr>
+                                    <p class="text-center">
+                                        <a href="../../store/">매장관리</a>에서 생물실를 등록해주세요.
+                                    </p>
+                                </div>
+                                {% else %}
+                                <div id="storage-room-list" class="list-group">
+                                    {% for list in storage_room_list %}
+                                    <a href="#" class="list-group-item" data-storage-room-id="{{ list.id }}">
+                                        <div class="media">
+                                            <span class="data-binding" data-storage-room-id="{{ list.id }}"
+                                                data-storage-room-name="{{ list.storage_room_name }}"></span>
+                                            <div class="media-left">
+                                                <img class="media-object"
+                                                    src="{% static 'assets/img/icon/Mimetypes-application-x-tar-icon-64x64.png' %}">
+                                            </div>
+                                            <div class="media-body w-100">
+                                                <p class="font-weight-bold">{{ list.storage_room_name }}</p>
+                                                {{ list.modified_date }}
+                                            </div>
                                         </div>
-                                        {% else %}
-                                        <div id="storage-room-list" class="list-group">
-                                            {% for list in storage_room_list %}
-                                            <a href="#" class="list-group-item" data-storage-room-id="{{ list.id }}">
-                                                <div class="media">
-                                                    <span class="data-binding d-none"
-                                                        data-storage-room-id="{{ list.id }}"
-                                                        data-storage-room-name="{{ list.storage_room_name }}"></span>
-                                                    <div class="media-left">
-                                                        <img class="media-object" src="{% static 'assets/img/icon/Mimetypes-application-x-tar-icon-64x64.png' %}">
-                                                    </div>
-                                                    <div class="media-body w-100">
-                                                        <p class="font-weight-bold">{{ list.storage_room_name }}</p>
-                                                        {{ list.modified_date }}
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            {% endfor %}
-                                        </div>
-                                        {% endif %}
-                                    </div>
+                                    </a>
+                                    {% endfor %}
                                 </div>
-                            </div>
-                            <div class="tab-pane" id="store-layout">
-                                <div class="table-responsive">
-                                    <div id="store-layout-canvas">
-                                        <div id="svg-store-layout" class="text-center"></div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="text-center">
-                                    <a href="" class="btn btn-default">처음으로</a>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="aquarium">
-                                <div class="table-responsive">
-                                    <div id="aquarium-canvas" class="text-center">
-                                        <div id="svg-center" class="text-center mx-auto">
-                                            <div id="svg-mini-map"></div>
-                                        </div>
-                                        <hr>
-                                        <div id="svg-aquarium" class="text-center"></div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="text-center">
-                                    <div class="btn-group">
-                                        <button type="button" id="redo-store-layout" class="btn btn-default">이전</button>
-                                        <a href="" class="btn btn-default">처음으로</a>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div id="inventory-menu">
-                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#alert-modal">재고 추가</button>
-                                </div>
-                                <hr>
-                                <div class="panel panel-default border-dark mb-0">
-                                    <div id="inventory-tool" class="panel-heading border-dark text-right"></div>
-                                    <div class="table-responsive">
-                                        <table id="inventory_table" class="table table-align-middle table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center text-nowrap">번호</th>
-                                                    <th class="text-center text-nowrap">열대어 분류</th>
-                                                    <th class="text-center text-nowrap">열대어 품종</th>
-                                                    <th class="text-center text-nowrap">크기 (cm)</th>
-                                                    <th class="text-center text-nowrap">마릿수</th>
-                                                    <th class="text-center text-nowrap">상태</th>
-                                                    <th class="text-center text-nowrap">동작</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="text-right">
-                                                <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>구피</td>
-                                                    <td>알비노풀레드</td>
-                                                    <td>2.7 cm</td>
-                                                    <td>3 마리</td>
-                                                    <td><i class="fas fa-circle text-success"></i> 분양 가능</td>
-                                                    <td class="min cell-button">
-                                                        <div class="btn-group d-flex pull-right">
-                                                            <button type="button" class="btn btn-sm btn-default">가격 수정</button>
-                                                            <button type="button" class="btn btn-sm btn-default">삭제</button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">2</th>
-                                                    <td>구피</td>
-                                                    <td>알비노풀레드</td>
-                                                    <td>1.7 cm</td>
-                                                    <td>12 마리</td>
-                                                    <td><i class="fas fa-circle text-warning"></i> 성장 단계</td>
-                                                    <td class="min cell-button">
-                                                        <div class="btn-group d-flex pull-right">
-                                                            <button type="button" class="btn btn-sm btn-default">가격 수정</button>
-                                                            <button type="button" class="btn btn-sm btn-default">삭제</button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div id="inventory-info" class="panel-footer bg-white"></div>
-                                </div>
-                                <div id="inventory-pagination" class="text-center"></div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
+                    <div class="tab-pane" id="store-layout">
+                        <div class="table-responsive">
+                            <div id="store-layout-canvas">
+                                <div id="svg-store-layout" class="text-center"></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="text-center mb-section">
+                            <a href="" class="btn btn-default">처음으로</a>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="aquarium">
+                        <div class="table-responsive">
+                            <div id="aquarium-canvas" class="text-center">
+                                <div id="svg-center" class="text-center mx-auto">
+                                    <div id="svg-mini-map"></div>
+                                </div>
+                                <hr>
+                                <div id="svg-aquarium" class="text-center"></div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="text-center">
+                            <div class="btn-group">
+                                <button type="button" id="redo-store-layout" class="btn btn-default">이전</button>
+                                <a href="" class="btn btn-default">처음으로</a>
+                            </div>
+                        </div>
+                        <hr>
+                        <div id="inventory-menu">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#alert-modal">재고
+                                추가</button>
+                        </div>
+                        <hr>
+                        <div class="panel panel-default border-dark">
+                            <div id="inventory-tool" class="panel-heading border-dark clearfix"></div>
+                            <div class="table-responsive">
+                                <table id="inventory_table" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>번호</th>
+                                            <th>분류</th>
+                                            <th>품종</th>
+                                            <th>크기 (cm)</th>
+                                            <th>마릿수</th>
+                                            <th>상태</th>
+                                            <th>동작</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="inventory-info" class="panel-footer bg-white"></div>
+                        </div>
+                        <div id="inventory-pagination" class="text-center"></div>
+                    </div>
                 </div>
             </div>
-            <footer class="my-4 text-muted text-center text-small">
-                <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
+            <footer class="text-muted text-small text-center my-section">
+                <i>Copyright &copy; roh-j, Licensed under the Apache License</i>
             </footer>
         </div>
     </div>

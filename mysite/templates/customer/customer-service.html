@@ -36,20 +36,30 @@
     <!-- Textarea Autosize -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/autosize.js/4.0.2/autosize.min.js"></script>
     <!-- Scripts -->
+    <script src="{% static 'assets/js/common.js' %}"></script>
 
     <title>Aquarium Assets</title>
     <script>
         $(function () {
             autosize($(".write-message"));
-            $("#management-menu").metisMenu();
+            $("#console-menu").metisMenu();
             $(".nav-second-level").removeClass("d-none");
+
+            load_complete();
         });
     </script>
 </head>
 
 <body>
+    <div id="side-section"></div>
+    <div id="content-section">
+        <div id="loading">
+            <div class="icon"><i class="fas fa-circle-notch fa-fw fa-3x fa-spin"></i></div>
+            <div class="text">Loading</div>
+        </div>
+    </div>
     <div id="wrapper">
-        <nav class="navbar navbar-default navbar-cls-top mb-0">
+        <nav class="navbar navbar-cls-top">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="/">Aquarium Assets</a>
@@ -61,9 +71,9 @@
                 </div>
             </div>
         </nav>
-        <nav class="navbar-default navbar-side">
+        <nav class="navbar-side">
             <div class="collapse sidebar-collapse">
-                <ul id="management-menu" class="nav">
+                <ul id="console-menu" class="nav">
                     <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
@@ -94,7 +104,7 @@
                         <a href="#"><i class="fas fa-folder-open fa-fw"></i>기타 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
                             <li><a href=""><i class="fas fa-desktop fa-fw"></i>페이지 관리</a></li>
-                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>라운지 이동</a></li>
+                            <li><a href=""><i class="fas fa-external-link-alt fa-fw"></i>장터 이동</a></li>
                             <li><a href="/business/"><i class="fas fa-exchange-alt fa-fw"></i>대시보드 전환</a></li>
                         </ul>
                     </li>
@@ -102,8 +112,8 @@
                 </ul>
             </div>
         </nav>
-        <div id="page-wrapper">
-            <div id="page-inner" class="container-fluid">
+        <div id="page-wrapper" class="d-none">
+            <div class="page-inner container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
                         <h2>고객관리</h2>
@@ -220,7 +230,7 @@
                                     <div class="panel-footer bg-white clearfix">
                                         <textarea class="write-message" placeholder="내용을 입력하세요." rows="2"></textarea>
                                         <div class="pull-right mt-3">
-                                            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> 전송</button>
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane fa-fw"></i> 전송</button>
                                         </div>
                                     </div>
                                 </div>
@@ -229,8 +239,8 @@
                     </div>
                 </div>
             </div>
-            <footer class="my-4 text-muted text-center text-small">
-                <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
+            <footer class="text-muted text-small text-center my-section">
+                <i>Copyright &copy; roh-j, Licensed under the Apache License</i>
             </footer>
         </div>
     </div>

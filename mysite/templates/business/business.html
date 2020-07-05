@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-default navbar-cls-top mb-0">
+    <nav class="navbar navbar-cls-top">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">Aquarium Assets</a>
@@ -43,15 +43,15 @@
             </div>
         </div>
     </nav>
-    <div class="container-fluid mt-5">
-        <div class="panel panel-default border-dark max-380 mx-auto">
+    <div class="container-fluid">
+        <div class="panel panel-default border-dark max-380 mx-auto my-section">
             <div class="panel-heading border-dark">비즈니스 관리</div>
             <div class="panel-body">
                 <img src="{% static 'assets/img/icon/Actions-view-pim-contacts-icon.png' %}" class="primary-image img-responsive">
                 <hr>
                 {% if not business_list %}
                 <div class="alert bg-default border-secondary">
-                    <i class="fas fa-exclamation-circle"></i> 비즈니스 등록이 필요합니다.
+                    <i class="fas fa-exclamation-circle fa-fw"></i> 비즈니스 등록이 필요합니다.
                 </div>
                 {% else %}
                 <div class="list-group">
@@ -74,8 +74,8 @@
                 </div>
             </div>
         </div>
-        <footer class="my-4 text-muted text-center text-small">
-            <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
+        <footer class="text-muted text-small text-center my-section">
+            <i>Copyright &copy; roh-j, Licensed under the Apache License</i>
         </footer>
     </div>
 </body>

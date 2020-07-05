@@ -1,5 +1,4 @@
 /* toggle switch (w3schools) */
-
 .switch {
     position: relative;
     display: inline-block;
@@ -51,9 +50,7 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
-
 /* store layout */
-
 rect.store-layout-grid {
     fill: none;
     stroke: #000;
@@ -70,9 +67,7 @@ rect.mini-map-store-layout-grid {
 rect.mini-map-store-layout-button {
     stroke: none;
 }
-
 /* aquarium */
-
 polygon.aquarium-grid {
     fill: none;
     stroke: #000;
@@ -97,9 +92,7 @@ rect.aquarium-front-button {
 rect.aquarium-front-button:hover {
     fill: #d0e0e8;
 }
-
 /* effect */
-
 polygon.effect-aquarium-grid {
     fill: none;
     stroke: #000;
@@ -120,9 +113,7 @@ rect.effect-aquarium-front-button {
     fill: #fff;
     stroke: none;
 }
-
 /* color picker */
-
 div.color-picker {
     width: 187px;
     padding: 5px;
@@ -154,4 +145,35 @@ div.color-selected {
     width: 34px;
     height: 34px;
     border: 1px solid #343a40;
+}
+/* spinner vertical */
+.spinner {
+    width: 78px;
+}
+.spinner input {
+    text-align: center;
+}
+.spinner-vertical {
+    position: relative;
+    display: table-cell;
+    width: 1%;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.spinner-vertical > .btn {
+    position: relative;
+    display: block;
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    padding: 8px;
+    margin-left: -1px;
+}
+.spinner-vertical > .btn:last-child {
+    margin-top: -2px;
+}
+.spinner-vertical i {
+    position: absolute;
+    top: 0;
+    left: 4px;
 }
