@@ -12,11 +12,11 @@ h4 {
 .overflow-scroll {
     overflow: scroll;
 }
-.max-344 {
-    max-width: 344px !important;
+.max-360 {
+    max-width: 360px !important;
 }
-.max-544 {
-    max-width: 544px !important;
+.max-600 {
+    max-width: 600px !important;
 }
 #wrapper {
     width: 100%;

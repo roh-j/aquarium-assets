@@ -14,7 +14,7 @@
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <!-- metisMenu (A jQuery menu plugin) -->
-    <link rel="stylesheet" href="https://unpkg.com/metismenu/dist/metisMenu.min.css">
+    <!--<link rel="stylesheet" href="https://unpkg.com/metismenu/dist/metisMenu.min.css">-->
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
     <!-- Custom Styles -->
@@ -33,7 +33,7 @@
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <!-- metisMenu (A jQuery menu plugin) -->
-    <script src="https://unpkg.com/metismenu"></script>
+    <!--<script src="https://unpkg.com/metismenu"></script>-->
     <!-- SVG.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
     <!-- Fake Smile (SVG) -->
@@ -93,7 +93,7 @@
         <nav class="navbar-default navbar-side">
             <div class="collapse sidebar-collapse">
                 <ul class="nav">
-                    <li class="text-center"><img src="{% static 'assets/img/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
+                    <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../store/"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
                     <li><a class="active-menu" href=""><i class="fas fa-archive fa-fw"></i>재고관리</a></li>
@@ -122,12 +122,12 @@
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="storage-room">
-                                <div class="panel panel-default border-dark max-544 mx-auto">
+                                <div class="panel panel-default border-dark max-600 mx-auto">
                                     <div class="panel-heading border-dark">창고 선택</div>
                                     <div class="panel-body">
                                         {% if not storage_room_list %}
                                         <div class="standby">
-                                            <img src="{% static 'assets/img/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
+                                            <img src="{% static 'assets/img/icon/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
                                             <hr>
                                             <p class="text-center">
                                                 <a href="../store/">매장관리</a>에서 창고를 등록해주세요.
@@ -142,11 +142,11 @@
                                                         data-storage-room-id="{{ list.id }}"
                                                         data-storage-room-name="{{ list.storage_room_name }}"></span>
                                                     <div class="media-left">
-                                                        <img class="media-object" src="{% static 'assets/img/Mimetypes-application-x-tar-icon-64x64.png' %}">
+                                                        <img class="media-object" src="{% static 'assets/img/icon/Mimetypes-application-x-tar-icon-64x64.png' %}">
                                                     </div>
                                                     <div class="media-body w-100">
                                                         <p class="font-weight-bold">{{ list.storage_room_name }}</p>
-                                                        3/10
+                                                        {{ list.modified_date }}
                                                     </div>
                                                 </div>
                                             </a>

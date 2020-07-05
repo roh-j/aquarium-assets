@@ -154,7 +154,7 @@ var async_aquarium_section = function () {
         if (data.length == 0) {
             $("#async-aquarium-section").append(
                 "<div class='standby'>\
-                <img src='" + DJANGO_STATIC_URL + "/assets/img/Actions-svn-commit-icon.png' class='img-responsive mx-auto'>\
+                <img src='" + DJANGO_STATIC_URL + "/assets/img/icon/Actions-svn-commit-icon.png' class='img-responsive mx-auto'>\
                 <hr>\
                 <p class='text-center'>창고의 섹션을 등록할 수 있습니다.</p>\
                 </div>"
@@ -166,6 +166,7 @@ var async_aquarium_section = function () {
             );
 
             for (i = 0; i < data.length; i++) {
+                var aquarium_total = parseInt(data[i]['fields']['aquarium_num_of_rows']) * parseInt(data[i]['fields']['aquarium_num_of_columns'])
                 $("#async-aquarium-section > #aquarium-section-list").append("\
                     <a href='#' class='list-group-item'>\
                         <div class='media'>\
@@ -176,13 +177,13 @@ var async_aquarium_section = function () {
                                 data-aquarium-num-of-rows='" + data[i]['fields']['aquarium_num_of_rows'] + "'\
                                 data-aquarium-num-of-columns='" + data[i]['fields']['aquarium_num_of_columns'] + "'></span>\
                             <div class='media-left'>\
-                                <img class='media-object' src='" + DJANGO_STATIC_URL + "/assets/img/Mimetypes-application-x-tar-icon-64x64.png'>\
+                                <img class='media-object' src='" + DJANGO_STATIC_URL + "/assets/img/icon/Mimetypes-application-x-tar-icon-64x64.png'>\
                             </div>\
                             <div class='media-body w-100'>\
                                 <p class='font-weight-bold'>\
                                     <i class='fas fa-circle' style='color: " + data[i]['fields']['section_color'] + ";'></i> " + data[i]['fields']['section_name'] + "\
                                 </p>\
-                                " + data[i]['fields']['aquarium_num_of_rows'] + " x " + data[i]['fields']['aquarium_num_of_columns'] + "\
+                                가로: " + data[i]['fields']['aquarium_num_of_columns'] + "개 / 높이: " + data[i]['fields']['aquarium_num_of_rows'] + "층 / 총: " + aquarium_total + "개\
                             </div>\
                         </div>\
                     </a>\

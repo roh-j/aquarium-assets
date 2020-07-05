@@ -14,7 +14,7 @@
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <!-- metisMenu (A jQuery menu plugin) -->
-    <link rel="stylesheet" href="https://unpkg.com/metismenu/dist/metisMenu.min.css">
+    <!--<link rel="stylesheet" href="https://unpkg.com/metismenu/dist/metisMenu.min.css">-->
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
     <!-- Custom Styles -->
@@ -33,7 +33,7 @@
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <!-- metisMenu (A jQuery menu plugin) -->
-    <script src="https://unpkg.com/metismenu"></script>
+    <!--<script src="https://unpkg.com/metismenu"></script>-->
     <!-- SVG.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
     <!-- Fake Smile (SVG) -->
@@ -49,7 +49,7 @@
     <script>
         $(function () {
             standby_store_layout();
-
+            
             $("#aquarium-section-color-picker > ul li").click(function (e) {
                 $("#aquarium-section-color-selected").css({ "background": $(this).data("section-color") });
                 $("form#aquarium-section-form input#id_section_color").val($(this).data("section-color"));
@@ -133,7 +133,30 @@
                 });
             });
 
-            $("form#storage-room-edit-form button").click(function (e) {
+            $("form#aquarium-section-form").submit(function (e) {
+                e.preventDefault();
+                var params = $("form#aquarium-section-form").serializeArray();
+                params.push({
+                    name: "FK", value: storage_room_id
+                });
+
+                $.ajax({
+                    url: "ajax/insert/aquarium-section/",
+                    method: "POST",
+                    data: params,
+                    dataType: "json",
+                }).done(function (data) {
+                    if (data["state"] == "success") {
+                        async_aquarium_section();
+                        standby_store_layout();
+                    }
+                    else if (data["state"] == "error") {
+                    }
+                }).fail(function (data) {
+                });
+            });
+
+            $("#storage-room-edit-modal button").click(function (e) {
                 if ($(this).data("edit-type") == "update") {
                     var params = $("form#storage-room-edit-form").serializeArray();
                     params.push({
@@ -182,30 +205,7 @@
                 }
             });
 
-            $("form#aquarium-section-form").submit(function (e) {
-                e.preventDefault();
-                var params = $("form#aquarium-section-form").serializeArray();
-                params.push({
-                    name: "FK", value: storage_room_id
-                });
-
-                $.ajax({
-                    url: "ajax/insert/aquarium-section/",
-                    method: "POST",
-                    data: params,
-                    dataType: "json",
-                }).done(function (data) {
-                    if (data["state"] == "success") {
-                        async_aquarium_section();
-                        standby_store_layout();
-                    }
-                    else if (data["state"] == "error") {
-                    }
-                }).fail(function (data) {
-                });
-            });
-
-            $("form#aquarium-section-edit-form button").click(function (e) {
+            $("#aquarium-section-edit-modal button").click(function (e) {
                 if ($(this).data("edit-type") == "update") {
                     var params = $("form#aquarium-section-edit-form").serializeArray();
                     params.push(
@@ -278,6 +278,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h5 id="storage-room-edit-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
                 </div>
                 <div id="storage-room-edit-modal-content" class="modal-body">
@@ -290,14 +291,14 @@
                                     name="{{ storage_room_form.storage_room_name.html_name }}" class="form-control">
                             </div>
                         </div>
-                        <div class="btn-group pull-right">
-                            <button type="button" data-edit-type="delete" class="btn btn-default"><i class="far fa-trash-alt"></i> 창고 삭제</button>
-                            <button type="button" data-edit-type="update" class="btn btn-default">레이블 변경</button>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+                    <div class="btn-group">
+                        <button type="button" data-edit-type="delete" class="btn btn-default"><i class="far fa-trash-alt"></i> 창고 삭제</button>
+                        <button type="button" data-edit-type="update" class="btn btn-default">레이블 변경</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -306,6 +307,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h5 id="aquarium-section-edit-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
                 </div>
                 <div id="aquarium-section-edit-modal-content" class="modal-body">
@@ -326,7 +328,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}" class="col-sm-4 control-label">높이</label>
+                            <label for="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}" class="col-sm-4 control-label">높이 (층)</label>
                             <div class="col-sm-8">
                                 <input type="number" class="form-control" id="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}"
                                     name="{{ aquarium_section_form.aquarium_num_of_rows.html_name }}" min="0">
@@ -335,7 +337,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-sm-8">
                                 <div class="alert border-secondary mb-0">
-                                    <i class="fas fa-exclamation-circle"></i> 섹션 안, 수조의 개수를 입력하세요.
+                                    <i class="fas fa-exclamation-circle"></i> 섹션 안에 있는 수조의 개수를 입력하세요.
                                 </div>
                             </div>
                         </div>
@@ -367,14 +369,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="pull-right">
-                            <button type="button" data-edit-type="delete" class="btn btn-default"><i class="far fa-trash-alt"></i> 섹션 삭제</button>
-                            <button type="button" data-edit-type="update" class="btn btn-default">섹션 수정</button>
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+                    <div class="btn-group">
+                        <button type="button" data-edit-type="delete" class="btn btn-default"><i class="far fa-trash-alt"></i> 섹션 삭제</button>
+                        <button type="button" data-edit-type="update" class="btn btn-default">섹션 수정</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -395,7 +397,7 @@
         <nav class="navbar-default navbar-side">
             <div class="collapse sidebar-collapse">
                 <ul class="nav">
-                    <li class="text-center"><img src="{% static 'assets/img/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
+                    <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a class="active-menu" href=""><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
                     <li><a href="../inventory/"><i class="fas fa-archive fa-fw"></i>재고관리</a></li>
@@ -424,7 +426,7 @@
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="storage-room">
-                                <div class="panel panel-default border-dark max-544 mx-auto">
+                                <div class="panel panel-default border-dark max-600 mx-auto">
                                     <div class="panel-heading border-dark">창고 관리</div>
                                     <div class="panel-body">
                                         <form id="storage-room-form" class="form-horizontal clearfix" method="POST">
@@ -443,7 +445,7 @@
                                         <hr>
                                         {% if not storage_room_list %}
                                         <div class="standby">
-                                            <img src="{% static 'assets/img/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
+                                            <img src="{% static 'assets/img/icon/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
                                             <hr>
                                             <p class="text-center">창고를 등록해주세요.</p>
                                         </div>
@@ -456,7 +458,7 @@
                                                         data-storage-room-id="{{ list.id }}"
                                                         data-storage-room-name="{{ list.storage_room_name }}"></span>
                                                     <div class="media-left">
-                                                        <img class="media-object" src="{% static 'assets/img/Mimetypes-application-x-tar-icon-64x64.png' %}">
+                                                        <img class="media-object" src="{% static 'assets/img/icon/Mimetypes-application-x-tar-icon-64x64.png' %}">
                                                     </div>
                                                     <div class="media-body w-100">
                                                         <p class="font-weight-bold">{{ list.storage_room_name }}</p>
@@ -477,7 +479,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="aquarium-section">
-                                <div class="panel panel-default border-dark max-544 mx-auto">
+                                <div class="panel panel-default border-dark max-600 mx-auto">
                                     <div class="panel-heading border-dark">섹션 / 수조 관리</div>
                                     <div class="panel-body">
                                         <form id="aquarium-section-form" class="form-horizontal clearfix" method="POST">
@@ -497,7 +499,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}" class="col-sm-4 control-label">높이</label>
+                                                <label for="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}" class="col-sm-4 control-label">높이 (층)</label>
                                                 <div class="col-sm-8">
                                                     <input type="number" class="form-control" id="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}"
                                                         name="{{ aquarium_section_form.aquarium_num_of_rows.html_name }}" value="0" min="0" readonly="true">
@@ -506,8 +508,15 @@
                                             <div class="form-group">
                                                 <div class="col-sm-offset-4 col-sm-8">
                                                     <div class="alert border-secondary mb-0">
-                                                        <i class="fas fa-exclamation-circle"></i> 섹션 안, 수조의 개수를 입력하세요.
+                                                        <i class="fas fa-exclamation-circle"></i> 섹션 안에 있는 수조의 개수를 입력하세요.
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-4 col-sm-8">
+                                                    (예시)
+                                                    <img src="{% static 'assets/img/aquarium-example.png' %}" class="img-responsive my-3">
+                                                    가로: 2 / 높이 (층): 1 로 입력
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -545,7 +554,7 @@
                                         <hr>
                                         <div id="async-aquarium-section">
                                             <div class="standby">
-                                                <img src="{% static 'assets/img/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
+                                                <img src="{% static 'assets/img/icon/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
                                                 <hr>
                                                 <p class="text-center">창고를 먼저 선택해주세요.</p>
                                             </div>
@@ -556,7 +565,7 @@
                                             <a href="" class="btn btn-default"><i class="fas fa-redo-alt"></i> 다시 선택</a>
                                             <button type="button" id="aquarium-section-edit" class="btn btn-default" disabled="disabled">변경</button>
                                             <button type="button" id="move-aquarium" class="btn btn-default" disabled="disabled">수조 관리</button>
-                                            <button type="button" id="move-store-layout" class="btn btn-default" disabled="disabled">매장 레이아웃</button>
+                                            <button type="button" id="move-store-layout" class="btn btn-default" disabled="disabled">레이아웃 관리</button>
                                         </div>
                                     </div>
                                 </div>

@@ -11,7 +11,9 @@ import json
 
 
 def index(request):
-    return redirect('main:signin')
+    return render(request=request,
+                  template_name='main/index.html')
+    #return redirect('main:signin')
 
 
 def register(request):
