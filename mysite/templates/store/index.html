@@ -197,6 +197,7 @@
                 }).done(function (data) {
                     if (data["state"] == "success") {
                         async_aquarium_section();
+                        standby_store_layout();
                     }
                     else if (data["state"] == "error") {
                     }
@@ -222,6 +223,7 @@
                             $("#aquarium-section-edit-modal").modal("hide");
                             $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
                                 async_aquarium_section();
+                                standby_store_layout();
                             });
                         }
                         else if (data["state"] == "error") {
@@ -245,6 +247,7 @@
                             $("#aquarium-section-edit-modal").modal("hide");
                             $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
                                 async_aquarium_section();
+                                standby_store_layout();
                             });
                         }
                         else if (data["state"] == "error") {

@@ -68,6 +68,8 @@ var draw_store_layout = function (url) {
                 aquarium_section_id = $(this).data("store-layout-section-id");
                 draw_aquarium("../store/ajax/async-from-inventory/aquarium-section/");
             });
+
+            // Complete
             $(".nav-tabs a[href='#store-layout']").tab("show");
         }
         else {
@@ -117,6 +119,8 @@ var draw_aquarium = function (url) {
                     aquarium.plain((data[0]["fields"]["aquarium_num_of_rows"] - i + 1) + "-" + (j + 1)).attr({ "text-anchor": "middle", "x": 60 * j + 30, "y": 40 + (60 * (i - 1)) });
                 }
             }
+
+            // Complete
             $(".nav-tabs a[href='#aquarium']").tab("show");
         }
         else {

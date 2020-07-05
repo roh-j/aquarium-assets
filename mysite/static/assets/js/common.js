@@ -4,6 +4,7 @@ var CSRF_TOKEN = Cookies.get("csrftoken");
 var standby_store_layout = function () {
     if (SVG.supported) {
         $("#store-layout-canvas").empty();
+        $("#store-layout-console").text("창고/섹션을 먼저 선택해주세요.");
 
         var row_count = 13;
         var col_label = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
