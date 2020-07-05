@@ -1,8 +1,8 @@
-var storage_room_id;
-var aquarium_section_id;
+var storage_room_id = null;
+var aquarium_section_id = null;
 
 $(function () {
-    $("#main-menu").metisMenu();
+    $("#management-menu").metisMenu();
     $(".nav-second-level").removeClass("d-none");
 
     $("#redo-store-layout").click(function (e) {
@@ -23,7 +23,7 @@ $(function () {
             storage_room_id = $("div.media > span.data-binding", this).data("storage-room-id");
             storage_room_name = $("div.media > span.data-binding", this).data("storage-room-name");
 
-            draw_store_layout("../store/ajax/async-from-inventory/store-layout/", function () {
+            draw_store_layout("../../store/ajax/async-from-inventory/store-layout/", function () {
                 $(".nav-tabs a[href='#store-layout']").tab("show");
             });
         }
@@ -95,7 +95,7 @@ var draw_store_layout = function (url, callback) {
             }
             $("rect.store-layout-button").on("click", function () {
                 aquarium_section_id = $(this).data("store-layout-section-id");
-                draw_aquarium("../store/ajax/async-from-inventory/aquarium-section/", function () {
+                draw_aquarium("../../store/ajax/async-from-inventory/aquarium-section/", function () {
                     $(".nav-tabs a[href='#aquarium']").tab("show");
                 });
             });

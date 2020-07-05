@@ -13,7 +13,6 @@ import json
 def index(request):
     return render(request=request,
                   template_name='main/index.html')
-    #return redirect('main:signin')
 
 
 def register(request):
@@ -41,11 +40,14 @@ def register_insert(request):
 
 
 def signin(request):
-    form = AuthenticationForm()
+    if request.user.is_authenticated:
+        return redirect('main:business')
+    else:
+        form = AuthenticationForm()
 
-    return render(request=request,
-                  template_name='main/login.html',
-                  context={'form': form})
+        return render(request=request,
+                    template_name='main/login.html',
+                    context={'form': form})
 
 
 def signin_insert(request):
@@ -71,7 +73,7 @@ def signin_insert(request):
 
 def signout(request):
     logout(request)
-    return redirect('main:signin')
+    return redirect('main:index')
 
 
 def business(request):

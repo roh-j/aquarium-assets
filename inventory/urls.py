@@ -19,5 +19,7 @@ from . import views
 app_name = 'inventory'
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('selection/', views.inventory_selection, name='inventory_selection'),
+    path('ordersheet/', views.inventory_ordersheet,
+         name='inventory_ordersheet'),
 ]

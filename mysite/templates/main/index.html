@@ -14,6 +14,7 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.extend.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/aquarium.css' %}">
 
     <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -29,31 +30,6 @@
         $(function () {
         });
     </script>
-    <style>
-        polygon.aquarium-grid {
-            fill: none;
-            stroke: #000;
-            stroke-width: 2;
-            stroke-linejoin: bevel;
-        }
-
-        rect.aquarium-front-grid {
-            fill: none;
-            stroke: #000;
-            stroke-width: 2;
-            stroke-linejoin: bevel;
-        }
-
-        polygon.aquarium-plane {
-            fill: #E7E7E7;
-            stroke: none;
-        }
-
-        rect.aquarium-front-button {
-            fill: #FFF;
-            stroke: none;
-        }
-    </style>
 </head>
 
 <body>
@@ -69,7 +45,12 @@
             </div>
             <div class="collapse navbar-collapse navbar-menu">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="login/"><i class="fas fa-sign-in-alt"></i>로그인</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="logout/">로그아웃</a></li>
+                    {% else %}
+                    <li><a href="login/">로그인</a></li>
+                    <li><a href="register/">회원가입</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -77,7 +58,7 @@
     <div class="jumbotron">
         <div class="container text-center">
             <h3>Prototype에 오신 것을 환영합니다.</h3>
-            <p><a href="login/" class="btn btn-primary">서비스로 이동</a></p>
+            <p><a href="business/" class="btn btn-default">서비스로 이동</a></p>
         </div>
     </div>
     <div class="container">
@@ -85,16 +66,16 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="141" height="141">
                 <g transform="translate(0, 60)">
                     <pattern id="water" width=".25" height="1.1" patternContentUnits="objectBoundingBox">
-                        <path fill="#207BA9" d="M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z" />
+                        <path fill="#207ba9" d="M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z" />
                     </pattern>
-                    <rect x="1" y="20" width="60" height="60" class="aquarium-front-grid" />
-                    <rect x="1" y="20" width="60" height="60" class="aquarium-front-button" />
-                    <polygon points="20,1 1,20 61,20 80,1" class="aquarium-grid" />
-                    <polygon points="20,1 1,20 61,20 80,1" class="aquarium-plane" />
-                    <polygon points="80,1 61,20 61,80 80,61" class="aquarium-grid" />
-                    <polygon points="80,1 61,20 61,80 80,61" class="aquarium-plane" />
+                    <rect x="1" y="20" width="60" height="60" class="effect-aquarium-front-grid" />
+                    <rect x="1" y="20" width="60" height="60" class="effect-aquarium-front-button" />
+                    <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-grid" />
+                    <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-plane" />
+                    <polygon points="80,1 61,20 61,80 80,61" class="effect-aquarium-grid" />
+                    <polygon points="80,1 61,20 61,80 80,61" class="effect-aquarium-plane" />
                     <mask id="water-mask">
-                        <rect x="1" y="20" width="59" height="60" fill="#FFF" />
+                        <rect x="1" y="20" width="59" height="60" fill="#fff" />
                     </mask>
                     <rect mask="url(#water-mask)" fill="url(#water)" x="-300" y="45" width="1200" height="120" opacity="0.3">
                         <animate attributeType="xml" attributeName="x" from="-300" to="0" repeatCount="indefinite" dur="3s" />
@@ -105,16 +86,16 @@
                 </g>
                 <g transform="translate(60, 0)">
                     <pattern id="water" width=".25" height="1.1" patternContentUnits="objectBoundingBox">
-                        <path fill="#207BA9" d="M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z" />
+                        <path fill="#207ba9" d="M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z" />
                     </pattern>
-                    <rect x="1" y="20" width="60" height="60" class="aquarium-front-grid" />
-                    <rect x="1" y="20" width="60" height="60" class="aquarium-front-button" />
-                    <polygon points="20,1 1,20 61,20 80,1" class="aquarium-grid" />
-                    <polygon points="20,1 1,20 61,20 80,1" class="aquarium-plane" />
-                    <polygon points="80,1 61,20 61,80 80,61" class="aquarium-grid" />
-                    <polygon points="80,1 61,20 61,80 80,61" class="aquarium-plane" />
+                    <rect x="1" y="20" width="60" height="60" class="effect-aquarium-front-grid" />
+                    <rect x="1" y="20" width="60" height="60" class="effect-aquarium-front-button" />
+                    <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-grid" />
+                    <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-plane" />
+                    <polygon points="80,1 61,20 61,80 80,61" class="effect-aquarium-grid" />
+                    <polygon points="80,1 61,20 61,80 80,61" class="effect-aquarium-plane" />
                     <mask id="water-mask">
-                        <rect x="1" y="20" width="59" height="60" fill="#FFF" />
+                        <rect x="1" y="20" width="59" height="60" fill="#fff" />
                     </mask>
                     <rect mask="url(#water-mask)" fill="url(#water)" x="-300" y="45" width="1200" height="120" opacity="0.3">
                         <animate attributeType="xml" attributeName="x" from="-300" to="0" repeatCount="indefinite" dur="3s" />
@@ -126,8 +107,26 @@
             </svg>
         </div>
         <hr>
-        <h4 class="text-center">비즈니스 파트너</h4>
+        <h4 class="text-center">Business Partner / Customer</h4>
         <hr>
+        <div class="panel panel-default border-dark">
+            <div class="panel-body">
+                <div class="media">
+                    <div class="media-left">
+                        <a href="https://cafe.naver.com/plecofarm" target="_blank">
+                            <img class="media-object" src="{% static 'assets/img/partner/Plecofarm-media.png' %}">
+                        </a>
+                    </div>
+                    <div class="media-body w-100">
+                        <h4 class="media-heading">플코팜 (Plecofarm)</h4>
+                        <hr>
+                        <a href="https://cafe.naver.com/plecofarm" target="_blank">https://cafe.naver.com/plecofarm</a><br>
+                        경기도 수원시 영통구 매탄동 833-3 (지하)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--
         <div class="panel panel-default border-dark max-360 mx-auto">
             <div class="panel-heading border-dark">플코팜</div>
             <div class="panel-body">
@@ -137,6 +136,7 @@
                 경기도 수원시 영통구 매탄동 833-3 (지하)</p>
             </div>
         </div>
+        -->
         <footer class="my-4 text-muted text-center text-small">
             <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
         </footer>

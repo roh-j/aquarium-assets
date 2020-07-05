@@ -17,7 +17,7 @@ def index(request, dashboard_id):
         business=dashboard_id).order_by('-id')
 
     return render(request=request,
-                  template_name='store/index.html',
+                  template_name='store/store.html',
                   context={'storage_room_form': storage_room_form, 'aquarium_section_form': aquarium_section_form,
                            'storage_room_list': storage_room_list})
 

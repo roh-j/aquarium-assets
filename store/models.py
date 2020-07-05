@@ -37,6 +37,27 @@ class AquariumSection(models.Model):
         return str(self.id)
 
 
+class Aquarium(models.Model):
+    id = models.AutoField(primary_key=True)
+    aquarium_section = models.ForeignKey(
+        AquariumSection,
+        on_delete=models.CASCADE
+    )
+    row = models.IntegerField(default=0)
+    column = models.IntegerField(default=0)
+    alias = models.CharField(max_length=20)
+    state = models.CharField(max_length=20)
+    memo = models.TextField()
+    ph = models.FloatField(default=7.0)
+    config_date = models.DateTimeField()
+    modified_date = models.DateTimeField()
+
+    objects = models.Manager()  # VS Code 버그 해결을 위한 코드
+
+    def __str__(self):
+        return str(self.id)
+
+
 class StoreLayout(models.Model):
     id = models.AutoField(primary_key=True)
     storage_room = models.ForeignKey(

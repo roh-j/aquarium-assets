@@ -5,4 +5,4 @@ from django.shortcuts import render
 
 def index(request, dashboard_id):
     return render(request=request,
-                  template_name='dashboard/index.html')
+                  template_name='dashboard/dashboard.html')

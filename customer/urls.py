@@ -19,5 +19,6 @@ from . import views
 app_name = 'customer'
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('list/', views.customer_list, name='customer_list'),
+    path('service/', views.customer_service, name='customer_service'),
 ]

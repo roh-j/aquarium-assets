@@ -8,7 +8,7 @@ var aquarium_num_of_rows = null;
 var aquarium_num_of_columns = null;
 
 $(function () {
-    $("#main-menu").metisMenu();
+    $("#management-menu").metisMenu();
     $(".nav-second-level").removeClass("d-none");
 
     $("#storage-room-edit-modal").on("hide.bs.modal", function (e) {
@@ -23,8 +23,8 @@ $(function () {
         $("form#aquarium-section-edit-form input#id_section_name").val("");
         $("form#aquarium-section-edit-form input#id_aquarium_num_of_rows").val(0);
         $("form#aquarium-section-edit-form input#id_aquarium_num_of_columns").val(0);
-        $("form#aquarium-section-edit-form input#id_section_color").val("#CD5C5C");
-        $("#aquarium-section-edit-color-selected").css({ "background": "#CD5C5C" });
+        $("form#aquarium-section-edit-form input#id_section_color").val("#cd5c5c");
+        $("#aquarium-section-edit-color-selected").css({ "background": "#cd5c5c" });
     });
 
     $("#aquarium-section-edit-color-picker > ul li").click(function (e) {
@@ -50,14 +50,14 @@ $(function () {
 
     $("#redo-aquarium-section").click(function (e) {
         if (section_id && section_color) {
-            $("#store-layout-canvas").empty();
+            //$("#store-layout-canvas").empty();
             $(".nav-tabs a[href='#aquarium-section']").tab("show");
         }
     });
 
     $("#storage-room-register").click(function (e) {
         $("#storage-room-edit-modal-title").html(
-            "<i class='fas fa-exclamation-circle text-primary'></i> 창고 등록"
+            "<i class='fas fa-exclamation-circle text-primary'></i> 방 등록"
         );
         $("#storage-room-edit-modal-footer").html(
             "<button type='submit' class='btn btn-primary' data-edit-type='insert'>등록</button>"
@@ -70,11 +70,11 @@ $(function () {
             $("form#storage-room-edit-form input#id_storage_room_name").val(storage_room_name);
 
             $("#storage-room-edit-modal-title").html(
-                "<i class='fas fa-exclamation-circle text-primary'></i> 창고 변경"
+                "<i class='fas fa-exclamation-circle text-primary'></i> 방 변경"
             );
             $("#storage-room-edit-modal-footer").html(
                 "<div class='btn-group'>\
-                    <button type='button' class='btn btn-default' data-edit-type='delete'><i class='far fa-trash-alt'></i> 창고 삭제</button>\
+                    <button type='button' class='btn btn-default' data-edit-type='delete'>삭제</button>\
                     <button type='submit' class='btn btn-primary' data-edit-type='update'>변경</button>\
                 </div>"
             );
@@ -105,7 +105,7 @@ $(function () {
             );
             $("#aquarium-section-edit-modal-footer").html(
                 "<div class='btn-group'>\
-                    <button type='button' class='btn btn-default' data-edit-type='delete'><i class='far fa-trash-alt'></i> 섹션 삭제</button>\
+                    <button type='button' class='btn btn-default' data-edit-type='delete'>삭제</button>\
                     <button type='submit' class='btn btn-primary' data-edit-type='update'>변경</button>\
                 </div>"
             );
@@ -305,7 +305,7 @@ var async_aquarium_section = function (callback) {
                 "<div class='standby'>\
                 <img src='" + DJANGO_STATIC_URL + "/assets/img/icon/Apps-utilities-file-archiver-icon.png' class='img-responsive mx-auto'>\
                 <hr>\
-                <p class='text-center'>창고의 섹션을 등록할 수 있습니다.</p>\
+                <p class='text-center'>방의 섹션을 등록할 수 있습니다.</p>\
                 </div>"
             );
         }

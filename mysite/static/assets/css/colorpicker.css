@@ -1,7 +1,7 @@
 div.color-picker {
     width: 187px;
     padding: 5px;
-    border: 1px solid #343A40;
+    border: 1px solid #343a40;
     border-radius: 4px;
 }
 div.color-picker ul {
@@ -17,7 +17,7 @@ div.color-picker ul li {
     height: 25px;
     margin-right: 5px;
     margin-bottom: 5px;
-    border: 1px solid #343A40;
+    border: 1px solid #343a40;
     cursor: pointer;
 }
 div.color-picker ul li:nth-child( 6n ) {
@@ -29,6 +29,6 @@ div.color-picker ul li:nth-child( n + 7 ) {
 div.color-selected {
     width: 34px;
     height: 34px;
-    border: 1px solid #343A40;
+    border: 1px solid #343a40;
     border-radius: 4px;
 }

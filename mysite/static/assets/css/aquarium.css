@@ -1,4 +1,4 @@
-/* STORE LAYOUT */
+/* store layout */
 
 rect.store-layout-grid {
     fill: none;
@@ -9,7 +9,7 @@ rect.store-layout-button {
     stroke: none;
 }
 
-/* AQUARIUM */
+/* aquarium */
 
 polygon.aquarium-grid {
     fill: none;
@@ -24,14 +24,40 @@ rect.aquarium-front-grid {
     stroke-linejoin: bevel;
 }
 polygon.aquarium-plane {
-    fill: #E7E7E7;
+    fill: #e7e7e7;
     stroke: none;
 }
 rect.aquarium-front-button {
-    fill: #FFF;
+    fill: #fff;
     stroke: none;
     cursor: pointer;
 }
 rect.aquarium-front-button:hover {
-    fill: #BADEFC;
+    fill: #badefc;
+}
+
+/* effect */
+
+polygon.effect-aquarium-grid {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linejoin: bevel;
+}
+
+rect.effect-aquarium-front-grid {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linejoin: bevel;
+}
+
+polygon.effect-aquarium-plane {
+    fill: #e7e7e7;
+    stroke: none;
+}
+
+rect.effect-aquarium-front-button {
+    fill: #fff;
+    stroke: none;
 }

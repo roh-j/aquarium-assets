@@ -3,6 +3,11 @@ from django.shortcuts import render
 # Create your views here.
 
 
-def index(request, dashboard_id):
+def customer_list(request, dashboard_id):
     return render(request=request,
-                  template_name='customer/index.html')
+                  template_name='customer/customer-list.html')
+
+
+def customer_service(request, dashboard_id):
+    return render(request=request,
+                  template_name='customer/customer-service.html')

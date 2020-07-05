@@ -1,7 +1,7 @@
-/* GENERAL STYLES */
+/* general styles */
 
 html {
-    background: #E7E7E7;
+    background: #e7e7e7;
 }
 h4 {
     padding-top: 10px;
@@ -18,8 +18,11 @@ h4 {
 .max-600 {
     max-width: 600px !important;
 }
+.min-180 {
+    min-width: 180px !important;
+}
 
-/* UI STYLES */
+/* ui styles */
 
 #wrapper {
     width: 100%;
@@ -28,10 +31,10 @@ h4 {
 #page-wrapper {
     padding: 15px;
     min-height: 620px;
-    background: #E7E7E7;
+    background: #e7e7e7;
 }
 #page-inner {
-    background: #FFF !important;
+    background: #fff !important;
 }
 .tab-content > .tab-pane {
     padding-top: 20px;
@@ -40,13 +43,13 @@ h4 {
 .list-group-item.selected,
 .list-group-item.selected:hover,
 .list-group-item.selected:focus {
-    background: #EEE;
+    background: #eee;
 }
 .navbar-menu {
     border: none;
 }
 .navbar-menu > ul > li > a {
-    color: #FFF !important;
+    color: #fff !important;
 }
 .nav.nav-tabs > li.disabled > a {
     pointer-events: none;
@@ -54,10 +57,10 @@ h4 {
     cursor: default;
 }
 
-/* DASHBOARD STYLES */
+/* dashboard styles */
 
 .panel-back {
-    background: #E7E7E7;
+    background: #e7e7e7;
 }
 .noti-box {
     min-height: 100px;
@@ -86,20 +89,20 @@ h4 {
     border-radius: 50px;
 }
 .bg-color-green {
-    background: #00CE6F;
-    color: #FFF;
+    background: #00ce6f;
+    color: #fff;
 }
 .bg-color-blue {
-    background: #A95DF0;
-    color: #FFF;
+    background: #a95df0;
+    color: #fff;
 }
 .bg-color-red {
-    background: #DB0630;
-    color: #FFF;
+    background: #db0630;
+    color: #fff;
 }
 .bg-color-brown {
-    background: #B94A00;
-    color: #FFF;
+    background: #b94a00;
+    color: #fff;
 }
 .icon-box-right {
     display: block;
@@ -112,8 +115,8 @@ h4 {
     font-size: 40px;
 }
 .main-temp-back {
-    background: #8702A8;
-    color: #FFF;
+    background: #8702a8;
+    color: #fff;
     font-size: 16px;
     font-weight: 300;
     text-align: center;
@@ -128,23 +131,23 @@ h4 {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
-    background: #2EA7EB;
-    color: #FFF;
+    background: #2ea7eb;
+    color: #fff;
 }
 .back-dash p {
     padding-top: 16px;
     font-size: 13px;
-    color: #FFF;
+    color: #fff;
     line-height: 25px;
     text-align: justify;
 }
 .back-footer-green {
-    background: #009B50;
-    border-top: 0 solid #FFF;
+    background: #009b50;
+    border-top: 0 solid #fff;
 }
 .back-footer-red {
-    background: #AF0000;
-    border-top: 0 solid #FFF;
+    background: #af0000;
+    border-top: 0 solid #fff;
 }
 .color-bottom-txt {
     color: #000;
@@ -152,7 +155,7 @@ h4 {
     line-height: 30px;
 }
 
-/* CHAT PANEL */
+/* chat panel */
 
 .scroll-panel .panel-body {
     height: 450px;
@@ -185,13 +188,13 @@ h4 {
     font-size: 14px;
     line-height: 1.42857143;
     color: #555;
-    background-color: #FFF;
+    background-color: #fff;
     background-image: none;
     border: none;
     resize: none;
 }
 
-/* MENU STYLES */
+/* menu styles */
 
 .primary-image {
     margin: 25px auto;
@@ -205,28 +208,28 @@ h4 {
     margin-right: 10px;
 }
 .navbar-cls-top {
-    background: #4D5467;
+    background: #4d5467;
     border: none;
 }
 .navbar-cls-top .navbar-brand {
-    color: #FFF;
-    background: #555B69;
+    color: #fff;
+    background: #555b69;
     width: 230px;
     text-align: center;
 }
 .navbar-default .navbar-toggle .icon-bar {
-    background: #FFF;
+    background: #fff;
 }
 .navbar-default .navbar-toggle {
-    border-color: #FFF;
+    border-color: #fff;
 }
 .navbar-cls-top .navbar-brand:hover {
-    color: #FFF;
-    background: #555B69;
+    color: #fff;
+    background: #555b69;
 }
 .navbar-default .navbar-toggle:hover,
 .navbar-default .navbar-toggle:focus {
-    background: #0097A7;
+    background: #0097a7;
 }
 .navbar-side {
     border: none;
@@ -240,7 +243,7 @@ h4 {
     padding: 0;
 }
 .sidebar-collapse .nav > li > a {
-    color: #FFF;
+    color: #fff;
     text-shadow: none;
 }
 .sidebar-collapse > .nav > li > a {
@@ -251,12 +254,12 @@ h4 {
 }
 .sidebar-collapse .nav > li > a:hover,
 .sidebar-collapse .nav > li > a:focus {
-    background: #555B69;
+    background: #555b69;
     outline: 0;
 }
 .active-menu {
-    color: #FFF !important;
-    background: #0097A7 !important;
+    color: #fff !important;
+    background: #0097a7 !important;
 }
 .nav-second-level li,
 .nav-third-level li {
@@ -272,6 +275,7 @@ h4 {
     padding-top: 20px;
     padding-bottom: 20px;
 }
+/*
 .arrow {
     float: right;
 }
@@ -281,7 +285,7 @@ h4 {
 .active > a > .fa.arrow:before {
     content: "\f107";
 }
-/*
+
 .nav-second-level > li > a:before,
 .nav-third-level > li > a:before {
     content: "";
@@ -290,7 +294,7 @@ h4 {
     left: 20px;
     width: 15px;
     height: 1px;
-    background: #FFF;
+    background: #fff;
     top: 30px;
 }
 .nav-second-level > li > a:after,
@@ -301,7 +305,7 @@ h4 {
     left: 20px;
     width: 1px;
     height: 100%;
-    background: #FFF;
+    background: #fff;
     top: 0;
     z-index: 10;
 }
@@ -315,7 +319,7 @@ h4 {
 }
 */
 
-/* UI ELEMENTS STYLES */
+/* ui elements styles */
 
 .square-btn-adjust {
     border: 0 solid transparent;
@@ -335,7 +339,7 @@ h4 {
     line-height: 1.428571429;
 }
 
-/* MEDIA QUERIES (MIN-WIDTH) */
+/* media queries (min-width) */
 
 @media(min-width: 768px) {
     #page-wrapper {
@@ -362,7 +366,7 @@ h4 {
 
 }
 
-/* MEDIA QUERIES (MAX-WIDTH) */
+/* media queries (max-width) */
 
 @media (max-width: 767.98px) {
     .table-responsive {
