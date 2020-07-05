@@ -9,13 +9,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <!-- binaryAdmin -->
-    <link rel="stylesheet" href="{% static 'assets/css/binaryAdmin-1.1.0.css' %}">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-spacing-4.3.1.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-style-4.3.1.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.extend.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
 
     <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -24,7 +22,6 @@
     <!-- Custom Scripts -->
 
     <title>Aquarium Assets</title>
-
     <script>
         $(function () {
             $(".list-group > a").click(function (e) {
@@ -59,8 +56,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 id="alert-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림
-                    </h5>
+                    <h5 id="alert-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
                 </div>
                 <div id="alert-modal-content" class="modal-body text-center"></div>
                 <div class="modal-footer">
@@ -73,6 +69,16 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">Aquarium Assets</a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse navbar-menu">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="../../logout/"><i class="fas fa-sign-out-alt"></i>로그아웃</a></li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -85,22 +91,32 @@
                 <hr>
                 <form method="POST">
                     {% csrf_token %}
-                    <input type="text" id="{{ form.name_of_company.id_for_label }}" name="{{ form.name_of_company.html_name }}"
-                        class="form-control mb-4" placeholder="상호" autofocus>
-                    <input type="text" id="{{ form.registration_number.id_for_label }}" name="{{ form.registration_number.html_name }}"
-                        class="form-control mb-4" placeholder="사업자등록번호">
+                    <div class="form-group">
+                        <label for="{{ form.name_of_company.id_for_label }}">상호</label>
+                        <input type="text" id="{{ form.name_of_company.id_for_label }}" name="{{ form.name_of_company.html_name }}" class="form-control" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.registration_number.id_for_label }}">사업자등록번호</label>
+                        <input type="text" id="{{ form.registration_number.id_for_label }}" name="{{ form.registration_number.html_name }}" class="form-control">
+                    </div>
                     <div class="alert border-secondary">
                         <i class="fas fa-exclamation-circle"></i> 000-00-00000 형식으로 사업자등록번호를 입력해주세요.
                     </div>
-                    <input type="text" id="{{ form.alias.id_for_label }}" name="{{ form.alias.html_name }}" class="form-control mb-4"
-                        placeholder="영어별칭">
+                    <div class="form-group">
+                        <label for="{{ form.alias.id_for_label }}">영어별칭</label>
+                        <input type="text" id="{{ form.alias.id_for_label }}" name="{{ form.alias.html_name }}" class="form-control">
+                    </div>
                     <div class="alert border-secondary">
                         <i class="fas fa-exclamation-circle"></i> 영어별칭
                     </div>
-                    <input type="text" id="{{ form.address.id_for_label }}" name="{{ form.address.html_name }}" class="form-control mb-4"
-                        placeholder="소재지">
-                    <input type="text" id="{{ form.contact.id_for_label }}" name="{{ form.contact.html_name }}" class="form-control mb-4"
-                        placeholder="대표전화">
+                    <div class="form-group">
+                        <label for="{{ form.address.id_for_label }}">소재지</label>
+                        <input type="text" id="{{ form.address.id_for_label }}" name="{{ form.address.html_name }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.contact.id_for_label }}">대표전화</label>
+                        <input type="text" id="{{ form.contact.id_for_label }}" name="{{ form.contact.html_name }}" class="form-control">
+                    </div>
                     <hr>
                     <div class="pull-right">
                         <a href="../" class="btn btn-default">취소</a>

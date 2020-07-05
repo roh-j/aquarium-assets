@@ -1,17 +1,22 @@
-/*
-    Authour URI: www.binarycart.com
-    Version: 1.1
-    License: MIT
-    
-    http://opensource.org/licenses/MIT
-
-    100% To use For Personal And Commercial Use.
-*/
-
 /* GENERAL STYLES */
 
 html {
     background: #E7E7E7;
+}
+h4 {
+    padding-top: 10px;
+}
+.overflow-auto {
+    overflow: auto;
+}
+.overflow-scroll {
+    overflow: scroll;
+}
+.max-344 {
+    max-width: 344px !important;
+}
+.max-544 {
+    max-width: 544px !important;
 }
 #wrapper {
     width: 100%;
@@ -24,9 +29,6 @@ html {
 }
 #page-inner {
     background: #FFF !important;
-}
-h4 {
-    padding-top: 10px;
 }
 .square-btn-adjust {
     border: 0 solid transparent;
@@ -42,6 +44,12 @@ h4 {
 .list-group-item.selected:hover,
 .list-group-item.selected:focus {
     background: #EEE;
+}
+.navbar-menu {
+    border: none;
+}
+.navbar-menu > ul > li > a {
+    color: #FFF !important;
 }
 
 /* DASHBOARD STYLES */
@@ -168,7 +176,7 @@ h4 {
     display: block;
     float: right;
 }
-.chat-input {
+.write-message {
     display: block;
     width: 100%;
     padding: 6px 12px;
@@ -334,10 +342,10 @@ h4 {
     }
 }
 @media (min-width: 992px) {
-    /* EMPTY */
+
 }
 @media (min-width: 1200px) {
-    /* EMPTY */
+
 }
 
 /* MEDIA QUERIES (MAX-WIDTH) */
@@ -346,10 +354,17 @@ h4 {
     .table-responsive {
         border: none !important;
     }
+    .navbar-menu > ul > li > a {
+        padding: 20px;
+    }
+    .navbar-nav {
+        margin: 0 -15px;
+        background: #424858;
+    }
 }
 @media (max-width: 991.98px) {
-    /* EMPTY */
+
 }
 @media (max-width: 1199.98px) {
-    /* EMPTY */
+    
 }

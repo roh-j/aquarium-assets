@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core import serializers
+from django.core.exceptions import ObjectDoesNotExist
 from store.models import StorageRoom, AquariumSection, StoreLayout
 from . import forms
 import json
@@ -68,28 +69,31 @@ def store_layout_insert(request, dashboard_id):
 
 def store_layout_async(request, dashboard_id):
     if request.method == 'POST':
-        match = {}
         row, column, sorted_color, context = [], [], [], []
+        match = {}
 
         store_layout_list = StoreLayout.objects.filter(
             storage_room=request.POST['FK']
         )
 
-        for list in store_layout_list:
-            match[str(list.row)+','+str(list.column)] = AquariumSection.objects.get(
-                id=str(list.aquarium_section)).section_color
+        if store_layout_list.exists():
+            for list in store_layout_list:
+                match[str(list.row)+','+str(list.column)] = AquariumSection.objects.get(
+                    id=str(list.aquarium_section)).section_color
 
-            row.append(list.row)
-            column.append(list.column)
+                row.append(list.row)
+                column.append(list.column)
 
-        sorted_row, sorted_column = zip(*sorted(zip(row, column)))
+            sorted_row, sorted_column = zip(*sorted(zip(row, column)))
 
-        for i, j in zip(sorted_row, sorted_column):
-            sorted_color.append(match[str(i)+','+str(j)])
+            for i, j in zip(sorted_row, sorted_column):
+                sorted_color.append(match[str(i)+','+str(j)])
 
-        for i, j, k in zip(sorted_row, sorted_column, sorted_color):
-            context.append({'row': i, 'column': j, 'color': k})
+            for i, j, k in zip(sorted_row, sorted_column, sorted_color):
+                context.append({'row': i, 'column': j, 'color': k})
 
-        context.insert(0, {'state': 'success'})
-
+            context.insert(0, {'state': 'success'})
+        else:
+            context.append({'state': 'empty'})
+            
         return HttpResponse(json.dumps(context))

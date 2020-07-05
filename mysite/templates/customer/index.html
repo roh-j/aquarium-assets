@@ -9,8 +9,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <!-- binaryAdmin -->
-    <link rel="stylesheet" href="{% static 'assets/css/binaryAdmin-1.1.0.css' %}">
     <!-- morris (chart) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
@@ -18,11 +16,12 @@
     <!-- metisMenu (A jQuery menu plugin) -->
     <link rel="stylesheet" href="https://unpkg.com/metismenu/dist/metisMenu.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-spacing-4.3.1.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-style-4.3.1.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-aquarium.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.extend.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/aquarium.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/colorpicker.css' %}">
 
     <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -42,7 +41,7 @@
     <title>Aquarium Assets</title>
     <script>
         $(function () {
-            autosize($(".chat-input"));
+            autosize($(".write-message"));
         });
     </script>
 </head>
@@ -62,8 +61,8 @@
             </div>
         </nav>
         <nav class="navbar-default navbar-side">
-            <div class="sidebar-collapse collapse">
-                <ul class="nav" id="main-menu">
+            <div class="collapse sidebar-collapse">
+                <ul class="nav">
                     <li class="text-center"><img src="{% static 'assets/img/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../store/"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
@@ -188,7 +187,7 @@
                                 </ul>
                             </div>
                             <div class="panel-footer bg-white clearfix">
-                                <textarea class="chat-input" placeholder="내용을 입력하세요." rows="2"></textarea>
+                                <textarea class="write-message" placeholder="내용을 입력하세요." rows="2"></textarea>
                                 <div class="pull-right mt-3">
                                     <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i>
                                         전송</button>

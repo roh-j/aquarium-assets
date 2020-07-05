@@ -9,8 +9,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <!-- binaryAdmin -->
-    <link rel="stylesheet" href="{% static 'assets/css/binaryAdmin-1.1.0.css' %}">
     <!-- morris (chart) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
@@ -18,12 +16,12 @@
     <!-- metisMenu (A jQuery menu plugin) -->
     <link rel="stylesheet" href="https://unpkg.com/metismenu/dist/metisMenu.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-colorPicker.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-spacing-4.3.1.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-style-4.3.1.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-aquarium.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.extend.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/aquarium.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/colorpicker.css' %}">
 
     <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -44,95 +42,126 @@
     <!-- Javascript Cookie -->
     <script src="{% static 'assets/js/lib/js.cookie.js' %}"></script>
     <!-- Custom Scripts -->
+    <script src="{% static 'assets/js/common.js' %}"></script>
     <script src="{% static 'assets/js/store.js' %}"></script>
 
     <title>Aquarium Assets</title>
     <script>
-    var TAB_STORAGE_ROOM;
-    var TAB_AQUARIUM_SECTION;
-    var TAB_STORE_LAYOUT;
+        $(function () {
+            init_store_layout();
 
-    $(function () {
-        TAB_STORAGE_ROOM = $("#store-tabs li:eq(0) a");
-        TAB_AQUARIUM_SECTION = $("#store-tabs li:eq(1) a");
-        TAB_STORE_LAYOUT = $("#store-tabs li:eq(2) a");
-
-        $(".color-picker > ul li").click(function (e) {
-            $("#color-selected").css({ "background": $(this).data("section-color") });
-            $("input#id_section_color").val($(this).data("section-color"));
-        });
-
-        $("#storage-room-list > a").click(function (e) {
-            e.preventDefault();
-
-            if (!$(this).hasClass("selected")) {
-                $("#storage-room-list > a").removeClass("selected");
-                $("#storage-room-list > a > div.media > div.media-body > p > span").remove();
-
-                $(this).addClass("selected");
-                $("div.media > div.media-body > p", this).append(
-                    "<span class='text-primary pull-right'><i class='fas fa-check'></i></span>"
-                );
-
-                storage_room_id = $(this).data("storage-room-id");
-
-                $("input#id_section_name").attr("readonly", false);
-                $("input#id_aquarium_num_of_rows").attr("readonly", false);
-                $("input#id_aquarium_num_of_columns").attr("readonly", false);
-            }
-
-            async_aquarium_section();
-        });
-
-        $("form#storage-room-form").submit(function (e) {
-            e.preventDefault();
-            var params = $("form#storage-room-form").serialize();
-
-            $.ajax({
-                url: "ajax/insert/storage-room/",
-                method: "POST",
-                data: params,
-                dataType: "json",
-            }).done(function (data) {
-                if (data["state"] == "success") {
-                    location.reload(true);
-                }
-                else if (data["state"] == "error") {
-                    $("#alert-modal-content").html("<p>" + data["messages"] + "</p>");
-                    $("#alert-modal").modal("show");
-                }
-            }).fail(function (data) {
-            });
-        });
-
-        $("form#aquarium-section-form").submit(function (e) {
-            e.preventDefault();
-            var params = $("form#aquarium-section-form").serializeArray();
-            params.push({
-                name: "FK", value: storage_room_id
+            $(".color-picker > ul li").click(function (e) {
+                $("#color-selected").css({ "background": $(this).data("section-color") });
+                $("input#id_section_color").val($(this).data("section-color"));
             });
 
-            $.ajax({
-                url: "ajax/insert/aquarium-section/",
-                method: "POST",
-                data: params,
-                dataType: "json",
-            }).done(function (data) {
-                if (data["state"] == "success") {
-                    alert("Awesome!");
+            $("#storage-room-list > a").click(function (e) {
+                e.preventDefault();
+
+                if (!$(this).hasClass("selected")) {
+                    $("#storage-room-list > a").removeClass("selected");
+                    $("#storage-room-list > a > div.media > div.media-body > p > span").remove();
+
+                    $(this).addClass("selected");
+                    $("div.media > div.media-body > p", this).append(
+                        "<span class='text-primary pull-right'><i class='fas fa-check'></i></span>"
+                    );
+
+                    $("input#id_section_name").attr("readonly", false);
+                    $("input#id_aquarium_num_of_rows").attr("readonly", false);
+                    $("input#id_aquarium_num_of_columns").attr("readonly", false);
+
+                    storage_room_id = $(this).data("storage-room-id");
+                    aquarium_section_id = null;
+                    aquarium_section_color = null;
+
+                    async_aquarium_section();
                 }
-                else if (data["state"] == "error") {
-                    $("#alert-modal-content").html("<p>" + data["messages"] + "</p>");
-                    $("#alert-modal").modal("show");
-                }
-            }).fail(function (data) {
             });
+
+            $("form#storage-room-form").submit(function (e) {
+                e.preventDefault();
+                var params = $("form#storage-room-form").serialize();
+
+                $.ajax({
+                    url: "ajax/insert/storage-room/",
+                    method: "POST",
+                    data: params,
+                    dataType: "json",
+                }).done(function (data) {
+                    if (data["state"] == "success") {
+                        location.reload(true);
+                    }
+                    else if (data["state"] == "error") {
+                    }
+                }).fail(function (data) {
+                });
+            });
+
+            $("form#aquarium-section-form").submit(function (e) {
+                e.preventDefault();
+                var params = $("form#aquarium-section-form").serializeArray();
+                params.push({
+                    name: "FK", value: storage_room_id
+                });
+
+                $.ajax({
+                    url: "ajax/insert/aquarium-section/",
+                    method: "POST",
+                    data: params,
+                    dataType: "json",
+                }).done(function (data) {
+                    if (data["state"] == "success") {
+                        async_aquarium_section();
+                    }
+                    else if (data["state"] == "error") {
+                    }
+                }).fail(function (data) {
+                });
+            });
+
+            $("#storage-room-edit").click(function (e) {
+                if (storage_room_id) {
+                }
+                else {
+                    $("#edit-modal-content").html("<p>창고를 선택해주세요.</p>");
+                    $("#edit-modal").modal("show");
+                }
+            });
+
+            $("#move-aquarium-section").click(function (e) {
+                if (storage_room_id) {
+                    $(".nav-tabs a[href='#aquarium-section']").tab("show");
+                }
+            });
+
+            $("#move-store-layout").click(function (e) {
+                if (aquarium_section_id && aquarium_section_color) {
+                    $(".nav-tabs a[href='#store-layout']").tab("show");
+                }
+            });
+
+            $("#redo-aquarium-section").click(function (e) {
+                $(".nav-tabs a[href='#aquarium-section']").tab("show");
+            })
         });
-    });
     </script>
 </head>
 
 <body>
+    <div id="edit-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="edit-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
+                </div>
+                <div id="edit-modal-content" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-cls-top mb-0">
             <div class="container-fluid">
@@ -147,8 +176,8 @@
             </div>
         </nav>
         <nav class="navbar-default navbar-side">
-            <div class="sidebar-collapse collapse">
-                <ul class="nav" id="main-menu">
+            <div class="collapse sidebar-collapse">
+                <ul class="nav">
                     <li class="text-center"><img src="{% static 'assets/img/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a class="active-menu" href=""><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
@@ -171,7 +200,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
-                        <ul id="store-tabs" class="nav nav-tabs">
+                        <ul class="nav nav-tabs">
                             <li class="active"><a href="#storage-room" data-toggle="tab">창고 관리</a></li>
                             <li><a href="#aquarium-section" data-toggle="tab">섹션 / 수조 관리</a></li>
                             <li><a href="#store-layout" data-toggle="tab">매장 레이아웃</a></li>
@@ -187,7 +216,7 @@
                                                 <label for="{{ storage_room_form.storage_room_name.id_for_label }}" class="col-sm-4 control-label">창고 레이블</label>
                                                 <div class="col-sm-8">
                                                     <input type="text" id="{{ storage_room_form.storage_room_name.id_for_label }}"
-                                                        name="{{ storage_room_form.storage_room_name.html_name }}" class="form-control" placeholder="창고 레이블">
+                                                        name="{{ storage_room_form.storage_room_name.html_name }}" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="pull-right">
@@ -197,7 +226,9 @@
                                         <hr>
                                         {% if not storage_room_list %}
                                         <div class="standby">
-                                            <img src="{% static 'assets/img/Places-user-identity-icon.png' %}" class="img-responsive mx-auto">
+                                            <img src="{% static 'assets/img/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
+                                            <hr>
+                                            <p class="text-center">창고를 등록해주세요.</p>
                                         </div>
                                         {% else %}
                                         <div id="storage-room-list" class="list-group">
@@ -209,7 +240,7 @@
                                                     </div>
                                                     <div class="media-body w-100">
                                                         <p class="font-weight-bold">{{ list.storage_room_name }}</p>
-                                                        3/10
+                                                        {{ list.modified_date }}
                                                     </div>
                                                 </div>
                                             </a>
@@ -217,12 +248,18 @@
                                         </div>
                                         {% endif %}
                                     </div>
-                                    <div class="panel-footer bg-white border-0 text-center">창고를 등록해주세요.</div>
+                                    <div class="panel-footer bg-white clearfix">
+                                        <div class="btn-group pull-right">
+                                            <a href="" class="btn btn-default"><i class="fas fa-redo-alt"></i> 다시 선택</a>
+                                            <button type="button" id="storage-room-edit" class="btn btn-default">변경</button>
+                                            <button type="button" id="move-aquarium-section" class="btn btn-default">섹션 관리</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="tab-pane" id="aquarium-section">
                                 <div class="panel panel-default border-dark max-544 mx-auto">
-                                    <div class="panel-heading border-dark">창고 관리</div>
+                                    <div class="panel-heading border-dark">섹션 / 수조 관리</div>
                                     <div class="panel-body">
                                         <form id="aquarium-section-form" class="form-horizontal clearfix" method="POST">
                                             {% csrf_token %}
@@ -230,22 +267,28 @@
                                                 <label for="{{ aquarium_section_form.section_name.id_for_label }}" class="col-sm-4 control-label">섹션 레이블</label>
                                                 <div class="col-sm-8">
                                                     <input type="text" class="form-control" id="{{ aquarium_section_form.section_name.id_for_label }}"
-                                                        name="{{ aquarium_section_form.section_name.html_name }}" placeholder="섹션 레이블" readonly="true">
+                                                        name="{{ aquarium_section_form.section_name.html_name }}" readonly="true">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}" class="col-sm-4 control-label">가로</label>
                                                 <div class="col-sm-8">
                                                     <input type="number" class="form-control" id="{{ aquarium_section_form.aquarium_num_of_rows.id_for_label }}"
-                                                        name="{{ aquarium_section_form.aquarium_num_of_rows.html_name }}" min="0" placeholder="수조의 개수 (가로)" readonly="true">
+                                                        name="{{ aquarium_section_form.aquarium_num_of_rows.html_name }}" min="0" readonly="true">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="{{ aquarium_section_form.aquarium_num_of_columns.id_for_label }}" class="col-sm-4 control-label">높이</label>
                                                 <div class="col-sm-8">
                                                     <input type="number" class="form-control" id="{{ aquarium_section_form.aquarium_num_of_columns.id_for_label }}"
-                                                        name="{{ aquarium_section_form.aquarium_num_of_columns.html_name }}" min="0" placeholder="수조의 개수 (높이)"
-                                                        readonly="true">
+                                                        name="{{ aquarium_section_form.aquarium_num_of_columns.html_name }}" min="0" readonly="true">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-4 col-sm-8">
+                                                    <div class="alert border-secondary mb-0">
+                                                        <i class="fas fa-exclamation-circle"></i> 섹션 안, 수조의 개수를 입력하세요.
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -283,16 +326,34 @@
                                         <hr>
                                         <div id="async-aquarium-section">
                                             <div class="standby">
-                                                <img src="{% static 'assets/img/Places-user-identity-icon.png' %}" class="img-responsive mx-auto">
+                                                <img src="{% static 'assets/img/Apps-utilities-file-archiver-icon.png' %}" class="img-responsive mx-auto">
+                                                <hr>
+                                                <p class="text-center">창고를 먼저 선택해주세요.</p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="panel-footer bg-white border-0 text-center">창고를 등록해주세요.</div>
+                                    <div class="panel-footer bg-white clearfix">
+                                        <div class="btn-group pull-right">
+                                            <a href="" class="btn btn-default"><i class="fas fa-redo-alt"></i> 다시 선택</a>
+                                            <button type="button" id="aquarium-section-edit" class="btn btn-default">변경</button>
+                                            <button type="button" id="move-aquarium" class="btn btn-default">수조 관리</button>
+                                            <button type="button" id="move-store-layout" class="btn btn-default">매장 레이아웃</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="tab-pane text-center" id="store-layout">
+                            <div class="tab-pane" id="store-layout">
                                 <div class="table-responsive">
-                                    <div id="store-layout-canvas"></div>
+                                    <div id="store-layout-canvas" class="text-center"></div>
+                                </div>
+                                <hr>
+                                <div id="store-layout-console" class="text-center">창고를 먼저 선택해주세요.</div>
+                                <hr>
+                                <div class="text-center">
+                                    <div class="btn-group">
+                                        <a href="" class="btn btn-default"><i class="fas fa-redo-alt"></i> 다시 선택</a>
+                                        <button type="button" id="redo-aquarium-section" class="btn btn-default">섹션 선택</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

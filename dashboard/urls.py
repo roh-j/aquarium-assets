@@ -20,6 +20,7 @@ app_name = 'dashboard'
 
 urlpatterns = [
     path('<int:dashboard_id>/', views.index, name='index'),
-    path('<int:dashboard_id>/customer/', include('customer.urls')),
+    path('<int:dashboard_id>/inventory/', include('inventory.urls')),
     path('<int:dashboard_id>/store/', include('store.urls')),
+    path('<int:dashboard_id>/customer/', include('customer.urls')),
 ]

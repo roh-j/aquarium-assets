@@ -9,21 +9,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <!-- binaryAdmin -->
-    <link rel="stylesheet" href="{% static 'assets/css/binaryAdmin-1.1.0.css' %}">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-spacing-4.3.1.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/utilities-style-4.3.1.css' %}">
-
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.extend.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
+    
     <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-
+    <!-- Custom Scripts -->
+    
     <title>Aquarium Assets</title>
-
     <script>
         $(function () {
             $("form").submit(function (e) {
@@ -77,12 +75,17 @@
             <div class="panel-heading">환영합니다.</div>
             <div class="panel-body">
                 <img src="{% static 'assets/img/Places-user-identity-icon.png' %}" class="primary-image img-responsive">
+                <hr>
                 <form method="POST">
                     {% csrf_token %}
-                    <input type="text" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" class="form-control mb-3"
-                        placeholder="아이디" autofocus>
-                    <input type="password" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}"
-                        class="form-control mb-3" placeholder="비밀번호">
+                    <div class="form-group">
+                        <label for="{{ form.username.id_for_label }}">사용자 계정</label>
+                        <input type="text" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" class="form-control" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.password.id_for_label }}">비밀번호</label>
+                        <input type="password" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" class="form-control">
+                    </div>
                     <div class="text-right">
                         <a href="../register/">회원이 아니십니까?</a>
                     </div>
