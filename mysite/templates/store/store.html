@@ -92,7 +92,7 @@
                             <input type="text" class="form-control" id="id_storage_room_name" name="storage_room_name">
                         </div>
                         <div class="alert alert-explain">
-                            <i class="fas fa-exclamation-circle fa-fw"></i> 생물실 레이블을 변경할 수 있습니다.
+                            생물실 레이블을 변경할 수 있습니다.
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -160,7 +160,7 @@
                             </div>
                         </div>
                         <div class="alert alert-explain">
-                            <i class="fas fa-exclamation-circle fa-fw"></i> 섹션 안에 있는 수조의 개수를 입력하세요.
+                            섹션 안에 있는 수조의 개수를 입력하세요.
                         </div>
                         <div class="form-group">
                             <label for="id_section_color" class="control-label">섹션 색상</label>
@@ -276,13 +276,13 @@
                         <a href="#"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
                             <li><a href="../inventory/manual/">직접 재고관리</a></li>
-                            <li><a href="../inventory/order-sheet/">클레버 재고관리</a></li>
+                            <li><a href="../inventory/clever/">클레버 재고관리</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-user-friends fa-fw"></i>고객관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../customer/list/">고객 목록</a></li>
+                            <li><a href="../customer/status/">고객 현황</a></li>
                             <li><a href="../customer/service/">고객 문의</a></li>
                         </ul>
                     </li>
@@ -316,7 +316,7 @@
                                 <hr>
                                 {% if not items %}
                                 <div class="standby">
-                                    <p class="text-center">생물실을 등록해주세요.</p>
+                                    <p>생물실을 등록해주세요.</p>
                                 </div>
                                 {% else %}
                                 <div id="storage-room-list" class="list-group">

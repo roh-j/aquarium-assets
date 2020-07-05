@@ -1,6 +1,7 @@
-from django.db.models import Q, Case, When, CharField, Value
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.db.models import Q, Case, When, Value, CharField
+from django.contrib import messages
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -18,7 +19,7 @@ class ManualView(APIView):
 
     def access_control(self, user_id, control_number):
         console = Console.objects.select_related('business').filter(
-            Q(user=user_id) | Q(business__user=user_id) & Q(business__comfirm_business=True),
+            Q(user=user_id) | Q(business__user=user_id) & Q(business__confirm_business=True),
             id=control_number,
         )
 
@@ -32,7 +33,8 @@ class ManualView(APIView):
                 queryset = StorageRoom.objects.filter(console=control_number).order_by('-id')
                 return Response({'storage_room_list': queryset}, template_name='inventory/inventory-manual.html')
             else:
-                return redirect('Main:IndexView')
+                messages.warning(request, '비즈니스 승인이 필요하거나 잘못된 접근입니다.')
+                return redirect('Console:IndexView')
         else:
             return redirect('Main:SignInView')
 
@@ -91,7 +93,11 @@ class AquariumView(APIView):
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, control_number, format=None):
-        queryset = Aquarium.objects.get(aquarium_section=request.query_params.get('fk_aquarium_section'), row=request.query_params.get('row'), column=request.query_params.get('column'))
+        queryset = Aquarium.objects.get(
+            aquarium_section=request.query_params.get('fk_aquarium_section'),
+            row=request.query_params.get('row'),
+            column=request.query_params.get('column'),
+        )
 
         serializer = AquariumSerializer(queryset)
         return JsonResponse(serializer.data, safe=False, status=200)

@@ -14,8 +14,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = ('id', 'order', 'unit_price', 'species', 'breed', 'remark', 'min_size',
-                  'max_size', 'stages_of_development', 'unit', 'price', 'quantity', 'remaining_order_quantity',)
+        fields = ('id', 'order', 'unit_price', 'species', 'breed', 'remark', 'min_size', 'max_size',
+                  'stages_of_development', 'unit', 'price', 'quantity', 'remaining_order_quantity',)
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -27,8 +27,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('id', 'order_items', 'customer_name',
-                  'contact', 'address', 'order_type', 'order_date',)
+        fields = ('id', 'order_items', 'customer_name', 'contact',
+                  'address', 'order_type', 'order_date',)
 
     def set_foreign_key(self, fk_console):
         self.fk_console = fk_console
@@ -43,7 +43,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if len(data['order_items']) == 0:
-            raise serializers.ValidationError()
+            raise serializers.ValidationError('주문 항목이 존재하지 않습니다.')
         return data
 
     def create(self, validated_data):
@@ -57,7 +57,6 @@ class OrderSerializer(serializers.ModelSerializer):
                     contact=validated_data['contact'],
                     address=validated_data['address'],
                 )
-                customer.save()
 
             order = Order.objects.create(
                 console=Console.objects.get(id=self.fk_console),
@@ -79,7 +78,7 @@ class OrderSerializer(serializers.ModelSerializer):
         for validated_data_item in validated_data['order_items']:
             unit_price = validated_data_item['unit_price']
 
-            order_item = OrderItem.objects.create(
+            OrderItem.objects.create(
                 order=order,
                 unit_price=unit_price,
                 species=validated_data_item['species'],
@@ -93,11 +92,8 @@ class OrderSerializer(serializers.ModelSerializer):
                 quantity=validated_data_item['quantity'],
                 remaining_order_quantity=validated_data_item['quantity'],
             )
+
             unit_price.order_quantity = F('order_quantity') + validated_data_item['quantity']
-
             unit_price.save()
-            order_item.save()
-
-        order.save()
 
         return order

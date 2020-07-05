@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q, Subquery, F, Sum, Case, When, Value, CharField
+from django.db.models import Q, F, Subquery, Sum, Case, When, Value, CharField
 from django.utils import timezone
 from rest_framework import serializers
 from console.models import Console
@@ -74,7 +74,7 @@ class AquariumStockSerializer(serializers.Serializer):
             )
 
             if aquarium_stock.exists():
-                raise serializers.ValidationError()
+                raise serializers.ValidationError('재고가 이미 존재합니다.')
 
         return data
 
@@ -88,7 +88,6 @@ class AquariumStockSerializer(serializers.Serializer):
                 breed=validated_data['breed'],
                 remark=validated_data['remark'],
             )
-            creature.save()
 
         aquarium_stock = AquariumStock.objects.create(
             console=Console.objects.get(id=self.fk_console),
@@ -111,8 +110,7 @@ class AquariumStockSerializer(serializers.Serializer):
 
         if unit_price is not None:
             aquarium_stock.unit_price = unit_price
-
-        aquarium_stock.save()
+            aquarium_stock.save()
 
         return aquarium_stock
 
@@ -210,7 +208,11 @@ class GoodsIssueSerializer(serializers.Serializer):
                             output_field=CharField(),
                         )
                     ).filter(
-                        id=validated_data['order_item']
+                        order=Subquery(
+                            OrderItem.objects.filter(
+                                id=validated_data['order_item']
+                            ).values_list('order')[:1]
+                        )
                     ).values_list('task_status')[:1]
                 )
             )
@@ -224,6 +226,8 @@ class GoodsIssueSerializer(serializers.Serializer):
             ).update(
                 order_quantity=F('order_quantity') - validated_data['quantity']
             )
+
+        stock_ledger.save()
 
         return stock_ledger
 

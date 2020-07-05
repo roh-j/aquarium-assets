@@ -312,7 +312,7 @@ var async_aquarium_section = function (callback) {
         else {
             $('#async-aquarium-section').append(
                 '<div class="standby">\
-                    <p class="text-center">생물실의 섹션을 등록할 수 있습니다.</p>\
+                    <p>생물실의 섹션을 등록할 수 있습니다.</p>\
                 </div>'
             );
         }

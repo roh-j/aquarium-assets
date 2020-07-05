@@ -1,6 +1,7 @@
-from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.db.models import Q
+from django.contrib import messages
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -28,7 +29,7 @@ class RegisterView(APIView):
 
     def access_control(self, user_id, control_number):
         console = Console.objects.select_related('business').filter(
-            Q(user=user_id) | Q(business__user=user_id) & Q(business__comfirm_business=True),
+            Q(user=user_id) | Q(business__user=user_id) & Q(business__confirm_business=True),
             id=control_number,
         )
 
@@ -41,7 +42,8 @@ class RegisterView(APIView):
             if access.exists():
                 return Response(template_name='order/order-register.html')
             else:
-                return redirect('Main:IndexView')
+                messages.warning(request, '비즈니스 승인이 필요하거나 잘못된 접근입니다.')
+                return redirect('Console:IndexView')
         else:
             return redirect('Main:SignInView')
 
@@ -54,13 +56,3 @@ class RegisterView(APIView):
             return JsonResponse(serializer.data, status=201)
 
         return JsonResponse(serializer.errors, status=400)
-
-
-class StatusView(APIView):
-    renderer_classes = (JSONRenderer, TemplateHTMLRenderer,)
-
-    def get(self, request, control_number, format=None):
-        if request.user.is_authenticated:
-            return Response(template_name='order/order-status.html')
-        else:
-            return redirect('Main:SignInView')

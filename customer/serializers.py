@@ -4,7 +4,7 @@ from customer.models import Customer
 # Create your serializers here.
 
 
-class ListSerializer(serializers.ModelSerializer):
+class SummarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer

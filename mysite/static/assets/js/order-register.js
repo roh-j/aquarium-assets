@@ -226,7 +226,13 @@ $(function () {
             $('#alert-modal').on('hidden.bs.modal', function () {
                 location.reload(true);
             });
-        }).fail(function (res, status, xhr) { });
+        }).fail(function (res, status, xhr) {
+            $.each(res.responseJSON, function (key, value) {
+                toastr.remove();
+                toastr.warning(value);
+                return false;
+            });
+        });
     });
 });
 
@@ -382,7 +388,7 @@ var async_product = function (callback) {
 
 var async_customer = function (callback) {
     $.ajax({
-        url: '../../customer/list/',
+        url: '../../customer/summary/',
         method: 'get',
         headers: {
             'Accept': 'application/json',

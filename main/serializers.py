@@ -1,11 +1,11 @@
-from rest_framework import serializers
 from django.core import exceptions
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+import django.contrib.auth.password_validation as validators
+from rest_framework import serializers
 from main.models import MEMBERSHIP_CHOICES, Profile
 from console.models import Console
-import django.contrib.auth.password_validation as validators
 
 # Create your serializers here.
 
@@ -95,19 +95,15 @@ class UserSerializer(serializers.Serializer):
         )
 
         user.set_password(validated_data['password'])
+        user.save()
 
-        profile = Profile.objects.create(
+        Profile.objects.create(
             user=user,
             membership=validated_data['membership'],
         )
-
-        console = Console.objects.create(
+        Console.objects.create(
             user=user
         )
-
-        user.save()
-        profile.save()
-        console.save()
 
         return user
 

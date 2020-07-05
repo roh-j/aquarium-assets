@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from django.utils import timezone
+from rest_framework import serializers
 from console.models import Console
 from store.models import StorageRoom, AquariumSection, StoreLayout, Aquarium
 
@@ -23,7 +23,6 @@ class StorageRoomSerializer(serializers.ModelSerializer):
             last_modified_date=timezone.now(),
         )
 
-        storage_room.save()
         return storage_room
 
 
@@ -52,16 +51,13 @@ class AquariumSectionSerializer(serializers.ModelSerializer):
 
         aquarium_section.last_modified_date = timezone.now()
 
-        aquarium_section.save()
-
         for row in range(validated_data['aquarium_num_of_rows']):
             for column in range(validated_data['aquarium_num_of_columns']):
-                aquarium = Aquarium.objects.create(
+                Aquarium.objects.create(
                     aquarium_section=aquarium_section,
                     row=row,
                     column=column,
                 )
-                aquarium.save()
 
         return aquarium_section
 
@@ -69,7 +65,6 @@ class AquariumSectionSerializer(serializers.ModelSerializer):
         instance.section_name = validated_data.get('section_name', instance.section_name)
         instance.section_color = validated_data.get('section_color', instance.section_color)
         instance.last_modified_date = timezone.now()
-
         instance.save()
 
         return instance
@@ -79,7 +74,8 @@ class AquariumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Aquarium
-        fields = ('id', 'row', 'column', 'alias', 'memo', 'setup_date', 'last_modified_date', 'creation_date',)
+        fields = ('id', 'row', 'column', 'alias', 'memo',
+                  'setup_date', 'last_modified_date', 'creation_date',)
 
 
 class StoreLayoutSerializer(serializers.ModelSerializer):
@@ -102,5 +98,4 @@ class StoreLayoutSerializer(serializers.ModelSerializer):
             column=validated_data['column'],
         )
 
-        store_layout.save()
         return store_layout

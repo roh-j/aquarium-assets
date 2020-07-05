@@ -59,7 +59,7 @@
         </div>
     </div>
     <div id="goods-issue-register-modal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -72,7 +72,7 @@
                             <li class="active"><a href="#goods-issue-to-sales" data-toggle="tab">판매</a></li>
                             <li><a href="#goods-issue" data-toggle="tab">출고</a></li>
                         </ul>
-                        <div class="form-group modal-lg-form">
+                        <div class="form-group">
                             <label for="id_goods_issue_quantity" class="control-label">출고 수량</label>
                             <div class="input-group">
                                 <span class="input-group-btn input-spinner">
@@ -96,10 +96,12 @@
                         </div>
                         <div class="tab-content">
                             <div class="tab-pane active" id="goods-issue-to-sales">
-                                <span class="control-label">주문 처리</span>
+                                <div class="alert alert-explain">
+                                    선택한 주문에 대해 처리할 수 있습니다.
+                                </div>
                             </div>
                             <div class="tab-pane" id="goods-issue">
-                                <div class="form-group modal-lg-form">
+                                <div class="form-group">
                                     <div style="width: 50%">
                                         <span class="control-label">출고 유형</span>
                                         <div id="id_goods_issue_description" class="btn-group d-flex" data-toggle="buttons">
@@ -123,7 +125,7 @@
         </div>
     </div>
     <div id="goods-receipt-register-modal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -136,7 +138,7 @@
                             <li class="active"><a href="#goods-receipt-for-purchase" data-toggle="tab">구매</a></li>
                             <li><a href="#goods-receipt" data-toggle="tab">입고</a></li>
                         </ul>
-                        <div class="form-group modal-lg-form">
+                        <div class="form-group">
                             <label for="id_goods_receipt_quantity" class="control-label">입고 수량</label>
                             <div class="input-group">
                                 <span class="input-group-btn input-spinner">
@@ -160,7 +162,7 @@
                         </div>
                         <div class="tab-content">
                             <div class="tab-pane active" id="goods-receipt-for-purchase">
-                                <div class="form-group modal-lg-form">
+                                <div class="form-group">
                                     <label for="id_purchase_price" class="control-label">가격</label>
                                     <div class="input-group">
                                         <span class="input-group-btn input-spinner">
@@ -347,13 +349,13 @@
                         <a href="#" aria-expanded="true"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li><a href="" class="active-menu">직접 재고관리</a></li>
-                            <li><a href="../order-sheet/">클레버 재고관리</a></li>
+                            <li><a href="../clever/">클레버 재고관리</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-user-friends fa-fw"></i>고객관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../../customer/list/">고객 목록</a></li>
+                            <li><a href="../../customer/status/">고객 현황</a></li>
                             <li><a href="../../customer/service/">고객 문의</a></li>
                         </ul>
                     </li>
@@ -381,8 +383,11 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="order-sheet">
-                        <button type="button" id="skip-order-sheet" class="btn btn-default">건너뛰기</button>
-                        <button type="button" class="wide-screen btn btn-default ml-2">넓게</button>
+                        <div class="clearfix">
+                            <button type="button" class="wide-screen btn btn-default">넓게</button>
+                            <button type="button" class="btn btn-default selected-order ml-2">선택 항목 처리</button>
+                            <button type="button" id="skip-order-sheet" class="btn btn-default pull-right">건너뛰기</button>
+                        </div>
                         <hr>
                         <div class="panel panel-default">
                             <div id="order-sheet-tool" class="panel-heading d-flex"></div>
@@ -420,7 +425,7 @@
                                 </table>
                             </div>
                             <div class="panel-footer text-right">
-                                <button type="button" id="selected-order" class="btn btn-default">선택 항목 처리</button>
+                                <button type="button" class="btn btn-default selected-order">선택 항목 처리</button>
                             </div>
                         </div>
                         <div id="order-sheet-pagination" class="text-center"></div>
@@ -432,7 +437,7 @@
                             <div class="panel-body">
                                 {% if not storage_room_list %}
                                 <div class="standby">
-                                    <p class="text-center"><a href="../../store/">매장관리</a>에서 생물실를 등록해주세요.</p>
+                                    <p><a href="../../store/">매장관리</a>에서 생물실를 등록해주세요.</p>
                                 </div>
                                 {% else %}
                                 <div id="storage-room-list" class="list-group">
@@ -484,11 +489,15 @@
                             </div>
                         </div>
                         <hr>
+                        <div id="pending-order">
+                            <div class="standby">
+                                <p>선택한 주문이 없습니다.</p>
+                            </div>
+                        </div>
+                        <hr>
                         <div id="inventory-menu">
                             <button type="button" id="aquarium-stock-register" class="btn btn-default" disabled>재고 추가</button>
                         </div>
-                        <hr>
-                        <div id="pending-order"></div>
                         <hr>
                         <div class="panel panel-default">
                             <div id="inventory-tool" class="panel-heading d-flex"></div>

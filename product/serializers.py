@@ -92,7 +92,7 @@ class UnitPriceSerializer(serializers.Serializer):
             )
 
             if unit_price.exists():
-                raise serializers.ValidationError()
+                raise serializers.ValidationError('해당 범위에 등록된 단가가 존재합니다.')
 
         if data['min_size'] > data['max_size']:
             raise serializers.ValidationError('크기의 범위를 확인하세요.')
@@ -109,7 +109,6 @@ class UnitPriceSerializer(serializers.Serializer):
                 breed=validated_data['breed'],
                 remark=validated_data['remark'],
             )
-            creature.save()
 
         unit_price = UnitPrice.objects.create(
             console=Console.objects.get(id=self.fk_console),
@@ -130,6 +129,5 @@ class UnitPriceSerializer(serializers.Serializer):
         )
 
         aquarium_stock.update(unit_price=unit_price)
-        unit_price.save()
 
         return unit_price

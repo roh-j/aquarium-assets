@@ -419,7 +419,7 @@ var async_order_sheet = function (callback) {
             }
         });
 
-        $('#selected-order').on('click', function () {
+        $('.selected-order').on('click', function () {
             var cells = order_sheet_table.cells().nodes();
             var pre = null;
             var idx = 0;
@@ -434,6 +434,7 @@ var async_order_sheet = function (callback) {
                         var tbody = '';
 
                         if (pre == null) {
+                            $('#pending-order').empty();
                             $('#pending-order').append('<div class="panel-group" id="accordion"></div>');
                         }
                         for (j = 0; j < order[i]['order_items'].length; j++) {
@@ -460,7 +461,7 @@ var async_order_sheet = function (callback) {
                         $('#pending-order .panel-group').append(
                             '<div class="panel">\
                                 <div class="panel-heading">\
-                                    <span class="label label-warning">' + order[i]['id'] + '</span>\
+                                    <span class="font-weight-bold">' + order[i]['id'] + '</span> / \
                                     <a href="#order-' + order[i]['id'] + '" data-toggle="collapse" data-parent="#accordion">\
                                         ' + order[i]['order_date'].split(' ')[0] + ' ' + conv_order_type(data[i]['order_type']) + '\
                                     </a>\

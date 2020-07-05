@@ -21,5 +21,4 @@ app_name = 'Order'
 urlpatterns = [
     path('pending-order/', views.PendingOrderView.as_view(), name='PendingOrderView'),
     path('register/', views.RegisterView.as_view(), name='RegisterView'),
-    path('status/', views.StatusView.as_view(), name='StatusView'),
 ]

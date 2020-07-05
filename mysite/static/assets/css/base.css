@@ -63,11 +63,11 @@ table tbody tr td {
 thead > tr > th.selection {
     width: 36px;
 }
-.modal-lg-form {
-    max-width: 568px;
-}
 .panel-heading a {
     color: #333;
+}
+.standby {
+    text-align: center;
 }
 /* ui styles */
 .btn,
@@ -263,8 +263,6 @@ table .pretty {
     margin-bottom: 20px;
     padding-top: 15px;
     padding-bottom: 15px;
-    padding-left: 10px;
-    border-left: 5px solid #ddd;
 }
 .dl-order {
     margin-top: 0;
@@ -312,12 +310,40 @@ table .pretty {
 #pending-order .panel .table {
     border-top: 1px solid #ddd !important;
 }
+#pending-order .panel .table > tbody > tr {
+    height: 51px;
+}
 span.control-label {
     vertical-align: middle;
     display: inline-block;
     max-width: 100%;
     margin-bottom: 5px;
     font-weight: 700;
+}
+dl.business-info {
+    margin: 0;
+    padding-top: 10px;
+    border-top: 1px dashed #ddd;
+}
+dl.business-info dt {
+    float: left;
+    width: 98px;
+    overflow: hidden;
+    clear: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-bottom: 5px;
+    text-align: right;
+}
+dl.business-info dt:last-of-type {
+    padding: 0;
+}
+dl.business-info dd {
+    margin-left: 108px;
+    padding-bottom: 5px;
+}
+dl.business-info dd:last-of-type {
+    padding: 0;
 }
 /* menu styles */
 .navbar-menu {

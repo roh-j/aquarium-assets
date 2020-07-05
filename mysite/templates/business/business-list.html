@@ -47,17 +47,25 @@
                 <hr>
                 {% if not items %}
                 <div class="alert alert-explain">
-                    <i class="fas fa-exclamation-circle fa-fw"></i> 비즈니스 등록이 필요합니다.
+                    비즈니스 등록이 필요합니다.
                 </div>
                 {% else %}
                 <div class="list-group">
                     {% for item in items %}
-                    <a href="../console/{{ item.pk }}/dashboard/" class="list-group-item disabled">
-                        <h4 class="list-group-item-heading">{{ item.business.name_of_company }}</h4>
-                        <p class="list-group-item-text">
-                            사업자등록번호: {{ item.business.registration_number }}<br>
-                            매장 URL: {{ item.business.alias }}
-                        </p>
+                    <a href="../console/{{ item.id }}/dashboard/" class="list-group-item">
+                        <p>{{ item.business.name_of_company }}</p>
+                        <dl class="business-info">
+                            <dt>사업자등록번호</dt>
+                            <dd>{{ item.business.registration_number }}</dd>
+                            <dt>매장 Alias</dt>
+                            <dd>{{ item.business.alias }}</dd>
+                            <dt>상태</dt>
+                            {% if item.business.confirm_business == True %}
+                            <dd><i class="fas fa-check-circle text-success"></i> 승인됨</dd>
+                            {% else %}
+                            <dd><i class="fas fa-exclamation-circle text-warning"></i> 승인 대기</dd>
+                            {% endif %}
+                        </dl>
                     </a>
                     {% endfor %}
                 </div>

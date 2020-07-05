@@ -19,5 +19,5 @@ from . import views
 app_name = 'Customer'
 
 urlpatterns = [
-    path('list/', views.ListView.as_view(), name='ListView'),
+    path('summary/', views.SummaryView.as_view(), name='SummaryView'),
 ]

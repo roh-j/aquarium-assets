@@ -4,16 +4,16 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from customer.models import Customer
-from customer.serializers import ListSerializer
+from customer.serializers import SummarySerializer
 
 # Create your views here.
 
 
-class ListView(APIView):
+class SummaryView(APIView):
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, control_number, format=None):
         queryset = Customer.objects.filter(console=control_number)
 
-        serializer = ListSerializer(queryset, many=True)
+        serializer = SummarySerializer(queryset, many=True)
         return JsonResponse(serializer.data, safe=False, status=200)

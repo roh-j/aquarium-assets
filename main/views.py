@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.views import APIView
@@ -21,6 +22,7 @@ class RegisterView(APIView):
 
     def get(self, request, format=None):
         if request.user.is_authenticated:
+            messages.warning(request, '이미 로그인되어 있습니다.')
             return redirect('Console:IndexView')
         else:
             return Response(template_name='main/main-register.html')
@@ -40,6 +42,7 @@ class SignInView(APIView):
 
     def get(self, request, format=None):
         if request.user.is_authenticated:
+            messages.warning(request, '이미 로그인되어 있습니다.')
             return redirect('Console:IndexView')
         else:
             return Response(template_name='main/main-login.html')

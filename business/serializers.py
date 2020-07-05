@@ -1,7 +1,7 @@
-from rest_framework import serializers
 from django.core import exceptions
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
+from rest_framework import serializers
 from business.models import Business
 from console.models import Console
 
@@ -74,11 +74,8 @@ class BusinessSerializer(serializers.ModelSerializer):
             alias=validated_data['alias'],
         )
 
-        console = Console.objects.create(
+        Console.objects.create(
             business=business
         )
-
-        business.save()
-        console.save()
 
         return business
