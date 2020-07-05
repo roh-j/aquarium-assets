@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="Author" content="roh-j">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <!-- binaryAdmin -->
+    <link rel="stylesheet" href="{% static 'assets/css/binaryAdmin-1.1.0.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/utilities-spacing-4.3.1.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/utilities-style-4.3.1.css' %}">
+
+    <!-- jQuery (1.12.4) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!-- Custom Scripts -->
+
+    <title>Aquarium Assets</title>
+
+    <script>
+        $(function () {
+            $(".list-group > a").click(function (e) {
+                e.preventDefault();
+            });
+            $("form").submit(function (e) {
+                e.preventDefault();
+                var params = $("form").serialize();
+
+                $.ajax({
+                    url: "ajax/insert/",
+                    method: "POST",
+                    data: params,
+                    dataType: "json",
+                }).done(function (data) {
+                    if (data["state"] == "success") {
+                        location.replace("../");
+                    }
+                    else if (data["state"] == "error") {
+                        $("#alert-modal-content").html("<p>" + data["messages"] + "</p>");
+                        $("#alert-modal").modal("show");
+                    }
+                }).fail(function (data) {
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="alert-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="alert-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림
+                    </h5>
+                </div>
+                <div id="alert-modal-content" class="modal-body text-center"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-default navbar-cls-top mb-0">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Aquarium Assets</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid mt-5">
+        <div class="panel panel-primary max-344 mx-auto">
+            <div class="panel-heading">비즈니스 추가</div>
+            <div class="panel-body">
+                <img src="{% static 'assets/img/Actions-document-sign-icon.png' %}"
+                    class="primary-image img-responsive">
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="text" id="{{ form.name_of_company.id_for_label }}" name="{{ form.name_of_company.html_name }}"
+                        class="form-control mb-4" placeholder="상호" autofocus>
+                    <input type="text" id="{{ form.registration_number.id_for_label }}" name="{{ form.registration_number.html_name }}"
+                        class="form-control mb-4" placeholder="사업자등록번호">
+                    <div class="alert border-secondary">
+                        <i class="fas fa-exclamation-circle"></i> 000-00-00000 형식으로 사업자등록번호를 입력해주세요.
+                    </div>
+                    <input type="text" id="{{ form.alias.id_for_label }}" name="{{ form.alias.html_name }}" class="form-control mb-4"
+                        placeholder="영어별칭">
+                    <div class="alert border-secondary">
+                        <i class="fas fa-exclamation-circle"></i> 영어별칭
+                    </div>
+                    <input type="text" id="{{ form.address.id_for_label }}" name="{{ form.address.html_name }}" class="form-control mb-4"
+                        placeholder="소재지">
+                    <input type="text" id="{{ form.contact.id_for_label }}" name="{{ form.contact.html_name }}" class="form-control mb-4"
+                        placeholder="대표전화">
+                    <hr>
+                    <div class="pull-right">
+                        <a href="../" class="btn btn-default">취소</a>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <footer class="my-4 text-muted text-center text-small">
+            <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
+        </footer>
+    </div>
+</body>
+
+</html>

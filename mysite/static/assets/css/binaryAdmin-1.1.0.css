@@ -1,0 +1,355 @@
+/*
+    Authour URI: www.binarycart.com
+    Version: 1.1
+    License: MIT
+    
+    http://opensource.org/licenses/MIT
+
+    100% To use For Personal And Commercial Use.
+*/
+
+/* GENERAL STYLES */
+
+html {
+    background: #E7E7E7;
+}
+#wrapper {
+    width: 100%;
+    background: #424858;
+}
+#page-wrapper {
+    padding: 15px;
+    min-height: 620px;
+    background: #E7E7E7;
+}
+#page-inner {
+    background: #FFF !important;
+}
+h4 {
+    padding-top: 10px;
+}
+.square-btn-adjust {
+    border: 0 solid transparent;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+.tab-content>.tab-pane {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.list-group-item.selected,
+.list-group-item.selected:hover,
+.list-group-item.selected:focus {
+    background: #EEE;
+}
+
+/* DASHBOARD STYLES */
+
+.panel-back {
+    background: #E7E7E7;
+}
+.noti-box {
+    min-height: 100px;
+    padding: 20px;
+}
+.noti-box .icon-box {
+    display: block;
+    float: left;
+    margin: 0 15px 10px 0;
+    width: 70px;
+    height: 70px;
+    line-height: 75px;
+    text-align: center;
+    font-size: 40px;
+}
+.text-box p {
+    margin: 0 0 3px;
+}
+.main-text {
+    font-size: 25px;
+    font-weight: 600;
+}
+.set-icon {
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+}
+.bg-color-green {
+    background: #00CE6F;
+    color: #FFF;
+}
+.bg-color-blue {
+    background: #A95DF0;
+    color: #FFF;
+}
+.bg-color-red {
+    background: #DB0630;
+    color: #FFF;
+}
+.bg-color-brown {
+    background: #B94A00;
+    color: #FFF;
+}
+.icon-box-right {
+    display: block;
+    float: right;
+    margin: 0 15px 10px 0;
+    width: 70px;
+    height: 70px;
+    line-height: 75px;
+    text-align: center;
+    font-size: 40px;
+}
+.main-temp-back {
+    background: #8702A8;
+    color: #FFF;
+    font-size: 16px;
+    font-weight: 300;
+    text-align: center;
+}
+.main-temp-back .text-temp {
+    font-size: 40px;
+}
+.back-dash {
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 500;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    background: #2EA7EB;
+    color: #FFF;
+}
+.back-dash p {
+    padding-top: 16px;
+    font-size: 13px;
+    color: #FFF;
+    line-height: 25px;
+    text-align: justify;
+}
+.back-footer-green {
+    background: #009B50;
+    border-top: 0 solid #FFF;
+}
+.back-footer-red {
+    background: #AF0000;
+    border-top: 0 solid #FFF;
+}
+.color-bottom-txt {
+    color: #000;
+    font-size: 16px;
+    line-height: 30px;
+}
+
+/* CHAT PANEL */
+
+.scroll-panel .panel-body {
+    height: 450px;
+    overflow-y: scroll;
+}
+.chat-box li {
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #808080;
+}
+.chat-box li .chat-body p {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+.chat-popover-right {
+    position: relative;
+    display: block;
+    float: left;
+}
+.chat-popover-left {
+    position: relative;
+    display: block;
+    float: right;
+}
+.chat-input {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #FFF;
+    background-image: none;
+    border: none;
+    resize: none;
+}
+
+/* MENU STYLES */
+
+.primary-image {
+    margin: 25px auto;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    max-height: 170px;
+    max-width: 170px;
+}
+.navbar-cls-top .navbar-brand {
+    color: #FFF;
+    background: #555B69;
+    width: 230px;
+    text-align: center;
+}
+.active-menu {
+    color: #FFF !important;
+    background: #0097A7 !important;
+}
+.arrow {
+    float: right;
+}
+.fa.arrow:before {
+    content: "\f104";
+}
+.active > a > .fa.arrow:before {
+    content: "\f107";
+}
+.nav-second-level li,
+.nav-third-level li {
+    border-bottom: none !important;
+}
+.nav-second-level li a {
+    padding-left: 37px;
+}
+.nav-third-level li a {
+    padding-left: 55px;
+}
+.sidebar-collapse,
+.sidebar-collapse .nav {
+    background: none;
+}
+.sidebar-collapse .nav {
+    padding: 0;
+}
+.sidebar-collapse .nav > li > a {
+    color: #FFF;
+    text-shadow: none;
+}
+.sidebar-collapse > .nav > li > a {
+    padding: 20px;
+}
+.sidebar-collapse > .nav > li {
+    border-bottom: 1px solid rgba(107, 108, 109, 0.19);
+}
+.sidebar-collapse .nav > li > a:hover,
+.sidebar-collapse .nav > li > a:focus {
+    background: #555B69;
+    outline: 0;
+}
+.nav-second-level > li > a:before,
+.nav-third-level > li > a:before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 20px;
+    width: 15px;
+    height: 1px;
+    background: #FF0000;
+    top: 20px;
+}
+.nav-second-level > li > a:after,
+.nav-third-level > li > a:after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 20px;
+    width: 1px;
+    height: 100%;
+    background: #FF0000;
+    top: 0;
+    z-index: 10;
+}
+.nav-second-level > li:last-child > a:after,
+.nav-third-level > li:last-child > a:after {
+    height: 50%;
+}
+.nav-third-level > li > a:after,
+.nav-third-level > li > a:before {
+    left: 40px;
+}
+.navbar-side {
+    border: none;
+    background: #424858;
+}
+.navbar-cls-top {
+    background: #4D5467;
+    border: none;
+}
+.navbar-cls-top .navbar-brand:hover {
+    color: #FFF;
+    background: #555B69;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background: #0097A7;
+}
+.navbar-default .navbar-toggle {
+    border-color: #FFF;
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background: #FFF;
+}
+.nav > li > a > i {
+    margin-right: 10px;
+}
+
+/* UI ELEMENTS STYLES */
+
+.btn-circle {
+    width: 50px;
+    height: 50px;
+    padding: 6px 0;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.428571429;
+}
+
+/* MEDIA QUERIES (MIN-WIDTH) */
+
+@media(min-width: 768px) {
+    #page-wrapper {
+        margin: 0 0 0 230px;
+        min-height: 940px;
+    }
+    .navbar-side {
+        z-index: 1;
+        position: absolute;
+        width: 230px;
+    }
+    .navbar {
+        border-radius: 0;
+    }
+    .sidebar-collapse {
+        display: block !important;
+        visibility: visible !important;
+    }
+}
+@media (min-width: 992px) {
+    /* EMPTY */
+}
+@media (min-width: 1200px) {
+    /* EMPTY */
+}
+
+/* MEDIA QUERIES (MAX-WIDTH) */
+
+@media (max-width: 767.98px) {
+    .table-responsive {
+        border: none !important;
+    }
+}
+@media (max-width: 991.98px) {
+    /* EMPTY */
+}
+@media (max-width: 1199.98px) {
+    /* EMPTY */
+}

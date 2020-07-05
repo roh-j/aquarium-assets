@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="Author" content="roh-j">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <!-- binaryAdmin -->
+    <link rel="stylesheet" href="{% static 'assets/css/binaryAdmin-1.1.0.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/utilities-spacing-4.3.1.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/utilities-style-4.3.1.css' %}">
+
+    <!-- jQuery (1.12.4) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!-- Custom Scripts -->
+
+    <title>Aquarium Assets</title>
+
+    <script>
+        $(function () {
+            //
+        });
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-cls-top mb-0">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Aquarium Assets</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid mt-5">
+        <div class="panel panel-primary max-344 mx-auto">
+            <div class="panel-heading">비즈니스 관리</div>
+            <div class="panel-body">
+                <img src="{% static 'assets/img/Actions-view-pim-contacts-icon.png' %}"
+                    class="primary-image img-responsive">
+                <h4 class="text-center">
+                    <span class="label label-primary font-weight-normal">{{ user }}님</span>
+                </h4>
+                <hr>
+                {% if not business_list %}
+                <div class="alert border-secondary"><i class="fas fa-exclamation-circle"></i> 비즈니스 등록이 필요합니다.</div>
+                {% else %}
+                <div class="list-group">
+                    {% for list in business_list %}
+                    <a href="../dashboard/{{ list.id }}/" class="list-group-item">
+                        <dl class="mb-0">
+                            <dt>{{ list.name_of_company }}</dt>
+                            <dd>
+                                Alias: {{ list.alias }}<br>
+                                Registration: {{ list.registration_number }}
+                            </dd>
+                        </dl>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <hr>
+                <div class="pull-right">
+                    <a href="register/" class="btn btn-default">비즈니스 추가</a>
+                </div>
+            </div>
+        </div>
+        <footer class="my-4 text-muted text-center text-small">
+            <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
+        </footer>
+    </div>
+</body>
+
+</html>

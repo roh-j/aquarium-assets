@@ -1,0 +1,37 @@
+/* STORE LAYOUT */
+
+rect.store-layout-grid {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+}
+rect.store-layout-button {
+    stroke: none;
+}
+
+/* AQUARIUM */
+
+polygon.aquarium-grid {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linejoin: bevel;
+}
+rect.aquarium-front-grid {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linejoin: bevel;
+}
+polygon.aquarium-plane {
+    fill: #E7E7E7;
+    stroke: none;
+}
+rect.aquarium-front-button {
+    fill: #FFF;
+    stroke: none;
+    cursor: pointer;
+}
+rect.aquarium-front-button:hover {
+    fill: #BADEFC;
+}

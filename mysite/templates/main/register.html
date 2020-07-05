@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="Author" content="roh-j">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <!-- binaryAdmin -->
+    <link rel="stylesheet" href="{% static 'assets/css/binaryAdmin-1.1.0.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/utilities-spacing-4.3.1.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/utilities-style-4.3.1.css' %}">
+
+    <!-- jQuery (1.12.4) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!-- Custom Scripts -->
+
+    <title>Aquarium Assets</title>
+
+    <script>
+        $(function () {
+            $("form").submit(function (e) {
+                e.preventDefault();
+                var params = $("form").serialize();
+
+                $.ajax({
+                    url: "ajax/insert/",
+                    method: "POST",
+                    data: params,
+                    dataType: "json",
+                }).done(function (data) {
+                    if (data["state"] == "success") {
+                        location.replace("../business/");
+                    }
+                    else if (data["state"] == "error") {
+                        $("#alert-modal-content").html("<p>" + data["messages"] + "</p>");
+                        $("#alert-modal").modal("show");
+                    }
+                }).fail(function (data) {
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="alert-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="alert-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림
+                    </h5>
+                </div>
+                <div id="alert-modal-content" class="modal-body text-center"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-default navbar-cls-top mb-0">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Aquarium Assets</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid mt-5">
+        <div class="panel panel-primary max-344 mx-auto">
+            <div class="panel-heading">계정 등록</div>
+            <div class="panel-body">
+                <img src="{% static 'assets/img/Places-user-identity-icon.png' %}" class="primary-image img-responsive">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="text" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" class="form-control mb-4"
+                        placeholder="아이디" autofocus>
+                    <div class="alert border-secondary">
+                        <i class="fas fa-exclamation-circle"></i> 문자, 숫자, 마침표를 사용할 수 있습니다.
+                    </div>
+                    <input type="text" id="{{ form.first_name.id_for_label }}" name="{{ form.first_name.html_name }}"
+                        class="form-control mb-4" placeholder="성">
+                    <input type="text" id="{{ form.last_name.id_for_label }}" name="{{ form.last_name.html_name }}"
+                        class="form-control mb-4" placeholder="이름">
+                    <input type="text" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" class="form-control mb-4"
+                        placeholder="이메일 주소">
+                    <input type="password" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}"
+                        class="form-control mb-4" placeholder="비밀번호">
+                    <div class="alert border-secondary">
+                        <i class="fas fa-exclamation-circle"></i> 문자, 숫자, 기호를 조합하여 8자 이상을 사용하세요.
+                    </div>
+                    <input type="password" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" class="form-control"
+                        placeholder="비밀번호 재확인">
+                    <hr>
+                    <div class="pull-right">
+                        <a href="../" class="btn btn-default">뒤로</a>
+                        <button type="submit" class="btn btn-primary">회원가입</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <footer class="my-4 text-muted text-center text-small">
+            <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
+        </footer>
+    </div>
+</body>
+
+</html>
