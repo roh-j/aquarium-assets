@@ -11,37 +11,39 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.extend.css' %}">
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
-    
+
     <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <!-- Custom Scripts -->
-    
+    <!-- serializeObject -->
+    <script src="{% static 'assets/js/lib/serializeObject.min.js' %}"></script>
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/common.js' %}"></script>
+
     <title>Aquarium Assets</title>
     <script>
         $(function () {
             $("form").submit(function (e) {
                 e.preventDefault();
-                var params = $("form").serialize();
+                var params = $("form").serializeObject();
 
                 $.ajax({
-                    url: "ajax/insert/",
-                    method: "POST",
-                    data: params,
+                    url: "",
+                    method: "post",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify(params),
                     dataType: "json",
-                }).done(function (data) {
-                    if (data["state"] == "success") {
-                        location.replace("../business/");
-                    }
-                    else if (data["state"] == "error") {
-                        $("#alert-modal-body").html(data["messages"]);
-                        $("#alert-modal").modal("show");
-                    }
-                }).fail(function (data) {
+                }).done(function (res, status, xhr) {
+                    location.replace("../business/");
+                }).fail(function (res, status, xhr) {
+                    console.log(res);
                 });
             });
         });
@@ -79,12 +81,12 @@
                 <form method="POST">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="{{ form.username.id_for_label }}">사용자 계정</label>
-                        <input type="text" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" class="form-control" autofocus>
+                        <label for="id_username">사용자 계정</label>
+                        <input type="text" id="id_username" name="username" class="form-control" autofocus>
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.password.id_for_label }}">비밀번호</label>
-                        <input type="password" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" class="form-control">
+                        <label for="id_password">비밀번호</label>
+                        <input type="password" id="id_password" name="password" class="form-control">
                     </div>
                     <div class="text-right">
                         <a href="../register/">회원이 아니십니까?</a>

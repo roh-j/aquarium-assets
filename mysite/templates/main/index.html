@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.extend.css' %}">
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/aquarium.css' %}">
 
@@ -23,13 +23,10 @@
     <!-- Fake Smile (SVG) -->
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
-    <!-- Custom Scripts -->
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/common.js' %}"></script>
 
     <title>Aquarium Assets</title>
-    <script>
-        $(function () {
-        });
-    </script>
 </head>
 
 <body>
@@ -80,7 +77,7 @@
                     <rect mask="url(#water-mask)" fill="url(#water)" x="-300" y="45" width="1200" height="120" opacity="0.3">
                         <animate attributeType="xml" attributeName="x" from="-300" to="0" repeatCount="indefinite" dur="3s" />
                     </rect>
-                    <rect mask="url(#water-mask)" fill="url(#water)" y="40" width="1600" height="120" opacity="0.3">
+                    <rect mask="url(#water-mask)" fill="url(#water)" x="-400" y="40" width="1600" height="120" opacity="0.3">
                         <animate attributeType="xml" attributeName="x" from="-400" to="0" repeatCount="indefinite" dur="4s" />
                     </rect>
                 </g>
@@ -100,7 +97,7 @@
                     <rect mask="url(#water-mask)" fill="url(#water)" x="-300" y="45" width="1200" height="120" opacity="0.3">
                         <animate attributeType="xml" attributeName="x" from="-300" to="0" repeatCount="indefinite" dur="3s" />
                     </rect>
-                    <rect mask="url(#water-mask)" fill="url(#water)" y="40" width="1600" height="120" opacity="0.3">
+                    <rect mask="url(#water-mask)" fill="url(#water)" x="-400" y="40" width="1600" height="120" opacity="0.3">
                         <animate attributeType="xml" attributeName="x" from="-400" to="0" repeatCount="indefinite" dur="4s" />
                     </rect>
                 </g>
@@ -126,17 +123,6 @@
                 </div>
             </div>
         </div>
-        <!--
-        <div class="panel panel-default border-dark max-360 mx-auto">
-            <div class="panel-heading border-dark">플코팜</div>
-            <div class="panel-body">
-                <img src="{% static 'assets/img/partner/Plecofarm.png' %}" class="img-responsive">
-                <hr>
-                <p><a href="https://cafe.naver.com/plecofarm" target="_blank">https://cafe.naver.com/plecofarm</a><br>
-                경기도 수원시 영통구 매탄동 833-3 (지하)</p>
-            </div>
-        </div>
-        -->
         <footer class="my-4 text-muted text-center text-small">
             <p><i>Copyright &copy; roh-j, Licensed under the Apache License</i></p>
         </footer>

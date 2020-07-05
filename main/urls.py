@@ -19,14 +19,8 @@ from . import views
 app_name = 'main'
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('register/', views.register, name='register'),
-    path('register/ajax/insert/', views.register_insert, name='register_insert'),
-    path('login/', views.signin, name='signin'),
-    path('login/ajax/insert/', views.signin_insert, name='signin_insert'),
-    path('logout/', views.signout, name='signout'),
-    path('business/', views.business, name='business'),
-    path('business/register/', views.business_register, name='business_register'),
-    path('business/register/ajax/insert/',
-         views.business_register_insert, name='business_register_insert'),
+    path('', views.IndexView.as_view(), name='IndexView'),
+    path('register/', views.RegisterView.as_view(), name='RegisterView'),
+    path('login/', views.SignInView.as_view(), name='SignInView'),
+    path('logout/', views.SignOutView.as_view(), name='SignOutView'),
 ]

@@ -11,37 +11,39 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.extend.css' %}">
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
-    
+
     <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <!-- Custom Scripts -->
-    
+    <!-- serializeObject -->
+    <script src="{% static 'assets/js/lib/serializeObject.min.js' %}"></script>
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/common.js' %}"></script>
+
     <title>Aquarium Assets</title>
     <script>
         $(function () {
             $("form").submit(function (e) {
                 e.preventDefault();
-                var params = $("form").serialize();
+                var params = $("form").serializeObject();
 
                 $.ajax({
-                    url: "ajax/insert/",
-                    method: "POST",
-                    data: params,
+                    url: "",
+                    method: "post",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify(params),
                     dataType: "json",
-                }).done(function (data) {
-                    if (data["state"] == "success") {
-                        location.replace("../business/");
-                    }
-                    else if (data["state"] == "error") {
-                        $("#alert-modal-body").html(data["messages"]);
-                        $("#alert-modal").modal("show");
-                    }
-                }).fail(function (data) {
+                }).done(function (res, status, xhr) {
+                    location.replace("../business/");
+                }).fail(function (res, status, xhr) {
+                    console.log(res);
                 });
             });
         });
@@ -78,34 +80,34 @@
                 <form method="POST">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="{{ form.username.id_for_label }}">사용자 계정</label>
-                        <input type="text" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" class="form-control" autofocus>
+                        <label for="id_username">사용자 계정</label>
+                        <input type="text" id="id_username" name="username" class="form-control" autofocus>
                     </div>
                     <div class="alert bg-default border-secondary">
                         <i class="fas fa-exclamation-circle"></i> 문자, 숫자, 마침표를 사용할 수 있습니다.
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.first_name.id_for_label }}">성 (이름)</label>
-                    <input type="text" id="{{ form.first_name.id_for_label }}" name="{{ form.first_name.html_name }}" class="form-control">
+                        <label for="id_first_name">성 (이름)</label>
+                        <input type="text" id="id_first_name" name="first_name" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.last_name.id_for_label }}">이름</label>
-                    <input type="text" id="{{ form.last_name.id_for_label }}" name="{{ form.last_name.html_name }}" class="form-control">
+                        <label for="id_last_name">이름</label>
+                        <input type="text" id="id_last_name" name="last_name" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.email.id_for_label }}">이메일 주소</label>
-                    <input type="text" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" class="form-control">
+                        <label for="id_email">이메일 주소</label>
+                        <input type="text" id="id_email" name="email" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.password1.id_for_label }}">비밀번호</label>
-                    <input type="password" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}" class="form-control">
+                        <label for="id_password">비밀번호</label>
+                        <input type="password" id="id_password" name="password" class="form-control">
                     </div>
                     <div class="alert bg-default border-secondary">
                         <i class="fas fa-exclamation-circle"></i> 문자, 숫자, 기호를 조합하여 8자 이상을 사용하세요.
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.password2.id_for_label }}">비밀번호 재확인</label>
-                        <input type="password" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" class="form-control">
+                        <label for="id_confirm_password">비밀번호 재확인</label>
+                        <input type="password" id="id_confirm_password" name="confirm_password" class="form-control">
                     </div>
                     <hr>
                     <div class="btn-group pull-right">

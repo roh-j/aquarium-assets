@@ -12,14 +12,49 @@ h4 {
 .overflow-scroll {
     overflow: scroll;
 }
+.overflow-visible {
+    overflow: visible !important;
+}
+table {
+    white-space: nowrap !important;
+}
+table tbody tr th {
+    text-align: center;
+}
+table.table-align-middle tbody tr th,
+table.table-align-middle tbody tr td {
+    vertical-align: middle !important;
+}
 .max-360 {
     max-width: 360px !important;
 }
 .max-600 {
     max-width: 600px !important;
 }
+.min-160 {
+    min-width: 160px !important;
+}
 .min-180 {
     min-width: 180px !important;
+}
+.min-215 {
+    min-width: 215px !important;
+}
+.min-table-cell {
+    width: 1%;
+    white-space: nowrap;
+}
+.form-control-hidden {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+}
+.table-cell-regular {
+    padding: 8px 15px !important;
 }
 
 /* ui styles */
@@ -378,6 +413,12 @@ h4 {
     .navbar-nav {
         margin: 0 -15px;
         background: #424858;
+    }
+    div.dataTables_wrapper div.dataTables_length,
+    div.dataTables_wrapper div.dataTables_filter,
+    div.dataTables_wrapper div.dataTables_info,
+    div.dataTables_wrapper div.dataTables_paginate {
+        text-align: right !important;
     }
 }
 @media (max-width: 991.98px) {

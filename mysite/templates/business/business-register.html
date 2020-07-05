@@ -11,15 +11,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.extend.css' %}">
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
 
     <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <!-- Custom Scripts -->
+    <!-- serializeObject -->
+    <script src="{% static 'assets/js/lib/serializeObject.min.js' %}"></script>
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/common.js' %}"></script>
 
     <title>Aquarium Assets</title>
     <script>
@@ -27,24 +30,25 @@
             $(".list-group > a").click(function (e) {
                 e.preventDefault();
             });
+
             $("form").submit(function (e) {
                 e.preventDefault();
-                var params = $("form").serialize();
+                var params = $("form").serializeObject();
+                console.log(params);
 
                 $.ajax({
-                    url: "ajax/insert/",
-                    method: "POST",
-                    data: params,
+                    url: "",
+                    method: "post",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify(params),
                     dataType: "json",
-                }).done(function (data) {
-                    if (data["state"] == "success") {
-                        location.replace("../");
-                    }
-                    else if (data["state"] == "error") {
-                        $("#alert-modal-body").html(data["messages"]);
-                        $("#alert-modal").modal("show");
-                    }
-                }).fail(function (data) {
+                }).done(function (res, status, xhr) {
+                    location.replace("../");
+                }).fail(function (res, status, xhr) {
+                    console.log(res);
                 });
             });
         });
@@ -87,36 +91,35 @@
         <div class="panel panel-default border-dark max-360 mx-auto">
             <div class="panel-heading border-dark">비즈니스 추가</div>
             <div class="panel-body">
-                <img src="{% static 'assets/img/icon/Actions-document-sign-icon.png' %}"
-                    class="primary-image img-responsive">
+                <img src="{% static 'assets/img/icon/Actions-document-sign-icon.png' %}" class="primary-image img-responsive">
                 <hr>
                 <form method="POST">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="{{ form.name_of_company.id_for_label }}">상호</label>
-                        <input type="text" id="{{ form.name_of_company.id_for_label }}" name="{{ form.name_of_company.html_name }}" class="form-control" autofocus>
+                        <label for="id_name_of_company">상호</label>
+                        <input type="text" id="id_name_of_company" name="name_of_company" class="form-control" autofocus>
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.registration_number.id_for_label }}">사업자등록번호</label>
-                        <input type="text" id="{{ form.registration_number.id_for_label }}" name="{{ form.registration_number.html_name }}" class="form-control">
+                        <label for="id_registration_number">사업자등록번호</label>
+                        <input type="text" id="id_registration_number" name="registration_number" class="form-control">
                     </div>
                     <div class="alert bg-default border-secondary">
                         <i class="fas fa-exclamation-circle"></i> 000-00-00000 형식으로 사업자등록번호를 입력해주세요.
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.alias.id_for_label }}">영어별칭</label>
-                        <input type="text" id="{{ form.alias.id_for_label }}" name="{{ form.alias.html_name }}" class="form-control">
+                        <label for="id_alias">영어별칭</label>
+                        <input type="text" id="id_alias" name="alias" class="form-control">
                     </div>
                     <div class="alert bg-default border-secondary">
                         <i class="fas fa-exclamation-circle"></i> 비즈니스 회원만 등록가능합니다.
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.address.id_for_label }}">소재지</label>
-                        <input type="text" id="{{ form.address.id_for_label }}" name="{{ form.address.html_name }}" class="form-control">
+                        <label for="id_address">소재지</label>
+                        <input type="text" id="id_address" name="address" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="{{ form.contact.id_for_label }}">대표전화</label>
-                        <input type="text" id="{{ form.contact.id_for_label }}" name="{{ form.contact.html_name }}" class="form-control">
+                        <label for="id_contact">대표전화</label>
+                        <input type="text" id="id_contact" name="contact" class="form-control">
                     </div>
                     <hr>
                     <div class="btn-group pull-right">

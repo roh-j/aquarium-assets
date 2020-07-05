@@ -11,22 +11,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.extend.css' %}">
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
-    
+
     <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <!-- Custom Scripts -->
-    
+    <!-- Scripts -->
+    <script src="{% static 'assets/js/common.js' %}"></script>
+
     <title>Aquarium Assets</title>
-    <script>
-        $(function () {
-            
-        });
-    </script>
 </head>
 
 <body>
@@ -62,7 +58,7 @@
                 {% else %}
                 <div class="list-group">
                     {% for list in business_list %}
-                    <a href="../dashboard/{{ list.id }}/" class="list-group-item">
+                    <a href="../management/{{ list.pk }}/dashboard/" class="list-group-item">
                         <dl class="mb-0">
                             <dt>{{ list.name_of_company }}</dt>
                             <dd>

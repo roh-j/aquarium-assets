@@ -19,7 +19,9 @@ from . import views
 app_name = 'inventory'
 
 urlpatterns = [
-    path('selection/', views.inventory_selection, name='inventory_selection'),
-    path('ordersheet/', views.inventory_ordersheet,
-         name='inventory_ordersheet'),
+    path('selection/', views.SelectionView.as_view(), name='SelectionView'),
+    path('price/', views.PriceView.as_view(), name='PriceView'),
+    path('selection/store-layout/', views.StoreLayoutView.as_view(), name='StoreLayoutView'),
+    path('selection/aquarium-section/', views.AquariumSectionView.as_view(), name='AquariumSectionView'),
+    path('selection/aquarium/', views.AquariumView.as_view(), name='AquariumView'),
 ]

@@ -37,12 +37,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',  # rest framework
     'main.apps.MainConfig',  # main app
-    'store.apps.StoreConfig',  # store app
+    'business.apps.BusinessConfig',  # business app
+    'management.apps.ManagementConfig',  # management app
     'dashboard.apps.DashboardConfig',  # dashboard app
-    'customer.apps.CustomerConfig',  # customer app
+    'store.apps.StoreConfig',  # store app
     'inventory.apps.InventoryConfig',  # inventory app
+    'customer.apps.CustomerConfig',  # customer app
     'accounting.apps.AccountingConfig',  # accounting app
+    'page.apps.PageConfig',  # page app
 ]
 
 MIDDLEWARE = [
@@ -124,7 +128,22 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
+
 STATICFILES_DIRS = [
-    STATIC_DIR,
+    os.path.join(os.path.dirname(__file__), 'static'),
 ]
+
+
+# Django Rest Framework Renderer
+# https://www.django-rest-framework.org/api-guide/renderers/
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+}

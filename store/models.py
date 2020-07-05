@@ -1,11 +1,10 @@
 from django.db import models
-from main.models import Business
+from business.models import Business
 
 # Create your models here.
 
 
 class StorageRoom(models.Model):
-    id = models.AutoField(primary_key=True)
     business = models.ForeignKey(
         Business,
         on_delete=models.CASCADE
@@ -16,11 +15,10 @@ class StorageRoom(models.Model):
     objects = models.Manager()  # VS Code 버그 해결을 위한 코드
 
     def __str__(self):
-        return str(self.id)
+        return self.storage_room_name
 
 
 class AquariumSection(models.Model):
-    id = models.AutoField(primary_key=True)
     storage_room = models.ForeignKey(
         StorageRoom,
         on_delete=models.CASCADE
@@ -34,32 +32,10 @@ class AquariumSection(models.Model):
     objects = models.Manager()  # VS Code 버그 해결을 위한 코드
 
     def __str__(self):
-        return str(self.id)
-
-
-class Aquarium(models.Model):
-    id = models.AutoField(primary_key=True)
-    aquarium_section = models.ForeignKey(
-        AquariumSection,
-        on_delete=models.CASCADE
-    )
-    row = models.IntegerField(default=0)
-    column = models.IntegerField(default=0)
-    alias = models.CharField(max_length=20)
-    state = models.CharField(max_length=20)
-    memo = models.TextField()
-    ph = models.FloatField(default=7.0)
-    config_date = models.DateTimeField()
-    modified_date = models.DateTimeField()
-
-    objects = models.Manager()  # VS Code 버그 해결을 위한 코드
-
-    def __str__(self):
-        return str(self.id)
+        return self.section_name
 
 
 class StoreLayout(models.Model):
-    id = models.AutoField(primary_key=True)
     storage_room = models.ForeignKey(
         StorageRoom,
         on_delete=models.CASCADE
@@ -74,4 +50,24 @@ class StoreLayout(models.Model):
     objects = models.Manager()  # VS Code 버그 해결을 위한 코드
 
     def __str__(self):
-        return str(self.id)
+        return str(self.pk)
+
+
+class Aquarium(models.Model):
+    aquarium_section = models.ForeignKey(
+        AquariumSection,
+        on_delete=models.CASCADE
+    )
+    row = models.IntegerField(default=0)
+    column = models.IntegerField(default=0)
+    alias = models.CharField(max_length=20, null=True)
+    state = models.CharField(max_length=20, null=True)
+    memo = models.TextField(null=True)
+    ph = models.FloatField(default=7.0, null=True)
+    config_date = models.DateTimeField()
+    modified_date = models.DateTimeField()
+
+    objects = models.Manager()  # VS Code 버그 해결을 위한 코드
+
+    def __str__(self):
+        return str(self.pk)
