@@ -5,9 +5,6 @@ $(function () {
     $("#main-menu").metisMenu();
     $(".nav-second-level").removeClass("d-none");
 
-    standby_store_layout();
-    standby_aquarium();
-
     $("#redo-store-layout").click(function (e) {
         $(".nav-tabs a[href='#store-layout']").tab("show");
     });
@@ -26,12 +23,14 @@ $(function () {
             storage_room_id = $("div.media > span.data-binding", this).data("storage-room-id");
             storage_room_name = $("div.media > span.data-binding", this).data("storage-room-name");
 
-            draw_store_layout("../store/ajax/async-from-inventory/store-layout/");
+            draw_store_layout("../store/ajax/async-from-inventory/store-layout/", function () {
+                $(".nav-tabs a[href='#store-layout']").tab("show");
+            });
         }
     });
 });
 
-var draw_store_layout = function (url) {
+var draw_store_layout = function (url, callback) {
     var params = {
         "csrfmiddlewaretoken": CSRF_TOKEN,
         "FK": storage_room_id
@@ -96,11 +95,14 @@ var draw_store_layout = function (url) {
             }
             $("rect.store-layout-button").on("click", function () {
                 aquarium_section_id = $(this).data("store-layout-section-id");
-                draw_aquarium("../store/ajax/async-from-inventory/aquarium-section/");
+                draw_aquarium("../store/ajax/async-from-inventory/aquarium-section/", function () {
+                    $(".nav-tabs a[href='#aquarium']").tab("show");
+                });
             });
 
-            // Complete
-            $(".nav-tabs a[href='#store-layout']").tab("show");
+            if (callback) {
+                callback();
+            }
         }
         else {
             alert("SVG를 지원하지 않는 브라우저입니다.");
@@ -109,7 +111,7 @@ var draw_store_layout = function (url) {
     });
 }
 
-var draw_aquarium = function (url) {
+var draw_aquarium = function (url, callback) {
     var params = {
         "csrfmiddlewaretoken": CSRF_TOKEN,
         "PK": aquarium_section_id
@@ -150,8 +152,9 @@ var draw_aquarium = function (url) {
                 }
             }
 
-            // Complete
-            $(".nav-tabs a[href='#aquarium']").tab("show");
+            if (callback) {
+                callback();
+            }
         }
         else {
             alert("SVG를 지원하지 않는 브라우저입니다.");

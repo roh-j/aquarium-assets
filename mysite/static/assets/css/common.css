@@ -48,6 +48,11 @@ h4 {
 .navbar-menu > ul > li > a {
     color: #FFF !important;
 }
+.nav.nav-tabs > li.disabled > a {
+    pointer-events: none;
+    color: #555;
+    cursor: default;
+}
 
 /* DASHBOARD STYLES */
 

@@ -10,8 +10,6 @@ var aquarium_num_of_columns = null;
 $(function () {
     $("#main-menu").metisMenu();
     $(".nav-second-level").removeClass("d-none");
-    
-    standby_store_layout();
 
     $("#storage-room-edit-modal").on("hide.bs.modal", function (e) {
         $("#storage-room-edit-modal-title").empty();
@@ -36,18 +34,23 @@ $(function () {
 
     $("#move-aquarium-section").click(function (e) {
         if (storage_room_id) {
-            $(".nav-tabs a[href='#aquarium-section']").tab("show");
+            async_aquarium_section(function () {
+                $(".nav-tabs a[href='#aquarium-section']").tab("show");
+            });
         }
     });
 
     $("#move-store-layout").click(function (e) {
         if (section_id && section_color) {
-            $(".nav-tabs a[href='#store-layout']").tab("show");
+            draw_store_layout("ajax/async/store-layout/", function () {
+                $(".nav-tabs a[href='#store-layout']").tab("show");
+            });
         }
     });
 
     $("#redo-aquarium-section").click(function (e) {
         if (section_id && section_color) {
+            $("#store-layout-canvas").empty();
             $(".nav-tabs a[href='#aquarium-section']").tab("show");
         }
     });
@@ -122,25 +125,14 @@ $(function () {
                 "<span class='text-primary pull-right'><i class='fas fa-check'></i></span>"
             );
 
-            $("input#id_section_name").attr("readonly", false);
-            $("input#id_aquarium_num_of_rows").attr("readonly", false);
-            $("input#id_aquarium_num_of_columns").attr("readonly", false);
-
             storage_room_id = $("div.media > span.data-binding", this).data("storage-room-id");
             section_id = null;
             section_color = null;
 
-            $("#storage-room-modify").removeAttr("disabled");
-            $("#move-aquarium-section").removeAttr("disabled");
-            $("#aquarium-section-register").removeAttr("disabled");
-
-            $("#aquarium-section-modify").attr("disabled", "disabled");
-            $("#move-store-layout").attr("disabled", "disabled");
-
             storage_room_name = $("div.media > span.data-binding", this).data("storage-room-name");
 
-            async_aquarium_section();
-            standby_store_layout();
+            $("#storage-room-modify").removeAttr("disabled");
+            $("#move-aquarium-section").removeAttr("disabled");
         }
     });
 
@@ -210,8 +202,7 @@ $(function () {
                 if (data["state"] == "success") {
                     $("#aquarium-section-edit-modal").modal("hide");
                     $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
-                        async_aquarium_section();
-                        standby_store_layout();
+                        async_aquarium_section(null);
                     });
                 }
                 else if (data["state"] == "error") {
@@ -235,8 +226,7 @@ $(function () {
                 if (data["state"] == "success") {
                     $("#aquarium-section-edit-modal").modal("hide");
                     $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
-                        async_aquarium_section();
-                        standby_store_layout();
+                        async_aquarium_section(null);
                     });
                 }
                 else if (data["state"] == "error") {
@@ -288,8 +278,7 @@ $(function () {
                 if (data["state"] == "success") {
                     $("#aquarium-section-edit-modal").modal("hide");
                     $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
-                        async_aquarium_section();
-                        standby_store_layout();
+                        async_aquarium_section(null);
                     });
                 }
                 else if (data["state"] == "error") {
@@ -300,7 +289,7 @@ $(function () {
     });
 });
 
-var async_aquarium_section = function () {
+var async_aquarium_section = function (callback) {
     var params = { "csrfmiddlewaretoken": CSRF_TOKEN, "FK": storage_room_id };
 
     $.ajax({
@@ -364,22 +353,24 @@ var async_aquarium_section = function () {
                     section_id = $("div.media > span.data-binding", this).data("section-id");
                     section_color = $("div.media > span.data-binding", this).data("section-color");
 
-                    $("#aquarium-section-modify").removeAttr("disabled");
-                    $("#move-store-layout").removeAttr("disabled");
-
                     section_name = $("div.media > span.data-binding", this).data("section-name");
                     aquarium_num_of_rows = $("div.media > span.data-binding", this).data("aquarium-num-of-rows");
                     aquarium_num_of_columns = $("div.media > span.data-binding", this).data("aquarium-num-of-columns");
 
-                    draw_store_layout("ajax/async/store-layout/");
+                    $("#aquarium-section-modify").removeAttr("disabled");
+                    $("#move-store-layout").removeAttr("disabled");
                 }
             });
+        }
+
+        if (callback) {
+            callback();
         }
     }).fail(function (data) {
     });
 }
 
-var draw_store_layout = function (url) {
+var draw_store_layout = function (url, callback) {
     var params = {
         "csrfmiddlewaretoken": CSRF_TOKEN,
         "FK": storage_room_id,
@@ -448,6 +439,7 @@ var draw_store_layout = function (url) {
                     }
                 }
             }
+
             $("rect.store-layout-button").on("click", function () {
                 if ($(this).data("store-layout-selected") && $(this).data("store-layout-modify-permission")) {
                     var params = {
@@ -462,7 +454,7 @@ var draw_store_layout = function (url) {
                         dataType: "json",
                     }).done(function (data) {
                         if (data["state"] == "success") {
-                            draw_store_layout("ajax/async/store-layout/");
+                            draw_store_layout("ajax/async/store-layout/", null);
                         }
                         else if (data["state"] == "error") {
                         }
@@ -477,12 +469,17 @@ var draw_store_layout = function (url) {
                     save_store_layout($(this).data("store-layout-row"), $(this).data("store-layout-column"));
                 }
             });
+
             $("#store-layout-console").html(
                 "<i class='fas fa-circle' style='color: " + section_color + ";'></i> 섹션을 추가 / 삭제합니다."
             );
         }
         else {
             alert("SVG를 지원하지 않는 브라우저입니다.");
+        }
+
+        if (callback) {
+            callback();
         }
     }).fail(function (data) {
     });
@@ -504,7 +501,7 @@ var save_store_layout = function (row, column) {
         dataType: "json",
     }).done(function (data) {
         if (data["state"] == "success") {
-            draw_store_layout("ajax/async/store-layout/");
+            draw_store_layout("ajax/async/store-layout/", null);
         }
         else if (data["state"] == "error") {
         }
