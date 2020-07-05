@@ -39,26 +39,26 @@
 </head>
 
 <body>
-    <div id="customer-register-modal" class="modal fade" tabindex="-1">
+    <div id="recipient-register-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h5 class="modal-title">받는 분</h5>
                 </div>
-                <form id="form-customer-register" method="POST">
+                <form id="form-recipient-register" method="POST">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="id_customer_name" class="control-label">고객명</label>
                             <input type="text" class="form-control" id="id_customer_name" name="customer_name">
                         </div>
                         <div class="form-group">
-                            <label for="id_address" class="control-label">주소</label>
-                            <input type="text" class="form-control" id="id_address" name="address">
-                        </div>
-                        <div class="form-group">
                             <label for="id_contact" class="control-label">연락처</label>
                             <input type="text" class="form-control" id="id_contact" name="contact">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_address" class="control-label">주소</label>
+                            <input type="text" class="form-control" id="id_address" name="address">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -275,16 +275,14 @@
                             </dl>
                         </div>
                         <hr>
-                        <div class="radio-vertical" style="padding-bottom: 15px">
+                        <div class="text-right">
                             <div class="pretty p-default p-round">
                                 <input type="radio" name="order_type" value="pickup" checked>
                                 <div class="state p-warning">
                                     <label>매장</label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="radio-vertical">
-                            <div class="pretty p-default p-round">
+                            <div class="pretty p-default p-round mr-0">
                                 <input type="radio" name="order_type" value="delivery">
                                 <div class="state p-warning">
                                     <label>택배</label>
@@ -295,7 +293,7 @@
                         <div class="text-right">
                             <div class="btn-group mr-3">
                                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#customer-modal">기존 고객</button>
-                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#customer-register-modal">신규 고객</button>
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#recipient-register-modal">신규 고객</button>
                             </div>
                             <button type="button" id="order-register" class="btn btn-default">등록</button>
                         </div>

@@ -60,12 +60,6 @@ table tbody tr td {
     content: "•";
     margin-right: 5px;
 }
-.radio-vertical {
-    text-align: right;
-}
-.radio-vertical .pretty {
-    margin-right: 0;
-}
 /* ui styles */
 .btn,
 .label,

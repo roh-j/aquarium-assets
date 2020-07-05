@@ -9,8 +9,8 @@ var product_table = null;
 var cart_table = null;
 
 var params = {};
+var recipient = {};
 var cart = [];
-var customer = {};
 
 $(function () {
 
@@ -24,10 +24,21 @@ $(function () {
 
     $('#order-register').on('click', function () {
         params['cart'] = cart;
-        params['customer'] = customer;
+        params['recipient'] = recipient;
         params['order_type'] = $('input:radio[name=order_type]:checked').val();
 
-        console.log(params)
+        $.ajax({
+            url: '',
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(params),
+            dataType: 'json',
+        }).done(function (data, status, xhr) {
+        }).fail(function (res, status, xhr) {
+        });
     });
 
     $('#add-order').on('click', function () {
@@ -52,12 +63,12 @@ $(function () {
         $('#view-order-type').text(value);
     });
 
-    $('#form-customer-register').on('submit', function (e) {
+    $('#form-recipient-register').on('submit', function (e) {
         e.preventDefault();
 
-        customer['customer_name'] = $('#id_customer_name').val();
-        customer['contact'] = $('#id_contact').val();
-        customer['address'] = $('#id_address').val();
+        recipient['customer_name'] = $('#id_customer_name').val();
+        recipient['contact'] = $('#id_contact').val();
+        recipient['address'] = $('#id_address').val();
 
         $('#view-customer-name').text($('#id_customer_name').val());
         $('#view-contact').text($('#id_contact').val());
@@ -267,7 +278,7 @@ var async_product = function (callback) {
                         <th>\
                             <span class="data-bind"\
                                 data-id="' + (product_table.rows().count() + 1) + '"\
-                                data-unit-price-id="' + data[i]['unit_price'] + '"\
+                                data-unit-price="' + data[i]['unit_price'] + '"\
                                 data-species="' + data[i]['creature__species'] + '"\
                                 data-breed="' + data[i]['creature__breed'] + '"\
                                 data-remark="' + escape_html(data[i]['remark']) + '"\
@@ -275,7 +286,7 @@ var async_product = function (callback) {
                                 data-max-size="' + data[i]['unit_price__max_size'] + '"\
                                 data-stages-of-development="' + data[i]['unit_price__stages_of_development'] + '"\
                                 data-unit="' + data[i]['unit'] + '"\
-                                data-unit-price="' + data[i]['unit_price__price'] + '"\
+                                data-price="' + data[i]['unit_price__price'] + '"\
                                 data-remaining-quantity="' + data[i]['remaining_quantity'] + '"></span>\
                             ' + (product_table.rows().count() + 1) + '\
                         </th>\
@@ -313,7 +324,7 @@ var async_product = function (callback) {
             if (!overlap) {
                 var data = {
                     'id': product.data('id'),
-                    'unit_price_id': product.data('unit-price-id'),
+                    'unit_price': product.data('unit-price'),
                     'species': product.data('species'),
                     'breed': product.data('breed'),
                     'remark': product.data('remark'),
@@ -321,7 +332,7 @@ var async_product = function (callback) {
                     'max_size': product.data('max-size'),
                     'stages_of_development': product.data('stages-of-development'),
                     'unit': product.data('unit'),
-                    'unit_price': product.data('unit-price'),
+                    'price': product.data('price'),
                     'quantity': 1,
                     'remaining_quantity': product.data('remaining-quantity'),
                 };
@@ -349,7 +360,7 @@ var async_product = function (callback) {
                     if (!overlap) {
                         var data = {
                             'id': product.data('id'),
-                            'unit_price_id': product.data('unit-price-id'),
+                            'unit_price': product.data('unit_price'),
                             'species': product.data('species'),
                             'breed': product.data('breed'),
                             'remark': product.data('remark'),
@@ -357,7 +368,7 @@ var async_product = function (callback) {
                             'max_size': product.data('max-size'),
                             'stages_of_development': product.data('stages-of-development'),
                             'unit': product.data('unit'),
-                            'unit_price': product.data('unit-price'),
+                            'price': product.data('price'),
                             'quantity': 1,
                             'remaining_quantity': product.data('remaining-quantity'),
                         };
@@ -411,7 +422,7 @@ var add_to_cart = function (callback) {
                 <tr>\
                     <th>\
                         <span class="data-bind"\
-                            data-unit-price-id="' + cart[i]['unit_price_id'] + '"\
+                            data-unit-price="' + cart[i]['unit_price'] + '"\
                             data-species="' + cart[i]['species'] + '"\
                             data-breed="' + cart[i]['breed'] + '"\
                             data-remark="' + escape_html(cart[i]['remark']) + '"\
@@ -419,7 +430,7 @@ var add_to_cart = function (callback) {
                             data-max-size="' + cart[i]['max_size'] + '"\
                             data-stages-of-development="' + cart[i]['stages_of_development'] + '"\
                             data-unit="' + cart[i]['unit'] + '"\
-                            data-unit-price="' + cart[i]['unit_price'] + '"\
+                            data-price="' + cart[i]['price'] + '"\
                             data-quantity="' + cart[i]['quantity'] + '"\
                             data-remaining-quantity="' + cart[i]['remaining_quantity'] + '"></span>\
                         ' + (cart_table.rows().count() + 1) + '\
@@ -430,7 +441,7 @@ var add_to_cart = function (callback) {
                     <td>' + stages_of_development + '</td>\
                     <td>' + unit + '</td>\
                     <td>' + cart[i]['quantity'] + '</td>\
-                    <td>' + (parseInt(cart[i]['unit_price']) * parseInt(cart[i]['quantity'])).toLocaleString() + ' 원</td>\
+                    <td>' + (parseInt(cart[i]['price']) * parseInt(cart[i]['quantity'])).toLocaleString() + ' 원</td>\
                     <td class="min col-btn">\
                         <div class="btn-group d-flex">\
                             <button type="button" class="btn btn-default"><i class="fas fa-pen fa-fw"></i></button>\
@@ -440,7 +451,7 @@ var add_to_cart = function (callback) {
                 </tr>\
             ')
         ).draw();
-        payment += (parseInt(cart[i]['unit_price']) * parseInt(cart[i]['quantity']));
+        payment += (parseInt(cart[i]['price']) * parseInt(cart[i]['quantity']));
     }
     $('#view-payment').text(payment.toLocaleString() + ' 원');
     toastr.remove();
