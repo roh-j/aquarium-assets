@@ -38,7 +38,7 @@
                         location.replace("../business/");
                     }
                     else if (data["state"] == "error") {
-                        $("#alert-modal-content").html(data["messages"]);
+                        $("#alert-modal-body").html(data["messages"]);
                         $("#alert-modal").modal("show");
                     }
                 }).fail(function (data) {
@@ -53,9 +53,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 id="alert-modal-title" class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title"><i class="fas fa-exclamation-circle text-primary"></i> 알림</h5>
                 </div>
-                <div id="alert-modal-content" class="modal-body text-center"></div>
+                <div id="alert-modal-body" class="modal-body text-center"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
                 </div>

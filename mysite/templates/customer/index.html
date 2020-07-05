@@ -14,7 +14,7 @@
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <!-- metisMenu (A jQuery menu plugin) -->
-    <!--<link rel="stylesheet" href="https://unpkg.com/metismenu/dist/metisMenu.min.css">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
     <!-- Custom Styles -->
@@ -33,7 +33,7 @@
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <!-- metisMenu (A jQuery menu plugin) -->
-    <!--<script src="https://unpkg.com/metismenu"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
     <!-- Textarea Autosize -->
     <script src="{% static 'assets/js/lib/autosize.min.js' %}"></script>
     <!-- Custom Scripts -->
@@ -42,6 +42,7 @@
     <script>
         $(function () {
             autosize($(".write-message"));
+            //$("#main-menu").metisMenu({ toggle: false });
         });
     </script>
 </head>
@@ -62,13 +63,18 @@
         </nav>
         <nav class="navbar-default navbar-side">
             <div class="collapse sidebar-collapse">
-                <ul class="nav">
-                    <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}"
-                            class="primary-image img-responsive"></li>
+                <ul id="main-menu" class="nav">
+                    <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
                     <li><a href="../"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../store/"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
                     <li><a href="../inventory/"><i class="fas fa-archive fa-fw"></i>재고관리</a></li>
-                    <li><a class="active-menu" href=""><i class="fas fa-user-friends fa-fw"></i>고객관리</a></li>
+                    <li>
+                        <a href="#"><i class="fas fa-user-friends fa-fw"></i>고객관리 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li><a href=""><i class="fas fa-list-ul fa-fw"></i>고객 목록</a></li>
+                            <li><a href="service/"><i class="fas fa-comment-dots fa-fw"></i>고객 문의</a></li>
+                        </ul>
+                    </li>
                     <li><a href="../accounting/"><i class="fas fa-chart-bar fa-fw"></i>매출관리</a></li>
                     <li><a href="../../../business/"><i class="fas fa-chart-bar fa-fw"></i>비즈니스</a></li>
                     <li><a href="../../../logout/"><i class="fas fa-sign-out-alt fa-fw"></i>로그아웃</a></li>
@@ -90,9 +96,49 @@
                             <li class="active"><a href="#customer-list" data-toggle="tab">고객 목록</a></li>
                             <li><a href="#customer-detail" data-toggle="tab">상세 정보</a></li>
                             <li><a href="#customer-service" data-toggle="tab">고객 문의</a></li>
+                            <li><a href="#customer-service-chat" data-toggle="tab">대화</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="customer-list">
+                                <div class="panel panel-default border-dark max-600 mx-auto">
+                                    <div class="panel-heading border-dark">고객 목록</div>
+                                    <div class="panel-body">
+                                        <button type="button" id="customer-register" class="btn btn-default"><i class="fas fa-plus"></i> 고객 추가</button>
+                                        <hr>
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item">
+                                                <div class="media">
+                                                    <div class="media-left">
+                                                        <img class="media-object" src="{% static 'assets/img/icon/Apps-system-users-icon.png' %}">
+                                                    </div>
+                                                    <div class="media-body w-100">
+                                                        <p class="font-weight-bold">철수</p>
+                                                        <i class="fas fa-address-book fa-fw text-secondary"></i> 010-1234-1234
+                                                        <i class="fas fa-globe-asia fa-fw text-secondary"></i> 서울특별시
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="list-group-item">
+                                                <div class="media">
+                                                    <div class="media-left">
+                                                        <img class="media-object" src="{% static 'assets/img/icon/Apps-system-users-icon.png' %}">
+                                                    </div>
+                                                    <div class="media-body w-100">
+                                                        <p class="font-weight-bold">영희</p>
+                                                        <i class="fas fa-address-book fa-fw text-secondary"></i> 010-1234-1234
+                                                        <i class="fas fa-globe-asia fa-fw text-secondary"></i> 서울특별시
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer bg-white clearfix">
+                                        <div class="btn-group pull-right">
+                                            <button type="button" id="customer-modify" class="btn btn-default" disabled="disabled">변경</button>
+                                            <button type="button" id="move-customer-detail" class="btn btn-default" disabled="disabled">상세 정보</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane" id="customer-detail">
                             </div>
@@ -100,36 +146,34 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-md-12">
                                         <div class="panel panel-default border-dark">
-                                            <div class="panel-heading border-dark">고객 목록</div>
+                                            <div class="panel-heading border-dark">대화 목록</div>
                                             <div class="panel-body">
                                                 <div class="list-group">
                                                     <a href="#" class="list-group-item">
                                                         <div class="media">
                                                             <div class="media-left">
-                                                                <img class="media-object"
-                                                                    src="{% static 'assets/img/icon/Apps-system-users-icon.png' %}">
+                                                                <img class="media-object" src="{% static 'assets/img/icon/Apps-system-users-icon.png' %}">
                                                             </div>
-                                                            <div class="media-body w-100">
-                                                                <p class="font-weight-bold">철수</p>
-                                                                <i class="fas fa-address-book fa-fw text-secondary"></i>
-                                                                010-1234-1234
-                                                                <i class="fas fa-globe-asia fa-fw text-secondary"></i>
-                                                                서울특별시
+                                                            <div class="chat-body media-body w-100">
+                                                                <div class="mb-3 clearfix">
+                                                                    <span class="font-weight-bold">윤우진</span>
+                                                                    <small class="pull-right text-muted">12 mins ago</small>
+                                                                </div>
+                                                                <p class="text-muted">구피 구매가능한가요?</p>
                                                             </div>
                                                         </div>
                                                     </a>
                                                     <a href="#" class="list-group-item">
                                                         <div class="media">
                                                             <div class="media-left">
-                                                                <img class="media-object"
-                                                                    src="{% static 'assets/img/icon/Apps-system-users-icon.png' %}">
+                                                                <img class="media-object" src="{% static 'assets/img/icon/Apps-system-users-icon.png' %}">
                                                             </div>
-                                                            <div class="media-body w-100">
-                                                                <p class="font-weight-bold">영희</p>
-                                                                <i class="fas fa-address-book fa-fw text-secondary"></i>
-                                                                010-1234-1234
-                                                                <i class="fas fa-globe-asia fa-fw text-secondary"></i>
-                                                                서울특별시
+                                                            <div class="chat-body media-body w-100">
+                                                                <div class="mb-3 clearfix">
+                                                                    <span class="font-weight-bold">영희</span>
+                                                                    <small class="pull-right text-muted">12 mins ago</small>
+                                                                </div>
+                                                                <p class="text-muted">구매하겠습니다!</p>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -144,10 +188,7 @@
                                                 <ul class="media-list chat-box">
                                                     <li class="media">
                                                         <div class="media-left">
-                                                            <a href="#">
-                                                                <img class="media-object"
-                                                                    src="{% static 'assets/img/icon/Apps-system-users-icon.png' %}">
-                                                            </a>
+                                                            <a href="#"><img class="media-object" src="{% static 'assets/img/icon/Apps-system-users-icon.png' %}"></a>
                                                         </div>
                                                         <div class="chat-body media-body w-100">
                                                             <div class="mb-3 clearfix">
@@ -177,16 +218,14 @@
                                                         </div>
                                                         <div class="media-right">
                                                             <a href="#">
-                                                                <img class="media-object"
-                                                                    src="{% static 'assets/img/icon/Places-user-identity-icon-64x64.png' %}">
+                                                                <img class="media-object" src="{% static 'assets/img/icon/Places-user-identity-icon-64x64.png' %}">
                                                             </a>
                                                         </div>
                                                     </li>
                                                     <li class="media">
                                                         <div class="media-left">
                                                             <a href="#">
-                                                                <img class="media-object"
-                                                                    src="{% static 'assets/img/icon/Apps-system-users-icon.png' %}">
+                                                                <img class="media-object" src="{% static 'assets/img/icon/Apps-system-users-icon.png' %}">
                                                             </a>
                                                         </div>
                                                         <div class="chat-body media-body w-100">
@@ -205,18 +244,16 @@
                                                 </ul>
                                             </div>
                                             <div class="panel-footer bg-white clearfix">
-                                                <textarea class="write-message" placeholder="내용을 입력하세요."
-                                                    rows="2"></textarea>
+                                                <textarea class="write-message" placeholder="내용을 입력하세요." rows="2"></textarea>
                                                 <div class="pull-right mt-3">
-                                                    <button type="submit" class="btn btn-primary"><i
-                                                            class="fas fa-paper-plane"></i>
-                                                        전송</button>
+                                                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> 전송</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="tab-pane" id="customer-service-chat"></div>
                         </div>
                     </div>
                 </div>

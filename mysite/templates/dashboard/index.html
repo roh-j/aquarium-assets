@@ -14,7 +14,7 @@
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <!-- metisMenu (A jQuery menu plugin) -->
-    <!--<link rel="stylesheet" href="https://unpkg.com/metismenu/dist/metisMenu.min.css">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
     <!-- Custom Styles -->
@@ -33,10 +33,16 @@
     <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <!-- metisMenu (A jQuery menu plugin) -->
-    <!--<script src="https://unpkg.com/metismenu"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
     <!-- Custom Scripts -->
 
     <title>Aquarium Assets</title>
+    <script>
+        $(function () {
+            $("#main-menu").metisMenu();
+            $(".nav-second-level").removeClass("d-none");
+        });
+    </script>
 </head>
 
 <body>
@@ -55,12 +61,18 @@
         </nav>
         <nav class="navbar-default navbar-side">
             <div class="collapse sidebar-collapse">
-                <ul class="nav">
+                <ul id="main-menu" class="nav">
                     <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
-                    <li><a class="active-menu" href=""><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
+                    <li><a href="" class="active-menu"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="store/"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
                     <li><a href="inventory/"><i class="fas fa-archive fa-fw"></i>재고관리</a></li>
-                    <li><a href="customer/"><i class="fas fa-user-friends fa-fw"></i>고객관리</a></li>
+                    <li>
+                        <a href="#"><i class="fas fa-user-friends fa-fw"></i>고객관리 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level d-none">
+                            <li><a href="customer/"><i class="fas fa-list-ul fa-fw"></i>고객 목록</a></li>
+                            <li><a href="customer/service/"><i class="fas fa-comment-dots fa-fw"></i>고객 문의</a></li>
+                        </ul>
+                    </li>
                     <li><a href="accounting/"><i class="fas fa-chart-bar fa-fw"></i>매출관리</a></li>
                     <li><a href="../../business/"><i class="fas fa-chart-bar fa-fw"></i>비즈니스</a></li>
                     <li><a href="../../logout/"><i class="fas fa-sign-out-alt fa-fw"></i>로그아웃</a></li>

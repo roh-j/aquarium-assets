@@ -8,6 +8,9 @@ var aquarium_num_of_rows = null;
 var aquarium_num_of_columns = null;
 
 $(function () {
+    $("#main-menu").metisMenu();
+    $(".nav-second-level").removeClass("d-none");
+    
     standby_store_layout();
 
     $("#storage-room-edit-modal").on("hide.bs.modal", function (e) {
@@ -49,12 +52,12 @@ $(function () {
         }
     });
 
-    $("#storage-room-edit").click(function (e) {
+    $("#storage-room-register").click(function (e) {
         $("#storage-room-edit-modal-title").html(
             "<i class='fas fa-exclamation-circle text-primary'></i> 창고 등록"
         );
         $("#storage-room-edit-modal-footer").html(
-            "<button type='button' class='btn btn-primary' data-edit-type='submit'>등록</button>"
+            "<button type='submit' class='btn btn-primary' data-edit-type='insert'>등록</button>"
         );
         $("#storage-room-edit-modal").modal("show");
     });
@@ -69,19 +72,19 @@ $(function () {
             $("#storage-room-edit-modal-footer").html(
                 "<div class='btn-group'>\
                     <button type='button' class='btn btn-default' data-edit-type='delete'><i class='far fa-trash-alt'></i> 창고 삭제</button>\
-                    <button type='button' class='btn btn-primary' data-edit-type='update'>변경</button>\
+                    <button type='submit' class='btn btn-primary' data-edit-type='update'>변경</button>\
                 </div>"
             );
             $("#storage-room-edit-modal").modal("show");
         }
     });
 
-    $("#aquarium-section-edit").click(function (e) {
+    $("#aquarium-section-register").click(function (e) {
         $("#aquarium-section-edit-modal-title").html(
             "<i class='fas fa-exclamation-circle text-primary'></i> 섹션 / 수조 등록"
         );
         $("#aquarium-section-edit-modal-footer").html(
-            "<button type='button' class='btn btn-primary' data-edit-type='submit'>등록</button>"
+            "<button type='submit' class='btn btn-primary' data-edit-type='insert'>등록</button>"
         );
         $("#aquarium-section-edit-modal").modal("show");
     });
@@ -100,7 +103,7 @@ $(function () {
             $("#aquarium-section-edit-modal-footer").html(
                 "<div class='btn-group'>\
                     <button type='button' class='btn btn-default' data-edit-type='delete'><i class='far fa-trash-alt'></i> 섹션 삭제</button>\
-                    <button type='button' class='btn btn-primary' data-edit-type='update'>변경</button>\
+                    <button type='submit' class='btn btn-primary' data-edit-type='update'>변경</button>\
                 </div>"
             );
             $("#aquarium-section-edit-modal").modal("show");
@@ -129,7 +132,7 @@ $(function () {
 
             $("#storage-room-modify").removeAttr("disabled");
             $("#move-aquarium-section").removeAttr("disabled");
-            $("#aquarium-section-edit").removeAttr("disabled");
+            $("#aquarium-section-register").removeAttr("disabled");
 
             $("#aquarium-section-modify").attr("disabled", "disabled");
             $("#move-store-layout").attr("disabled", "disabled");
@@ -141,8 +144,10 @@ $(function () {
         }
     });
 
-    $(document).on("click", "#storage-room-edit-modal-footer button", function (e) {
-        if ($(this).data("edit-type") == "submit") {
+    $(document).on("submit", "form#storage-room-edit-form", function (e) {
+        e.preventDefault();
+
+        if ($("button[type=submit]", this).data("edit-type") == "insert") {
             var params = $("form#storage-room-edit-form").serialize();
 
             $.ajax({
@@ -162,7 +167,7 @@ $(function () {
             }).fail(function (data) {
             });
         }
-        else if ($(this).data("edit-type") == "update") {
+        else if ($("button[type=submit]", this).data("edit-type") == "update") {
             var params = $("form#storage-room-edit-form").serializeArray();
             params.push({
                 name: "PK", value: storage_room_id
@@ -185,7 +190,64 @@ $(function () {
             }).fail(function (data) {
             });
         }
-        else if ($(this).data("edit-type") == "delete") {
+    });
+
+    $(document).on("submit", "form#aquarium-section-edit-form", function (e) {
+        e.preventDefault();
+
+        if ($("button[type=submit]", this).data("edit-type") == "insert") {
+            var params = $("form#aquarium-section-edit-form").serializeArray();
+            params.push({
+                name: "FK", value: storage_room_id
+            });
+
+            $.ajax({
+                url: "ajax/insert/aquarium-section/",
+                method: "POST",
+                data: params,
+                dataType: "json",
+            }).done(function (data) {
+                if (data["state"] == "success") {
+                    $("#aquarium-section-edit-modal").modal("hide");
+                    $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
+                        async_aquarium_section();
+                        standby_store_layout();
+                    });
+                }
+                else if (data["state"] == "error") {
+                }
+            }).fail(function (data) {
+            });
+        }
+        else if ($("button[type=submit]", this).data("edit-type") == "update") {
+            var params = $("form#aquarium-section-edit-form").serializeArray();
+            params.push(
+                { name: "PK", value: section_id },
+                { name: "FK", value: storage_room_id }
+            );
+
+            $.ajax({
+                url: "ajax/update/aquarium-section/",
+                method: "POST",
+                data: params,
+                dataType: "json",
+            }).done(function (data) {
+                if (data["state"] == "success") {
+                    $("#aquarium-section-edit-modal").modal("hide");
+                    $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
+                        async_aquarium_section();
+                        standby_store_layout();
+                    });
+                }
+                else if (data["state"] == "error") {
+                }
+            }).fail(function (data) {
+            });
+        }
+    });
+
+    $(document).on("click", "#storage-room-edit-modal-footer button", function (e) {
+        if ($(this).data("edit-type") == "delete") {
             var params = {
                 "csrfmiddlewaretoken": CSRF_TOKEN,
                 "PK": storage_room_id
@@ -211,56 +273,7 @@ $(function () {
     });
 
     $(document).on("click", "#aquarium-section-edit-modal-footer button", function (e) {
-        if ($(this).data("edit-type") == "submit") {
-            var params = $("form#aquarium-section-edit-form").serializeArray();
-            params.push({
-                name: "FK", value: storage_room_id
-            });
-
-            $.ajax({
-                url: "ajax/insert/aquarium-section/",
-                method: "POST",
-                data: params,
-                dataType: "json",
-            }).done(function (data) {
-                if (data["state"] == "success") {
-                    $("#aquarium-section-edit-modal").modal("hide");
-                    $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
-                        async_aquarium_section();
-                        standby_store_layout();
-                    });
-                }
-                else if (data["state"] == "error") {
-                }
-            }).fail(function (data) {
-            });
-        }
-        else if ($(this).data("edit-type") == "update") {
-            var params = $("form#aquarium-section-edit-form").serializeArray();
-            params.push(
-                { name: "PK", value: section_id },
-                { name: "FK", value: storage_room_id }
-            );
-
-            $.ajax({
-                url: "ajax/update/aquarium-section/",
-                method: "POST",
-                data: params,
-                dataType: "json",
-            }).done(function (data) {
-                if (data["state"] == "success") {
-                    $("#aquarium-section-edit-modal").modal("hide");
-                    $("#aquarium-section-edit-modal").on("hidden.bs.modal", function (e) {
-                        async_aquarium_section();
-                        standby_store_layout();
-                    });
-                }
-                else if (data["state"] == "error") {
-                }
-            }).fail(function (data) {
-            });
-        }
-        else if ($(this).data("edit-type") == "delete") {
+        if ($(this).data("edit-type") == "delete") {
             var params = {
                 "csrfmiddlewaretoken": CSRF_TOKEN,
                 "PK": section_id
@@ -465,7 +478,7 @@ var draw_store_layout = function (url) {
                 }
             });
             $("#store-layout-console").html(
-                "<i class='fas fa-circle' style='color: " + section_color + ";'></i> 섹션을 추가/삭제합니다."
+                "<i class='fas fa-circle' style='color: " + section_color + ";'></i> 섹션을 추가 / 삭제합니다."
             );
         }
         else {

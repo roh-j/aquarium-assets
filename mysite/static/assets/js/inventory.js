@@ -1,6 +1,36 @@
 var storage_room_id;
 var aquarium_section_id;
 
+$(function () {
+    $("#main-menu").metisMenu();
+    $(".nav-second-level").removeClass("d-none");
+
+    standby_store_layout();
+    standby_aquarium();
+
+    $("#redo-store-layout").click(function (e) {
+        $(".nav-tabs a[href='#store-layout']").tab("show");
+    });
+    $("#storage-room-list > a").click(function (e) {
+        e.preventDefault();
+
+        if (!$(this).hasClass("selected")) {
+            $("#storage-room-list > a").removeClass("selected");
+            $("#storage-room-list > a > div.media > div.media-body > p > span").remove();
+
+            $(this).addClass("selected");
+            $("div.media > div.media-body > p", this).append(
+                "<span class='text-primary pull-right'><i class='fas fa-check'></i></span>"
+            );
+
+            storage_room_id = $("div.media > span.data-binding", this).data("storage-room-id");
+            storage_room_name = $("div.media > span.data-binding", this).data("storage-room-name");
+
+            draw_store_layout("../store/ajax/async-from-inventory/store-layout/");
+        }
+    });
+});
+
 var draw_store_layout = function (url) {
     var params = {
         "csrfmiddlewaretoken": CSRF_TOKEN,

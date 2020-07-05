@@ -18,6 +18,9 @@ h4 {
 .max-600 {
     max-width: 600px !important;
 }
+
+/* UI STYLES */
+
 #wrapper {
     width: 100%;
     background: #424858;
@@ -30,13 +33,7 @@ h4 {
 #page-inner {
     background: #FFF !important;
 }
-.square-btn-adjust {
-    border: 0 solid transparent;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
-}
-.tab-content>.tab-pane {
+.tab-content > .tab-pane {
     padding-top: 20px;
     padding-bottom: 20px;
 }
@@ -199,34 +196,36 @@ h4 {
     max-height: 170px;
     max-width: 170px;
 }
+.nav > li > a > i {
+    margin-right: 10px;
+}
+.navbar-cls-top {
+    background: #4D5467;
+    border: none;
+}
 .navbar-cls-top .navbar-brand {
     color: #FFF;
     background: #555B69;
     width: 230px;
     text-align: center;
 }
-.active-menu {
-    color: #FFF !important;
-    background: #0097A7 !important;
+.navbar-default .navbar-toggle .icon-bar {
+    background: #FFF;
 }
-.arrow {
-    float: right;
+.navbar-default .navbar-toggle {
+    border-color: #FFF;
 }
-.fa.arrow:before {
-    content: "\f104";
+.navbar-cls-top .navbar-brand:hover {
+    color: #FFF;
+    background: #555B69;
 }
-.active > a > .fa.arrow:before {
-    content: "\f107";
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background: #0097A7;
 }
-.nav-second-level li,
-.nav-third-level li {
-    border-bottom: none !important;
-}
-.nav-second-level li a {
-    padding-left: 37px;
-}
-.nav-third-level li a {
-    padding-left: 55px;
+.navbar-side {
+    border: none;
+    background: #424858;
 }
 .sidebar-collapse,
 .sidebar-collapse .nav {
@@ -250,6 +249,34 @@ h4 {
     background: #555B69;
     outline: 0;
 }
+.active-menu {
+    color: #FFF !important;
+    background: #0097A7 !important;
+}
+.nav-second-level li,
+.nav-third-level li {
+    border-bottom: none !important;
+}
+.nav-second-level li a {
+    padding-left: 37px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.nav-third-level li a {
+    padding-left: 55px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.arrow {
+    float: right;
+}
+.fa.arrow:before {
+    content: "\f104";
+}
+.active > a > .fa.arrow:before {
+    content: "\f107";
+}
+/*
 .nav-second-level > li > a:before,
 .nav-third-level > li > a:before {
     content: "";
@@ -258,8 +285,8 @@ h4 {
     left: 20px;
     width: 15px;
     height: 1px;
-    background: #FF0000;
-    top: 20px;
+    background: #FFF;
+    top: 30px;
 }
 .nav-second-level > li > a:after,
 .nav-third-level > li > a:after {
@@ -269,7 +296,7 @@ h4 {
     left: 20px;
     width: 1px;
     height: 100%;
-    background: #FF0000;
+    background: #FFF;
     top: 0;
     z-index: 10;
 }
@@ -281,34 +308,16 @@ h4 {
 .nav-third-level > li > a:before {
     left: 40px;
 }
-.navbar-side {
-    border: none;
-    background: #424858;
-}
-.navbar-cls-top {
-    background: #4D5467;
-    border: none;
-}
-.navbar-cls-top .navbar-brand:hover {
-    color: #FFF;
-    background: #555B69;
-}
-.navbar-default .navbar-toggle:hover,
-.navbar-default .navbar-toggle:focus {
-    background: #0097A7;
-}
-.navbar-default .navbar-toggle {
-    border-color: #FFF;
-}
-.navbar-default .navbar-toggle .icon-bar {
-    background: #FFF;
-}
-.nav > li > a > i {
-    margin-right: 10px;
-}
+*/
 
 /* UI ELEMENTS STYLES */
 
+.square-btn-adjust {
+    border: 0 solid transparent;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+}
 .btn-circle {
     width: 50px;
     height: 50px;

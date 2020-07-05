@@ -4,7 +4,7 @@ var CSRF_TOKEN = Cookies.get("csrftoken");
 var standby_store_layout = function () {
     if (SVG.supported) {
         $("#store-layout-canvas").empty();
-        $("#store-layout-console").text("창고/섹션을 먼저 선택해주세요.");
+        $("#store-layout-console").text("창고 / 섹션을 먼저 선택해주세요.");
 
         var row_count = 13;
         var col_label = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
@@ -46,17 +46,14 @@ var standby_store_layout = function () {
 
 var standby_aquarium = function () {
     if (SVG.supported) {
-        var tmp_x = 10;
-        var tmp_y = 3;
+        var row = 3;
+        var column = 4;
 
-        var aquarium = SVG("aquarium-canvas").size(60 * tmp_x + 21, 60 * tmp_y + 21);
+        var aquarium = SVG("aquarium-canvas").size(60 * column + 21, 60 * row + 21);
 
-        for (i = tmp_y; i > 0; i--) {
-            for (j = 0; j < tmp_x; j++) {
-                if (i == 2 && j == 6) {
-                    continue;
-                }
-                if (i == 1 && j == 6) {
+        for (i = row; i > 0; i--) {
+            for (j = 0; j < column; j++) {
+                if ((i == 2 && j == 2) || (i == 1 && j == 3) || (i == 1 && j == 2)) {
                     continue;
                 }
                 var group = aquarium.group();
@@ -77,7 +74,7 @@ var standby_aquarium = function () {
                 group.add(aquarium.polygon('80,1 61,20 61,80 80,61').attr({ 'class': 'aquarium-plane' }));
 
                 group.move(60 * j, 60 * (i - 1));
-                aquarium.plain((tmp_y - i + 1) + "-" + (j + 1)).attr({ "text-anchor": "middle", "x": 60 * j + 30, "y": 40 + (60 * (i - 1)) });
+                aquarium.plain((row - i + 1) + "-" + (j + 1)).attr({ "text-anchor": "middle", "x": 60 * j + 30, "y": 40 + (60 * (i - 1)) });
             }
         }
     }
