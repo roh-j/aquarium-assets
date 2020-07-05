@@ -8,26 +8,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/dataTables.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
@@ -203,6 +203,65 @@
                     <div class="modal-footer">
                         <button type="reset" class="btn btn-default"><i class="fas fa-redo-alt fa-fw"></i></button>
                         <button type="submit" class="btn btn-default">등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="unit-price-modify-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">단가 변경</h5>
+                </div>
+                <form id="form-unit-price-modify" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <span class="control-label">판매 범위</span>
+                            <div id="id_modify_scope_of_sales" class="btn-group d-flex" data-toggle="buttons">
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="scope_of_sales" value="store_and_online"> 모두
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="scope_of_sales" value="store_only"> 매장
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="scope_of_sales" value="online_only"> 온라인
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="scope_of_sales" value="not_for_sale"> 없음
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_modify_price" class="control-label">가격</label>
+                            <div class="input-group">
+                                <span class="input-group-btn input-spinner">
+                                    <button type="button" class="btn btn-default" data-spinner-value="-100">
+                                        <i class="fas fa-angle-left fa-fw"></i>
+                                    </button>
+                                </span>
+                                <input type="text" class="form-control text-center" id="id_modify_price" name="price" data-input-type="int">
+                                <span class="input-group-btn input-spinner">
+                                    <button type="button" class="btn btn-default" data-spinner-value="+100">
+                                        <i class="fas fa-angle-right fa-fw"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <div class="btn-group input-spinner">
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+100">백</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+1000">천</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+10000">1 만</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+100000">10 만</button>
+                            </div>
+                        </div>
+                        <div id="unit-price-modify-warning"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="unit-price-delete" class="btn btn-default">삭제</button>
+                        <button type="submit" class="btn btn-default">변경</button>
                     </div>
                 </form>
             </div>

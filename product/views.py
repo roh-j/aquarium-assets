@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
-from django.db.models import F, Q, Sum, Count
+from django.db.models import Q, F, Subquery, Sum, Count
 from django.contrib import messages
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.views import APIView
@@ -39,12 +39,56 @@ class IndexView(APIView):
     def post(self, request, control_number, format=None):
         serializer = UnitPriceSerializer(data=request.data)
         serializer.set_foreign_key(control_number)
+        serializer.set_action('create')
 
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
 
         return JsonResponse(serializer.errors, status=400)
+
+    def put(self, request, control_number, format=None):
+        unit_price = UnitPrice.objects.get(id=request.data['pk_unit_price'])
+        serializer = UnitPriceSerializer(data=request.data, instance=unit_price, partial=True)
+        serializer.set_action('partial_update')
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+
+        return JsonResponse(serializer.errors, status=400)
+
+    def delete(self, request, control_number, format=None):
+        creature_dependency = UnitPrice.objects.values_list('console', 'creature').filter(
+            console=control_number,
+            creature=Subquery(
+                UnitPrice.objects.filter(
+                    id=request.data['pk_unit_price']
+                ).values_list('creature')[:1]
+            )
+        ).union(
+            AquariumStock.objects.values_list('console', 'creature').filter(
+                console=control_number,
+                creature=Subquery(
+                    UnitPrice.objects.filter(
+                        id=request.data['pk_unit_price']
+                    ).values_list('creature')[:1]
+                )
+            ),
+            all=True,
+        ).count()
+
+        if (creature_dependency == 1):
+            Creature.objects.filter(
+                id=Subquery(
+                    UnitPrice.objects.filter(
+                        id=request.data['pk_unit_price']
+                    ).values_list('creature')[:1]
+                )
+            ).delete()
+
+        UnitPrice.objects.filter(id=request.data['pk_unit_price']).delete()
+        return HttpResponse(status=204)
 
 
 class CreatureView(APIView):
@@ -59,8 +103,8 @@ class UnitPriceView(APIView):
 
     def get(self, request, control_number, format=None):
         queryset = UnitPrice.objects.filter(console=control_number).select_related('creature').order_by('-id')
-        context = list(queryset.values('creature__species', 'creature__breed', 'creature__remark',
-                                       'id', 'min_size', 'max_size', 'stages_of_development', 'unit', 'price', 'scope_of_sales'))
+        context = list(queryset.values('creature__species', 'creature__breed', 'creature__remark', 'id',
+                                       'min_size', 'max_size', 'stages_of_development', 'unit', 'price', 'scope_of_sales', 'order_quantity'))
         return JsonResponse(context, safe=False, status=200)
 
 

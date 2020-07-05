@@ -61,13 +61,16 @@ table tbody tr td {
     margin-right: 5px;
 }
 thead > tr > th.selection {
-    width: 36px;
+    width: 32px;
 }
 .panel-heading a {
     color: #333;
 }
 .standby {
     text-align: center;
+}
+.panel-body .list-group {
+    margin: 0;
 }
 /* ui styles */
 .btn,
@@ -86,6 +89,9 @@ thead > tr > th.selection {
 .nav-tabs li a,
 .pagination li a {
     border-radius: 0 !important;
+}
+.alert {
+    margin-bottom: 15px;
 }
 .alert-explain {
     background-color: #f5f5f5;
@@ -177,7 +183,10 @@ footer {
 }
 /* component styles */
 table .pretty {
-    margin: 0 10px;
+    margin: 0;
+}
+table .pretty .state label {
+    text-indent: 0;
 }
 .table-heading {
     height: 34px;
@@ -267,26 +276,10 @@ table .pretty {
 .dl-order {
     margin-top: 0;
     margin-bottom: 20px;
+    border: 1px solid #343a40;
 }
 .dl-order dl {
     margin: 0;
-}
-.dl-order dt {
-    overflow: hidden;
-    clear: left;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    padding-right: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-.dl-order dd {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-.dl-order dt:first-of-type,
-.dl-order dd:first-of-type {
-    padding-top: 15px;
 }
 #list-widget > div {
     border-left: 1px solid #ddd;
@@ -441,20 +434,24 @@ dl.business-info dd:last-of-type {
     }
     .dl-order dt {
         float: left;
-        width: 160px;
+        width: 180px;
         overflow: hidden;
         clear: left;
         text-align: right;
         text-overflow: ellipsis;
         white-space: nowrap;
+        padding-top: 25px;
         padding-right: 20px;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        background-color: #f5f5f5;
+        border-right: 1px solid #ddd;
     }
     .dl-order dd {
-        margin-left: 180px;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        margin-left: 200px;
+        padding-top: 25px;
+    }
+    .dl-order dt:last-of-type,
+    .dl-order dd:last-of-type {
+        padding-bottom: 25px;
     }
 }
 @media (min-width: 992px) {
@@ -485,10 +482,14 @@ dl.business-info dd:last-of-type {
     .table-responsive {
         border: none !important;
     }
+    .dl-order dt {
+        padding: 20px 10px 0 10px;
+    }
     .dl-order dd {
+        padding: 10px;
         border-bottom: 1px dashed #ddd;
     }
-    .dl-order dd:last-child {
+    .dl-order dd:last-of-type {
         border: none;
     }
 }

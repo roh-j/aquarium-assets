@@ -1,4 +1,5 @@
 var price_table = null;
+var unit_price_id = null;
 
 $(function () {
     $('#console-menu').metisMenu();
@@ -66,6 +67,24 @@ $(function () {
 
             async_unit_price(load_complete());
         }
+    });
+
+    $('#unit_price_table').on('length.dt', function (e, settings, len) {
+        $('#unit_price_table').on('draw.dt', function () {
+            event_unit_price_modify();
+        });
+    });
+
+    $('#unit_price_table').on('search.dt', function () {
+        $('#unit_price_table').on('draw.dt', function () {
+            event_unit_price_modify();
+        });
+    });
+
+    $('#unit_price_table').on('page.dt', function () {
+        $('#unit_price_table').on('draw.dt', function () {
+            event_unit_price_modify();
+        });
     });
 
     $('#unit-price-register').on('click', function () {
@@ -145,6 +164,68 @@ $(function () {
             });
         });
     });
+
+    $('#form-unit-price-modify').on('submit', function (e) {
+        e.preventDefault();
+        var params = $('#form-unit-price-modify').serializeObject();
+        params = $.extend(
+            params, {
+                'pk_unit_price': unit_price_id
+            }
+        );
+
+        $.ajax({
+            url: '',
+            method: 'put',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(params),
+            dataType: 'json'
+        }).done(function (data, status, xhr) {
+            $('#unit-price-modify-modal').modal('hide');
+            $('#unit-price-modify-modal').on('hidden.bs.modal', function () {
+                async_unit_price();
+                
+                toastr.remove();
+                toastr.success('단가가 변경되었습니다.');
+                $(this).off('hidden.bs.modal');
+            });
+        }).fail(function (res, status, xhr) {
+            $.each(res.responseJSON, function (key, value) {
+                toastr.remove();
+                toastr.warning(value);
+                return false;
+            });
+        });
+    });
+
+    $('#unit-price-delete').on('click', function () {
+        var params = {
+            'pk_unit_price': unit_price_id
+        };
+
+        $.ajax({
+            url: '',
+            method: 'delete',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(params),
+            dataType: 'json'
+        }).done(function (data, status, xhr) {
+            $('#unit-price-modify-modal').modal('hide');
+            $('#unit-price-modify-modal').on('hidden.bs.modal', function () {
+                async_unit_price();
+
+                toastr.remove();
+                toastr.success('단가가 삭제되었습니다.');
+                $(this).off('hidden.bs.modal');
+            });
+        }).fail(function (res, status, xhr) { });
+    });
 });
 
 var async_unit_price = function (callback) {
@@ -163,7 +244,14 @@ var async_unit_price = function (callback) {
             price_table.row.add(
                 $(
                     '<tr>\
-                        <th scope="row">' + (price_table.rows().count() + 1) + '</th>\
+                        <th scope="row">\
+                            <span class="data-bind"\
+                                data-unit-price-id="' + data[i]['id'] + '"\
+                                data-price="' + data[i]['price'] + '"\
+                                data-scope-of-sales="' + data[i]['scope_of_sales'] + '"\
+                                data-order-quantity="' + data[i]['order_quantity'] + '"></span>\
+                            ' + (price_table.rows().count() + 1) + '\
+                        </th>\
                         <td>' + data[i]['creature__species'] + '</td>\
                         <td>' + data[i]['creature__breed'] + '</td>\
                         <td>' + data[i]['creature__remark'] + '</td>\
@@ -174,12 +262,50 @@ var async_unit_price = function (callback) {
                         <td>' + data[i]['price'].toLocaleString() + ' 원</td>\
                         <td>' + conv_scope_of_sales(data[i]['scope_of_sales']) + '</td>\
                         <td class="min col-btn">\
-                            <button type="button" class="btn btn-default"><i class="fas fa-pen fa-fw"></i></button>\
+                            <button type="button" class="btn btn-default unit-price-modify"><i class="fas fa-pen fa-fw"></i></button>\
                         </td>\
                     </tr>'
                 )
             ).draw();
         }
+
+        event_unit_price_modify();
+
         typeof callback === 'function' && callback();
     }).fail(function (res, status, xhr) { });
+};
+
+var event_unit_price_modify = function (callback) {
+    $('.unit-price-modify').off('click');
+    $('.unit-price-modify').on('click', function () {
+        var unit_price = $('th span.data-bind', $(this).closest('tr'));
+        var scope_of_sales = $('#form-unit-price-modify input[name=scope_of_sales][value=' + unit_price.data('scope-of-sales') + ']');
+
+        $('#form-unit-price-modify')
+            .find('input[type=radio]')
+            .closest('label')
+            .removeClass('active');
+
+        if (parseInt(unit_price.data('order-quantity')) == 0) {
+            $('#unit-price-modify-warning').empty();
+            $('#unit-price-delete').attr('disabled', false);
+        }
+        else {
+            $('#unit-price-modify-warning').html(
+                '<div class="alert alert-explain">\
+                    <span class="text-danger font-weight-bold">' + unit_price.data('order-quantity') + '</span> 마리에 대한 처리되지 않은 주문이 존재하여 삭제하실 수 없습니다.\
+                </div>'
+            );
+            $('#unit-price-delete').attr('disabled', true);
+        }
+
+        unit_price_id = unit_price.data('unit-price-id');
+        scope_of_sales.attr('checked', true);
+        scope_of_sales.parents('label').addClass('active');
+        $('#form-unit-price-modify input[name=price]').val(unit_price.data('price'));
+
+        $('#unit-price-modify-modal').modal('show');
+    });
+
+    typeof callback === 'function' && callback();
 };

@@ -153,6 +153,24 @@ $(function () {
         }
     });
 
+    $('#product_table').on('length.dt', function (e, settings, len) {
+        $('#product_table').on('draw.dt', function () {
+            event_add_to_cart();
+        });
+    });
+
+    $('#product_table').on('search.dt', function () {
+        $('#product_table').on('draw.dt', function () {
+            event_add_to_cart();
+        });
+    });
+
+    $('#product_table').on('page.dt', function () {
+        $('#product_table').on('draw.dt', function () {
+            event_add_to_cart();
+        });
+    });
+
     order_item_table = $('#order_item_table').DataTable({
         'buttons': [
             {
@@ -206,6 +224,27 @@ $(function () {
             $('#order_item_table_filter').detach().appendTo('#order-item-tool');
             $('#order_item_table_paginate').detach().appendTo('#order-item-pagination');
         }
+    });
+
+    $('#order_item_table').on('length.dt', function (e, settings, len) {
+        $('#order_item_table').on('draw.dt', function () {
+            event_order_item_modify();
+            event_order_item_delete();
+        });
+    });
+
+    $('#order_item_table').on('search.dt', function () {
+        $('#order_item_table').on('draw.dt', function () {
+            event_order_item_modify();
+            event_order_item_delete();
+        });
+    });
+
+    $('#order_item_table').on('page.dt', function () {
+        $('#order_item_table').on('draw.dt', function () {
+            event_order_item_modify();
+            event_order_item_delete();
+        });
     });
 
     $('#order-register').on('click', function () {
@@ -306,43 +345,7 @@ var async_product = function (callback) {
             }
         });
 
-        $('.add-to-cart').on('click', function () {
-            var overlap = false;
-            var product = $('th span.data-bind', $(this).closest('tr'));
-
-            for (i = 0; i < order_items.length; i++) {
-                if (order_items[i]['id'] == product.data('id')) {
-                    if (order_items[i]['remaining_quantity'] <= order_items[i]['quantity']) {
-                        toastr.remove();
-                        toastr.warning('재고가 부족합니다.');
-                        return;
-                    }
-                    order_items[i]['quantity'] = parseInt(order_items[i]['quantity']) + 1;
-                    overlap = true;
-                }
-            }
-            if (!overlap) {
-                var data = {
-                    'id': product.data('id'),
-                    'unit_price': product.data('unit-price'),
-                    'species': product.data('species'),
-                    'breed': product.data('breed'),
-                    'remark': product.data('remark'),
-                    'min_size': product.data('min-size'),
-                    'max_size': product.data('max-size'),
-                    'stages_of_development': product.data('stages-of-development'),
-                    'unit': product.data('unit'),
-                    'price': product.data('price'),
-                    'quantity': 1,
-                    'remaining_quantity': product.data('remaining-quantity')
-                };
-                order_items.push(data);
-            }
-            update_cart(function() {
-                toastr.remove();
-                toastr.success('상품을 담았습니다.');
-            });
-        });
+        event_add_to_cart();
 
         $('#selected-items-to-cart').on('click', function () {
             var cells = product_table.cells().nodes();
@@ -463,6 +466,49 @@ var async_customer = function (callback) {
     }).fail(function (res, status, xhr) { });
 };
 
+var event_add_to_cart = function (callback) {
+    $('.add-to-cart').off('click');
+    $('.add-to-cart').on('click', function () {
+        var overlap = false;
+        var product = $('th span.data-bind', $(this).closest('tr'));
+
+        for (i = 0; i < order_items.length; i++) {
+            if (order_items[i]['id'] == product.data('id')) {
+                if (order_items[i]['remaining_quantity'] <= order_items[i]['quantity']) {
+                    toastr.remove();
+                    toastr.warning('재고가 부족합니다.');
+                    return;
+                }
+                order_items[i]['quantity'] = parseInt(order_items[i]['quantity']) + 1;
+                overlap = true;
+            }
+        }
+        if (!overlap) {
+            var data = {
+                'id': product.data('id'),
+                'unit_price': product.data('unit-price'),
+                'species': product.data('species'),
+                'breed': product.data('breed'),
+                'remark': product.data('remark'),
+                'min_size': product.data('min-size'),
+                'max_size': product.data('max-size'),
+                'stages_of_development': product.data('stages-of-development'),
+                'unit': product.data('unit'),
+                'price': product.data('price'),
+                'quantity': 1,
+                'remaining_quantity': product.data('remaining-quantity')
+            };
+            order_items.push(data);
+        }
+        update_cart(function () {
+            toastr.remove();
+            toastr.success('상품을 담았습니다.');
+        });
+    });
+
+    typeof callback === 'function' && callback();
+};
+
 var update_cart = function (callback) {
     var payment = 0;
     order_item_table.clear().draw();
@@ -507,21 +553,35 @@ var update_cart = function (callback) {
 
     $('#view-payment').text(payment.toLocaleString() + ' 원');
 
+    event_order_item_modify();
+    event_order_item_delete();
+    
+    typeof callback === 'function' && callback();
+};
+
+var event_order_item_modify = function (callback) {
+    $('.order-item-modify').off('click');
     $('.order-item-modify').on('click', function () {
-        order_item_idx = $(this).closest('tr').index();
+        order_item_idx = order_item_table.row($(this).parents('tr')).index();
 
         $('input[name=cart_quantity]').val(order_items[order_item_idx]['quantity']);
         $('#cart-quantity-register-modal').modal('show');
     });
 
-    $('.order-item-delete').on('click', function () {
-        var idx = $(this).closest('tr').index();
-        order_items.splice(idx, 1);
+    typeof callback === 'function' && callback();
+};
 
+var event_order_item_delete = function (callback) {
+    $('.order-item-delete').off('click');
+    $('.order-item-delete').on('click', function () {
+        var idx = order_item_table.row($(this).parents('tr')).index();
+        order_items.splice(idx, 1);
+        
         update_cart(function () {
             toastr.remove();
             toastr.success('항목을 삭제하였습니다.');
         });
     });
+
     typeof callback === 'function' && callback();
 };

@@ -8,12 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.0.96/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/component.css' %}">
@@ -21,20 +21,20 @@
     <link rel="stylesheet" href="{% static 'assets/css/dataTables.css' %}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/ko.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
@@ -63,7 +63,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title">출고</h5>
+                    <h5 class="modal-title">출고 등록</h5>
                 </div>
                 <form id="form-goods-issue-register" method="POST">
                     {% csrf_token %}
@@ -80,7 +80,7 @@
                                         <i class="fas fa-angle-left fa-fw"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control text-center" id="id_goods_issue_quantity" name="goods_issue_quantity" data-input-type="int" value="1">
+                                <input type="text" class="form-control text-center" id="id_goods_issue_quantity" name="goods_issue_quantity" data-input-type="int" value="0">
                                 <span class="input-group-btn input-spinner">
                                     <button type="button" class="btn btn-default" data-spinner-value="+1">
                                         <i class="fas fa-angle-right fa-fw"></i>
@@ -102,11 +102,14 @@
                             </div>
                             <div class="tab-pane" id="goods-issue">
                                 <div class="form-group">
-                                    <div style="width: 50%">
+                                    <div style="width: 75%">
                                         <span class="control-label">출고 유형</span>
                                         <div id="id_goods_issue_description" class="btn-group d-flex" data-toggle="buttons">
                                             <label class="btn btn-default w-100 active">
-                                                <input type="radio" name="goods_issue_description" value="parcel_out" checked> 분양
+                                                <input type="radio" name="goods_issue_description" value="modify" checked> 변경
+                                            </label>
+                                            <label class="btn btn-default w-100">
+                                                <input type="radio" name="goods_issue_description" value="parcel_out"> 분양
                                             </label>
                                             <label class="btn btn-default w-100">
                                                 <input type="radio" name="goods_issue_description" value="death"> 폐사
@@ -129,7 +132,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 class="modal-title">입고</h5>
+                    <h5 class="modal-title">입고 등록</h5>
                 </div>
                 <form id="form-goods-receipt-register" method="POST">
                     {% csrf_token %}
@@ -146,7 +149,7 @@
                                         <i class="fas fa-angle-left fa-fw"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control text-center" id="id_goods_receipt_quantity" name="goods_receipt_quantity" data-input-type="int" value="1">
+                                <input type="text" class="form-control text-center" id="id_goods_receipt_quantity" name="goods_receipt_quantity" data-input-type="int" value="0">
                                 <span class="input-group-btn input-spinner">
                                     <button type="button" class="btn btn-default" data-spinner-value="+1">
                                         <i class="fas fa-angle-right fa-fw"></i>
@@ -185,7 +188,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="goods-receipt"></div>
+                            <div class="tab-pane" id="goods-receipt">
+                                <div class="form-group">
+                                    <div style="width: 50%">
+                                        <span class="control-label">입고 유형</span>
+                                        <div id="id_goods_receipt_description" class="btn-group d-flex" data-toggle="buttons">
+                                            <label class="btn btn-default w-100 active">
+                                                <input type="radio" name="goods_receipt_description" value="modify" checked> 변경
+                                            </label>
+                                            <label class="btn btn-default w-100">
+                                                <input type="radio" name="goods_receipt_description" value="adoption"> 입양
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -286,7 +303,7 @@
                         </div>
                         <div class="form-group">
                             <div style="width: 75%">
-                                <span class="control-label">암/수</span>
+                                <span class="control-label">성별</span>
                                 <div id="id_gender" class="btn-group d-flex" data-toggle="buttons">
                                     <label class="btn btn-default w-100 active">
                                         <input type="radio" name="gender" value="none" checked> 없음
@@ -383,9 +400,11 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="order-sheet">
-                        <button type="button" class="btn btn-default selected-order">선택 항목 처리</button>
-                        <button type="button" class="wide-screen btn btn-default ml-2">넓게</button>
-                        <button type="button" id="skip-order-sheet" class="btn btn-default pull-right">건너뛰기</button>
+                        <div class="clearfix">
+                            <button type="button" class="wide-screen btn btn-default">넓게</button>
+                            <button type="button" class="btn btn-default selected-order ml-2">선택 항목 처리</button>
+                            <button type="button" id="skip-order-sheet" class="btn btn-default pull-right">건너뛰기</button>
+                        </div>
                         <hr>
                         <div class="panel panel-default">
                             <div id="order-sheet-tool" class="panel-heading d-flex"></div>
@@ -508,7 +527,7 @@
                                             <th>품종</th>
                                             <th>특이사항</th>
                                             <th>크기 (cm)</th>
-                                            <th>암/수</th>
+                                            <th>성별</th>
                                             <th>마릿수</th>
                                             <th>상태</th>
                                             <th>동작</th>

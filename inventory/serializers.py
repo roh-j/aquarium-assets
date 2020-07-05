@@ -173,6 +173,26 @@ class GoodsIssueSerializer(serializers.Serializer):
         )
 
         if (self.aquarium_stock.quantity - validated_data['quantity'] == 0):
+            creature_dependency = AquariumStock.objects.values_list('console', 'creature').filter(
+                console=self.fk_console,
+                creature=self.aquarium_stock.creature,
+            ).union(
+                UnitPrice.objects.values_list('console', 'creature').filter(
+                    console=self.fk_console,
+                    creature=self.aquarium_stock.creature,
+                ),
+                all=True,
+            ).count()
+
+            if (creature_dependency == 1):
+                Creature.objects.filter(
+                    id=Subquery(
+                        AquariumStock.objects.filter(
+                            id=self.fk_aquarium_stock
+                        ).values_list('creature')[:1]
+                    )
+                ).delete()
+
             self.aquarium_stock.delete()
         else:
             self.aquarium_stock.quantity = F('quantity') - validated_data['quantity']
@@ -181,6 +201,19 @@ class GoodsIssueSerializer(serializers.Serializer):
 
         if validated_data['order_item'] is not None:
             stock_ledger.order_item = self.order_item
+
+            UnitPrice.objects.filter(
+                id=Subquery(
+                    OrderItem.objects.filter(
+                        id=validated_data['order_item']
+                    ).values_list('unit_price')[:1]
+                )
+            ).update(
+                order_quantity=F('order_quantity') - validated_data['quantity']
+            )
+            
+            if (self.order_item.remaining_order_quantity - validated_data['quantity'] == 0):
+                self.order_item.unit_price = None
 
             self.order_item.remaining_order_quantity = F('remaining_order_quantity') - validated_data['quantity']
             self.order_item.save()
@@ -216,17 +249,7 @@ class GoodsIssueSerializer(serializers.Serializer):
                     ).values_list('task_status')[:1]
                 )
             )
-
-            UnitPrice.objects.filter(
-                id=Subquery(
-                    OrderItem.objects.filter(
-                        id=validated_data['order_item']
-                    ).values_list('unit_price')[:1]
-                )
-            ).update(
-                order_quantity=F('order_quantity') - validated_data['quantity']
-            )
-
+            
         stock_ledger.save()
 
         return stock_ledger
@@ -284,5 +307,7 @@ class GoodsReceiptSerializer(serializers.Serializer):
         aquarium_stock = AquariumStock.objects.get(id=self.fk_aquarium_stock)
         aquarium_stock.quantity = F('quantity') + validated_data['quantity']
         aquarium_stock.save()
+
+        stock_ledger.save()
 
         return stock_ledger

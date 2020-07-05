@@ -17,6 +17,7 @@ TRANSACTION_TYPE_CHOICES = (
     ('goods_receipt', 'goods_receipt'),
 )
 DESCRIPTION_CHOICES = (
+    ('modify', 'modify'),
     ('goods_sales', 'goods_sales'),
     ('parcel_out', 'parcel_out'),
     ('death', 'death'),
@@ -86,9 +87,10 @@ class StockLedger(models.Model):
     description = models.CharField(
         max_length=30,
         choices=DESCRIPTION_CHOICES,
-        default='goods_sales',
+        default='modify',
     )
     quantity = models.IntegerField(default=1)
     purchase_price = models.IntegerField(null=True, blank=True)
+    creation_date = models.DateTimeField(default=timezone.now)
 
     objects = models.Manager()  # for Visual Studio Code

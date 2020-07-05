@@ -139,7 +139,7 @@ $(function () {
                     'transaction_type': 'goods_receipt',
                     'fk_aquarium': aquarium_id,
                     'fk_aquarium_stock': aquarium_stock_id,
-                    'description': 'adoption',
+                    'description': $('input:radio[name=goods_receipt_description]:checked').val(),
                     'quantity': $('input[name=goods_receipt_quantity]').val()
                 }; break;
         }

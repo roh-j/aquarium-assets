@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
@@ -68,6 +69,9 @@ class UnitPriceSerializer(serializers.Serializer):
         },
     )
 
+    def set_action(self, action):
+        self.action = action
+
     def set_foreign_key(self, fk_console):
         self.fk_console = fk_console
 
@@ -80,22 +84,23 @@ class UnitPriceSerializer(serializers.Serializer):
         return creature
 
     def validate(self, data):
-        creature = self.get_creature(data['species'], data['breed'], data['remark'])
+        if self.action == 'create':
+            creature = self.get_creature(data['species'], data['breed'], data['remark'])
 
-        if creature is not None:
-            unit_price = UnitPrice.objects.filter(
-                Q(min_size__lte=data['min_size']) & Q(max_size__gte=data['min_size']) |
-                Q(min_size__lte=data['max_size']) & Q(max_size__gte=data['max_size']),
-                console=Console.objects.get(id=self.fk_console),
-                creature=creature,
-                unit=data['unit'],
-            )
+            if creature is not None:
+                unit_price = UnitPrice.objects.filter(
+                    Q(min_size__lte=data['min_size']) & Q(max_size__gte=data['min_size']) |
+                    Q(min_size__lte=data['max_size']) & Q(max_size__gte=data['max_size']),
+                    console=Console.objects.get(id=self.fk_console),
+                    creature=creature,
+                    unit=data['unit'],
+                )
 
-            if unit_price.exists():
-                raise serializers.ValidationError('해당 범위에 등록된 단가가 존재합니다.')
+                if unit_price.exists():
+                    raise serializers.ValidationError('해당 범위에 등록된 단가가 존재합니다.')
 
-        if data['min_size'] > data['max_size']:
-            raise serializers.ValidationError('크기의 범위를 확인하세요.')
+            if data['min_size'] > data['max_size']:
+                raise serializers.ValidationError('크기의 범위를 확인하세요.')
 
         return data
 
@@ -131,3 +136,11 @@ class UnitPriceSerializer(serializers.Serializer):
         aquarium_stock.update(unit_price=unit_price)
 
         return unit_price
+
+    def update(self, instance, validated_data):
+        instance.scope_of_sales = validated_data.get('scope_of_sales', instance.scope_of_sales)
+        instance.price = validated_data.get('price', instance.price)
+        instance.last_modified_date = timezone.now()
+        instance.save()
+
+        return instance
