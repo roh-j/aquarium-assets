@@ -35,7 +35,7 @@ class AquariumStock(models.Model):
     gender = models.CharField(
         max_length=20,
         choices=GENDER_CHOICES,
-        default='none'
+        default='none',
     )
     size = models.FloatField(default=0.0)
     quantity = models.IntegerField(default=1)

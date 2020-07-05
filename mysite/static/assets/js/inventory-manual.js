@@ -27,7 +27,7 @@ $(function () {
         $(this).text(conv);
     });
 
-    $('#aquarium-stock-register').on('click', function (e) {
+    $('#aquarium-stock-register').on('click', function () {
         $.ajax({
             url: '../../product/creature/',
             method: 'get',
@@ -97,7 +97,7 @@ $(function () {
             dataType: 'json',
         }).done(function (data, status, xhr) {
             $('#aquarium-stock-register-modal').modal('hide');
-            $('#aquarium-stock-register-modal').on('hidden.bs.modal', function (e) {
+            $('#aquarium-stock-register-modal').on('hidden.bs.modal', function () {
                 async_aquarium_stock();
 
                 toastr.remove();
@@ -206,7 +206,7 @@ $(function () {
      * Event bind.
      */
 
-    $('#redo-store-layout').on('click', function (e) {
+    $('#redo-store-layout').on('click', function () {
         $('.nav-tabs a[href="#store-layout"]').tab('show');
         $('#aquarium-stock-register').attr('disabled', true);
         aquarium_row = null;

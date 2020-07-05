@@ -124,7 +124,7 @@ var init_vertical_spinner = function () {
 };
 
 var init_custom_radio_reset = function () {
-    $('button[type=reset]').closest('form').on('reset', function (e) {
+    $('button[type=reset]').closest('form').on('reset', function () {
         form = $(this);
 
         setTimeout(function () {

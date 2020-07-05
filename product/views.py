@@ -1,4 +1,4 @@
-from django.db.models import Sum, Count, F
+from django.db.models import Sum, Count, F, Q
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
@@ -61,12 +61,12 @@ class StockView(APIView):
             unit=F('gender'),
             unit_price__price=F('unit_price__price'),
             remaining_quantity=Sum('quantity') - F('unit_price__order_quantity'),
-            count=Count('unit_price'),
         ).filter(
+            Q(unit_price__scope_of_sales='delivery_and_pickup') | Q(unit_price__scope_of_sales='pickup_only'),
             console=control_number,
             unit_price__isnull=False,
             remaining_quantity__gte=1,
-        ).order_by('-id')
+        )
 
         context = list(queryset)
 

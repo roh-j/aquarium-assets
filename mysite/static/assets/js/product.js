@@ -84,7 +84,7 @@ $(function () {
         }
     });
 
-    $('#unit-price-register').on('click', function (e) {
+    $('#unit-price-register').on('click', function () {
         $.ajax({
             url: 'creature/',
             method: 'get',
@@ -153,7 +153,7 @@ $(function () {
             dataType: 'json',
         }).done(function (data, status, xhr) {
             $('#unit-price-register-modal').modal('hide');
-            $('#unit-price-register-modal').on('hidden.bs.modal', function (e) {
+            $('#unit-price-register-modal').on('hidden.bs.modal', function () {
                 async_unit_price();
             });
         }).fail(function (res, status, xhr) {

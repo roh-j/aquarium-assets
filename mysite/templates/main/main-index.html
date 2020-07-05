@@ -19,6 +19,27 @@
     <script src="{% static 'assets/js/common.js' %}"></script>
 
     <title>Aquarium Assets</title>
+    <style>
+        .jumbotron {
+            position: relative;
+            height: 450px;
+        }
+        .jumbotron > .container {
+            position: relative;
+            z-index: 2;
+        }
+        .img-jumbotron-desktop {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 450px;
+            z-index: 1;
+            background-image: url("{% static 'assets/img/jumbotron-som-br.jpg' %}");
+            background-repeat: no-repeat;
+            background-position: top;
+            background-size: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -45,7 +66,9 @@
         </div>
     </nav>
     <div class="jumbotron">
+        <div class="img-jumbotron-desktop visible-lg"></div>
         <div class="container">
+            <p class="lead">Prototype에 오신 것을 환영합니다!</p>
             <p><a href="console/" class="btn btn-default">서비스로 이동</a></p>
         </div>
     </div>

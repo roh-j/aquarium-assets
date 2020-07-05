@@ -39,6 +39,35 @@
 </head>
 
 <body>
+    <div id="customer-register-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">받는 분</h5>
+                </div>
+                <form id="form-customer-register" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="id_customer_name" class="control-label">고객명</label>
+                            <input type="text" class="form-control" id="id_customer_name" name="customer_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_address" class="control-label">주소</label>
+                            <input type="text" class="form-control" id="id_address" name="address">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_contact" class="control-label">연락처</label>
+                            <input type="text" class="form-control" id="id_contact" name="contact">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div id="customer-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -130,7 +159,7 @@
                         <a href="#" aria-expanded="true"><i class="fas fa-shopping-basket fa-fw"></i>주문관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li><a href="" class="active-menu">주문서 작성</a></li>
-                            <li><a href="../list/">주문처리 현황</a></li>
+                            <li><a href="../status/">주문처리 현황</a></li>
                         </ul>
                     </li>
                     <li>
@@ -226,34 +255,49 @@
                                 </table>
                             </div>
                             <div class="panel-footer text-right">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default">항목 담기</button>
-                                    <button type="button" class="btn btn-default">항목 담기</button>
-                                </div>
+                                <button type="button" id="empty-cart" class="btn btn-default">비우기</button>
                             </div>
                         </div>
                         <div id="cart-pagination" class="text-center"></div>
                         <hr><h4 class="lead-step">Step 3. <small>주문서 확인</small></h4><hr>
                         <div class="dl-order bs-callout bs-callout-warning">
-                            <dt>받는 분 </dt>
-                            <dd>네이버</dd>
-                            <dt>전화번호 </dt>
-                            <dd>1588-3830</dd>
-                            <dt>기본주소 </dt>
-                            <dd>경기도 성남시 분당구 불정로 6 경기도 성남시 분당구 불정로 6</dd>
-                            <dt>상세주소 </dt>
-                            <dd>NAVER그린팩토리</dd>
-                            <dt>배송 </dt>
-                            <dd>매장</dd>
-                            <dt>합계 </dt>
-                            <dd id="payment" class="text-danger">0 원</dd>
+                            <dl>
+                                <dt>받는 분</dt>
+                                <dd id="view-customer-name">(없음)</dd>
+                                <dt>연락처</dt>
+                                <dd id="view-contact">(없음)</dd>
+                                <dt>주소</dt>
+                                <dd id="view-address">(없음)</dd>
+                                <dt>배송</dt>
+                                <dd id="view-order-type">매장</dd>
+                                <dt>합계</dt>
+                                <dd id="view-payment" class="text-danger">0 원</dd>
+                            </dl>
+                        </div>
+                        <hr>
+                        <div class="radio-vertical" style="padding-bottom: 15px">
+                            <div class="pretty p-default p-round">
+                                <input type="radio" name="order_type" value="pickup" checked>
+                                <div class="state p-warning">
+                                    <label>매장</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="radio-vertical">
+                            <div class="pretty p-default p-round">
+                                <input type="radio" name="order_type" value="delivery">
+                                <div class="state p-warning">
+                                    <label>택배</label>
+                                </div>
+                            </div>
                         </div>
                         <hr>
                         <div class="text-right">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#customer-modal">고객 정보 가져오기</button>
-                                <button type="button" class="btn btn-default">신규 고객</button>
+                            <div class="btn-group mr-3">
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#customer-modal">기존 고객</button>
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#customer-register-modal">신규 고객</button>
                             </div>
+                            <button type="button" id="order-register" class="btn btn-default">등록</button>
                         </div>
                         <hr>
                     </div>

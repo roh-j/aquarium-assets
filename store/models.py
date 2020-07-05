@@ -5,7 +5,7 @@ from console.models import Console
 
 # Create your models here.
 
-OPERATION_CHOICES = (
+OPERATION_STATUS_CHOICES = (
     ('active', 'active'),
     ('inactive', 'inactive'),
 )
@@ -63,7 +63,7 @@ class Aquarium(models.Model):
     alias = models.CharField(max_length=20, null=True, blank=True)
     operation_status = models.CharField(
         max_length=20,
-        choices=OPERATION_CHOICES,
+        choices=OPERATION_STATUS_CHOICES,
         default='active',
     )
     memo = models.TextField(null=True, blank=True)

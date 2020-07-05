@@ -4,7 +4,7 @@ from console.models import Console
 
 # Create your models here.
 
-DEVELOPMENT_CHOICES = (
+STAGES_OF_DEVELOPMENT_CHOICES = (
     ('adult', 'adult'),
     ('immature', 'immature'),
     ('juvenile', 'juvenile'),
@@ -14,6 +14,12 @@ UNIT_CHOICES = (
     ('none', 'none'),
     ('female', 'female'),
     ('male', 'male'),
+)
+SCOPE_OF_SALES_CHOICES = (
+    ('delivery_and_pickup', 'delivery_and_pickup'),
+    ('pickup_only', 'pickup_only'),
+    ('delivery_only', 'delivery_only'),
+    ('not_for_sale', 'not_for_sale'),
 )
 
 
@@ -43,13 +49,18 @@ class UnitPrice(models.Model):
     max_size = models.FloatField(default=0.0)
     stages_of_development = models.CharField(
         max_length=20,
-        choices=DEVELOPMENT_CHOICES,
-        default='adult'
+        choices=STAGES_OF_DEVELOPMENT_CHOICES,
+        default='adult',
     )
     unit = models.CharField(
         max_length=20,
         choices=UNIT_CHOICES,
-        default='none'
+        default='none',
+    )
+    scope_of_sales = models.CharField(
+        max_length=20,
+        choices=SCOPE_OF_SALES_CHOICES,
+        default='not_for_sale',
     )
     price = models.IntegerField(default=0)
     order_quantity = models.IntegerField(default=0)

@@ -60,6 +60,12 @@ table tbody tr td {
     content: "•";
     margin-right: 5px;
 }
+.radio-vertical {
+    text-align: right;
+}
+.radio-vertical .pretty {
+    margin-right: 0;
+}
 /* ui styles */
 .btn,
 .label,
@@ -260,6 +266,9 @@ table .pretty {
 .dl-order {
     margin-top: 0;
     margin-bottom: 20px;
+}
+.dl-order dl {
+    margin: 0;
 }
 .dl-order dt {
     overflow: hidden;

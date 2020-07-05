@@ -8,7 +8,9 @@ var customer_table = null;
 var product_table = null;
 var cart_table = null;
 
+var params = {};
 var cart = [];
+var customer = {};
 
 $(function () {
 
@@ -20,8 +22,46 @@ $(function () {
     init_horizontal_spinner();
     init_checkbox_select_all();
 
-    $('#add-order').on('click', function (e) {
+    $('#order-register').on('click', function () {
+        params['cart'] = cart;
+        params['customer'] = customer;
+        params['order_type'] = $('input:radio[name=order_type]:checked').val();
+
+        console.log(params)
+    });
+
+    $('#add-order').on('click', function () {
         $('#add-order-modal').modal('show');
+    });
+
+    $('#empty-cart').on('click', function () {
+        cart_table.clear().draw();
+        cart = [];
+    });
+
+    $('input:radio[name=order_type]').on('click', function () {
+        var value = $('input:radio[name=order_type]:checked').val();
+        switch (value) {
+            case 'pickup':
+                value = '매장';
+                break;
+            case 'delivery':
+                value = '택배';
+                break;
+        }
+        $('#view-order-type').text(value);
+    });
+
+    $('#form-customer-register').on('submit', function (e) {
+        e.preventDefault();
+
+        customer['customer_name'] = $('#id_customer_name').val();
+        customer['contact'] = $('#id_contact').val();
+        customer['address'] = $('#id_address').val();
+
+        $('#view-customer-name').text($('#id_customer_name').val());
+        $('#view-contact').text($('#id_contact').val());
+        $('#view-address').text($('#id_address').val());
     });
 
     customer_table = $('#customer_table').DataTable({
@@ -402,7 +442,7 @@ var add_to_cart = function (callback) {
         ).draw();
         payment += (parseInt(cart[i]['unit_price']) * parseInt(cart[i]['quantity']));
     }
-    $('#payment').text(payment.toLocaleString() + ' 원');
+    $('#view-payment').text(payment.toLocaleString() + ' 원');
     toastr.remove();
     toastr.success('상품을 담았습니다.');
     typeof callback === 'function' && callback();

@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
 from console.models import Console
-from product.models import DEVELOPMENT_CHOICES, UNIT_CHOICES, Creature, UnitPrice
+from product.models import STAGES_OF_DEVELOPMENT_CHOICES, UNIT_CHOICES, SCOPE_OF_SALES_CHOICES, Creature, UnitPrice
 from inventory.models import AquariumStock
 
 # Create your serializers here.
@@ -20,8 +20,9 @@ class UnitPriceSerializer(serializers.Serializer):
     breed = serializers.CharField(write_only=True, required=True)
     min_size = serializers.FloatField(required=True)
     max_size = serializers.FloatField(required=True)
-    stages_of_development = serializers.ChoiceField(required=True, choices=DEVELOPMENT_CHOICES)
+    stages_of_development = serializers.ChoiceField(required=True, choices=STAGES_OF_DEVELOPMENT_CHOICES)
     unit = serializers.ChoiceField(required=True, choices=UNIT_CHOICES)
+    scope_of_sales = serializers.ChoiceField(required=True, choices=SCOPE_OF_SALES_CHOICES)
     price = serializers.FloatField(required=True)
 
     def set_FK(self, key):
@@ -72,6 +73,7 @@ class UnitPriceSerializer(serializers.Serializer):
             min_size=validated_data['min_size'],
             max_size=validated_data['max_size'],
             stages_of_development=validated_data['stages_of_development'],
+            scope_of_sales=validated_data['scope_of_sales'],
             unit=validated_data['unit'],
             price=validated_data['price'],
         )

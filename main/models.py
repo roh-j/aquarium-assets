@@ -8,9 +8,10 @@ MEMBERSHIP_CHOICES = (
     ('general', 'general'),
     ('business', 'business'),
 )
-SALES_CHOICES = (
-    ('active', 'active'),
-    ('inactive', 'inactive'),
+SALES_STATUS_CHOICES = (
+    ('not_for_sale', 'not_for_sale'),
+    ('on_sale', 'on_sale'),
+    ('sold_out', 'sold_out'),
 )
 
 
@@ -19,8 +20,8 @@ class Ticket(models.Model):
     price = models.IntegerField(default=0)
     sales_status = models.CharField(
         max_length=20,
-        choices=SALES_CHOICES,
-        default='active',
+        choices=SALES_STATUS_CHOICES,
+        default='not_for_sale',
     )
 
     objects = models.Manager()  # for Visual Studio Code

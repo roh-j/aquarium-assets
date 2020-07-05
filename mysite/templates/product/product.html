@@ -150,6 +150,23 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="id_scope_of_sales" class="control-label d-block">판매 범위</label>
+                            <div id="id_scope_of_sales" class="btn-group d-flex" data-toggle="buttons">
+                                <label class="btn btn-default w-100 active">
+                                    <input type="radio" name="scope_of_sales" value="delivery_and_pickup" checked> 모두
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="scope_of_sales" value="pickup_only"> 택배
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="scope_of_sales" value="delivery_only"> 매장
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="scope_of_sales" value="not_for_sale"> 없음
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="id_price" class="control-label">가격</label>
                             <div class="input-group">
                                 <span class="input-group-btn input-spinner">
@@ -173,7 +190,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">등록</button>
+                        <button type="submit" class="btn btn-default">등록</button>
                     </div>
                 </form>
             </div>
@@ -213,7 +230,7 @@
                         <a href="#"><i class="fas fa-shopping-basket fa-fw"></i>주문관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
                             <li><a href="../order/register/">주문서 작성</a></li>
-                            <li><a href="../order/list/">주문처리 현황</a></li>
+                            <li><a href="../order/status/">주문처리 현황</a></li>
                         </ul>
                     </li>
                     <li>
