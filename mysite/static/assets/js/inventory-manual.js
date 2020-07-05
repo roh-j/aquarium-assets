@@ -24,14 +24,6 @@ $(function () {
 
     $('.wide-screen').on('click', function () {
         wide_screen('toggle');
-        order_sheet_table.$('input[type="checkbox"]').each(function () {
-            if (!$.contains(document, this)) {
-                console.log(this)
-                if (this.checked) {
-                    console.log(this.name)
-                }
-            }
-        });
     });
 
     $('#skip-order-sheet').on('click', function () {
@@ -57,8 +49,70 @@ $(function () {
         inventory_table.clear().draw();
     });
 
+    $('#form-goods-issue-register').on('submit', function (e) {
+        e.preventDefault();
+
+        switch ($('.modal-body .nav-tabs li.active a', this).attr('href')) {
+            case '#goods-issue-to-sales':
+                var params = {
+                    'transaction_type': 'goods_issue',
+                    'fk_aquarium': aquarium_id,
+                    'order_item': $('input:radio[name=pending_order]:checked').val(),
+                    'description': 'goods_sales',
+                    'quantity': $('input[name=goods_issue_quantity]').val()
+                }; break;
+            case '#goods-issue':
+                var params = {
+                    'transaction_type': 'goods_issue',
+                    'fk_aquarium': aquarium_id,
+                    'description': $('input:radio[name=goods_issue_description]:checked').val(),
+                    'quantity': $('input[name=goods_issue_quantity]').val()
+                }; break;
+        }
+
+        $.ajax({
+            url: 'goods-issue/',
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(params),
+            dataType: 'json'
+        }).done(function (data, status, xhr) {
+        }).fail(function (res, status, xhr) {
+            $.each(res.responseJSON, function (key, value) {
+                toastr.remove();
+                toastr.warning(value);
+                return false;
+            });
+        });
+    });
+
+    $('#form-goods-receipt-register').on('submit', function (e) {
+        e.preventDefault();
+
+        switch ($('.modal-body .nav-tabs li.active a', this).attr('href')) {
+            case '#goods-receipt-for-purchase':
+                var params = {
+                    'transaction': 'goods_receipt',
+                    'fk_aquarium': aquarium_id,
+                    'description': 'purchase_of_goods',
+                    'quantity': $('input[name=goods_receipt_quantity]').val(),
+                    'purchase_price': $('input[name=purchase_price]').val()
+                }; break;
+            case '#goods-receipt':
+                var params = {
+                    'transaction': 'goods_receipt',
+                    'fk_aquarium': aquarium_id,
+                    'description': 'adoption',
+                    'quantity': $('input[name=goods_receipt_quantity]').val()
+                }; break;
+        }
+    });
+
     order_sheet_table = $('#order_sheet_table').DataTable({
-        'rowsGroup': [0, 1, 2],
+        'rowsGroup': [0, 1, 2, 3],
         'autoWidth': false,
         'ordering': false,
         'info': false,
@@ -196,7 +250,7 @@ $(function () {
         var params = $('#form-aquarium-stock-register').serializeObject();
         params = $.extend(
             params, {
-                'FK': aquarium_id
+                'fk_aquarium': aquarium_id
             }
         );
 
@@ -217,7 +271,13 @@ $(function () {
                 toastr.remove();
                 toastr.success('재고를 등록하였습니다.');
             });
-        }).fail(function (res, status, xhr) { });
+        }).fail(function (res, status, xhr) {
+            $.each(res.responseJSON, function (key, value) {
+                toastr.remove();
+                toastr.warning(value);
+                return false;
+            });
+        });
     });
 });
 
@@ -312,7 +372,7 @@ var async_order_sheet = function (callback) {
                         var tbody = '';
 
                         if (pre == null) {
-                            $('#shipping-order').append('<div class="panel-group" id="accordion"></div>');
+                            $('#pending-order').append('<div class="panel-group" id="accordion"></div>');
                         }
                         for (j = 0; j < order[i]['order_items'].length; j++) {
                             var remaining_order_quantity = parseInt(order[i]['order_items'][j]['quantity']) - parseInt(order[i]['order_items'][j]['remaining_order_quantity']);
@@ -320,30 +380,26 @@ var async_order_sheet = function (callback) {
                                 '<tr>\
                                     <th scope="row" class="selection">\
                                         <div class="pretty p-default p-round">\
-                                            <input type="radio" name="shipping_order">\
+                                            <input type="radio" name="pending_order" value="' + order[i]['order_items'][j]['id'] + '">\
                                             <div class="state p-warning">\
                                                 <label></label>\
                                             </div>\
                                         </div>\
                                     </th>\
-                                    <th>\
-                                        <span class="data-bind"\
-                                            data-items-id="' + order[i]['order_items'][j]['id'] + '"></span>\
-                                        ' + (j + 1) + '\
-                                    </th>\
+                                    <th>' + (j + 1) + '</th>\
                                     <td>' + order[i]['order_items'][j]['species'] + '</td>\
                                     <td>' + order[i]['order_items'][j]['breed'] + '</td>\
                                     <td>' + null_to_empty(order[i]['order_items'][j]['remark']) + '</td>\
                                     <td>' + conv_stages_of_development(order[i]['order_items'][j]['stages_of_development']) + '</td>\
                                     <td>' + conv_unit(order[i]['order_items'][j]['unit']) + '</td>\
                                     <td>' + remaining_order_quantity + ' / ' + order[i]['order_items'][j]['quantity'] + '</td>\
-                                </tr>'
+                                </tr>';
                         }
-                        $('#shipping-order .panel-group').append(
-                            '<div class="panel panel-default">\
+                        $('#pending-order .panel-group').append(
+                            '<div class="panel">\
                                 <div class="panel-heading">\
                                     <a href="#order-' + order[i]['id'] + '" data-toggle="collapse" data-parent="#accordion">\
-                                        ' + order[i]['id'] + ' &bullet; ' + order[i]['order_date'].split(' ')[0] + ' &bullet; ' + conv_order_type(data[i]['order_type']) + '\
+                                    ' + order[i]['id'] + ' / ' + order[i]['order_date'].split(' ')[0] + ' / ' + conv_order_type(data[i]['order_type']) + '\
                                     </a>\
                                 </div>\
                                 <div id="order-' + order[i]['id'] + '" class="table-responsive panel-collapse collapse">\
@@ -372,7 +428,7 @@ var async_order_sheet = function (callback) {
                 pre = $(this).val();
             });
 
-            $('#shipping-order .panel-group .panel:first-child > .panel-collapse').addClass('in');
+            $('#pending-order .panel-group .panel:first-child > .panel-collapse').addClass('in');
             $('.nav-tabs a[href="#storage-room"]').tab('show');
         });
         typeof callback === 'function' && callback();
@@ -381,7 +437,7 @@ var async_order_sheet = function (callback) {
 
 var async_aquarium_stock = function (callback) {
     var params = {
-        'FK': aquarium_id
+        'fk_aquarium': aquarium_id
     };
 
     $.ajax({
@@ -410,8 +466,8 @@ var async_aquarium_stock = function (callback) {
                         <td>' + conv_status(data[i]['status']) + '</td>\
                         <td class="min col-btn">\
                             <div class="btn-group d-flex">\
-                                <button type="button" class="btn btn-default shipping-register"><i class="fas fa-minus fa-fw"></i></button>\
-                                <button type="button" class="btn btn-default receiving-register"><i class="fas fa-plus fa-fw"></i></button>\
+                                <button type="button" class="btn btn-default goods-issue-register"><i class="fas fa-minus fa-fw"></i></button>\
+                                <button type="button" class="btn btn-default goods-receipt-register"><i class="fas fa-plus fa-fw"></i></button>\
                                 <button type="button" class="btn btn-default"><i class="fas fa-pen fa-fw"></i></button>\
                             </div>\
                         </td>\
@@ -419,11 +475,11 @@ var async_aquarium_stock = function (callback) {
                 )
             ).draw();
 
-            $('.shipping-register').on('click', function () {
-                $('#shipping-register-modal').modal('show');
+            $('.goods-issue-register').on('click', function () {
+                $('#goods-issue-register-modal').modal('show');
             });
-            $('.receiving-register').on('click', function () {
-                $('#receiving-register-modal').modal('show');
+            $('.goods-receipt-register').on('click', function () {
+                $('#goods-receipt-register-modal').modal('show');
             });
         }
         typeof callback === 'function' && callback();
@@ -432,7 +488,7 @@ var async_aquarium_stock = function (callback) {
 
 var draw_store_layout = function (callback) {
     var params = {
-        'FK': storage_room_id
+        'fk_storage_room': storage_room_id
     };
 
     $.ajax({
@@ -515,7 +571,7 @@ var draw_store_layout = function (callback) {
 
 var draw_aquarium = function (callback) {
     var params = {
-        'PK': aquarium_section_id
+        'pk_aquarium_section': aquarium_section_id
     };
     $.ajax({
         url: 'aquarium-section/',
@@ -650,7 +706,7 @@ var draw_aquarium = function (callback) {
                 aquarium_column = $(this).data('aquarium-column');
 
                 var params = {
-                    'FK': aquarium_section_id,
+                    'fk_aquarium_section': aquarium_section_id,
                     'row': aquarium_row,
                     'column': aquarium_column
                 };

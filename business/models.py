@@ -10,8 +10,8 @@ class Business(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    registration_number = models.CharField(max_length=20, unique=True)
     name_of_company = models.CharField(max_length=40)
+    registration_number = models.CharField(max_length=20, unique=True)
     address = models.CharField(max_length=200)
     contact = models.CharField(max_length=20)
     alias = models.CharField(max_length=20, unique=True)

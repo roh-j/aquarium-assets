@@ -12,15 +12,16 @@ GENDER_CHOICES = (
     ('female', 'female'),
     ('male', 'male'),
 )
-CONTROL_CHOICES = (
-    ('with_shipping_closing', 'with_shipping_closing'),
-    ('without_shipping_closing', 'without_shipping_closing'),
-    ('with_receiving_closing', 'with_receiving_closing'),
-    ('without_receiving_closing', 'without_receiving_closing'),
+TRANSACTION_TYPE_CHOICES = (
+    ('goods_issue', 'goods_issue'),
+    ('goods_receipt', 'goods_receipt'),
 )
-WITHOUT_SHIPPING_CLOSING_TYPE_CHOICES = (
+DESCRIPTION_CHOICES = (
+    ('goods_sales', 'goods_sales'),
     ('parcel_out', 'parcel_out'),
     ('death', 'death'),
+    ('purchase_of_goods', 'purchase_of_goods'),
+    ('adoption', 'adoption'),
 )
 
 
@@ -56,7 +57,7 @@ class AquariumStock(models.Model):
     objects = models.Manager()  # for Visual Studio Code
 
 
-class StockRecord(models.Model):
+class StockLedger(models.Model):
     console = models.ForeignKey(
         Console,
         on_delete=models.CASCADE,
@@ -71,16 +72,17 @@ class StockRecord(models.Model):
         null=True,
         blank=True,
     )
-    control = models.CharField(
+    transaction_type = models.CharField(
+        max_length=20,
+        choices=TRANSACTION_TYPE_CHOICES,
+        default='goods_issue',
+    )
+    description = models.CharField(
         max_length=30,
-        choices=CONTROL_CHOICES,
-        default='with_shipping_closing',
+        choices=DESCRIPTION_CHOICES,
+        default='goods_sales',
     )
     quantity = models.IntegerField(default=1)
-    with_receiving_closing_price = models.IntegerField(null=True, blank=True)
-    without_shipping_closing_type = models.CharField(
-        max_length=20,
-        choices=WITHOUT_SHIPPING_CLOSING_TYPE_CHOICES,
-        null=True,
-        blank=True,
-    )
+    purchase_price = models.IntegerField(null=True, blank=True)
+
+    objects = models.Manager()  # for Visual Studio Code

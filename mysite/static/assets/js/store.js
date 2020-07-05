@@ -1,7 +1,7 @@
 var storage_room_id = null;
 var storage_room_name = null;
 
-var section_id = null;
+var aquarium_section_id = null;
 var section_name = null;
 var section_color = null;
 
@@ -48,7 +48,7 @@ $(function () {
             $('div.media > div.media-body > p', this).append('<span class="text-primary pull-right"><i class="fas fa-check fa-fw"></i></span>');
 
             storage_room_id = $('div.media > span.data-bind', this).data('storage-room-id');
-            section_id = null;
+            aquarium_section_id = null;
             section_color = null;
             storage_room_name = $('div.media > span.data-bind', this).data('storage-room-name');
 
@@ -113,7 +113,7 @@ $(function () {
         var params = $('#form-storage-room-modify').serializeObject();
         params = $.extend(
             params, {
-                'PK': storage_room_id
+                'pk_storage_room': storage_room_id
             }
         );
 
@@ -136,7 +136,7 @@ $(function () {
 
     $('#storage-room-delete').on('click', function () {
         var params = {
-            'PK': storage_room_id
+            'pk_storage_room': storage_room_id
         };
 
         $.ajax({
@@ -161,7 +161,7 @@ $(function () {
         var params = $('#form-aquarium-section-register').serializeObject();
         params = $.extend(
             params, {
-                'FK': storage_room_id
+                'fk_storage_room': storage_room_id
             }
         );
 
@@ -187,8 +187,8 @@ $(function () {
         var params = $('#form-aquarium-section-modify').serializeObject();
         params = $.extend(
             params, {
-                'PK': section_id,
-                'FK': storage_room_id,
+                'pk_aquarium_section': aquarium_section_id,
+                'fk_storage_room': storage_room_id,
                 'aquarium_num_of_columns': aquarium_num_of_columns,
                 'aquarium_num_of_rows': aquarium_num_of_rows
             }
@@ -213,7 +213,7 @@ $(function () {
 
     $('#aquarium-section-delete').on('click', function () {
         var params = {
-            'PK': section_id
+            'pk_aquarium_section': aquarium_section_id
         };
 
         $.ajax({
@@ -236,7 +236,7 @@ $(function () {
 
 var async_aquarium_section = function (callback) {
     var params = {
-        'FK': storage_room_id
+        'fk_storage_room': storage_room_id
     };
 
     $.ajax({
@@ -294,7 +294,7 @@ var async_aquarium_section = function (callback) {
                     $(this).addClass('selected');
                     $('div.media > div.media-body > p', this).append('<span class="text-primary pull-right"><i class="fas fa-check fa-fw"></i></span>');
 
-                    section_id = $('div.media > span.data-bind', this).data('section-id');
+                    aquarium_section_id = $('div.media > span.data-bind', this).data('section-id');
                     section_color = $('div.media > span.data-bind', this).data('section-color');
                     section_name = $('div.media > span.data-bind', this).data('section-name');
                     aquarium_num_of_rows = $('div.media > span.data-bind', this).data('aquarium-num-of-rows');
@@ -318,8 +318,8 @@ var async_aquarium_section = function (callback) {
 
 var draw_store_layout = function (callback) {
     var params = {
-        'FK1': storage_room_id,
-        'FK2': section_id
+        'fk_storage_room': storage_room_id,
+        'fk_aquarium_section': aquarium_section_id
     };
 
     $.ajax({
@@ -390,7 +390,7 @@ var draw_store_layout = function (callback) {
             $('rect.store-layout-button').on('click', function () {
                 if ($(this).data('store-layout-selected') && $(this).data('store-layout-modify-permission')) {
                     var params = {
-                        'PK': $(this).data('store-layout-id')
+                        'pk_store_layout': $(this).data('store-layout-id')
                     };
 
                     $.ajax({
@@ -425,8 +425,8 @@ var draw_store_layout = function (callback) {
 
 var save_store_layout = function (row, column) {
     var params = {
-        'FK1': storage_room_id,
-        'FK2': section_id,
+        'fk_storage_room': storage_room_id,
+        'fk_aquarium_section': aquarium_section_id,
         'row': row,
         'column': column
     };

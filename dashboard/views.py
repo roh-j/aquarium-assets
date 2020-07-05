@@ -13,7 +13,10 @@ class IndexView(APIView):
     renderer_classes = (TemplateHTMLRenderer,)
 
     def access_control(self, user_id, control_number):
-        console = Console.objects.select_related('business').filter(Q(user=user_id) | Q(business__user=user_id), id=control_number)
+        console = Console.objects.select_related('business').filter(
+            Q(user=user_id) | Q(business__user=user_id) & Q(business__comfirm_business=True),
+            id=control_number,
+        )
 
         return console
 

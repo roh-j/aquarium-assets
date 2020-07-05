@@ -30,12 +30,12 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ('id', 'order_items', 'customer_name',
                   'contact', 'address', 'order_type', 'order_date',)
 
-    def set_foreign_key(self, key):
-        self.FK = key
+    def set_foreign_key(self, fk_console):
+        self.fk_console = fk_console
 
     def get_customer(self, customer_name, contact, address):
         try:
-            customer = Customer.objects.get(customer_name=customer_name, contact=contact, address=address, console=self.FK)
+            customer = Customer.objects.get(customer_name=customer_name, contact=contact, address=address, console=self.fk_console)
         except ObjectDoesNotExist:
             customer = None
 
@@ -52,7 +52,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
             if customer is None:
                 customer = Customer.objects.create(
-                    console=Console.objects.get(id=self.FK),
+                    console=Console.objects.get(id=self.fk_console),
                     customer_name=validated_data['customer_name'],
                     contact=validated_data['contact'],
                     address=validated_data['address'],
@@ -60,7 +60,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 customer.save()
 
             order = Order.objects.create(
-                console=Console.objects.get(id=self.FK),
+                console=Console.objects.get(id=self.fk_console),
                 customer=customer,
                 customer_name=validated_data['customer_name'],
                 contact=validated_data['contact'],
@@ -69,7 +69,7 @@ class OrderSerializer(serializers.ModelSerializer):
             )
         else:
             order = Order.objects.create(
-                console=Console.objects.get(id=self.FK),
+                console=Console.objects.get(id=self.fk_console),
                 customer_name=validated_data['customer_name'],
                 contact=validated_data['contact'],
                 address=validated_data['address'],

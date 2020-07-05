@@ -1,40 +1,88 @@
 from rest_framework import serializers
 from django.core import exceptions
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-import django.contrib.auth.password_validation as validators
 from main.models import MEMBERSHIP_CHOICES, Profile
 from console.models import Console
+import django.contrib.auth.password_validation as validators
 
 # Create your serializers here.
 
 
 class UserSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(required=True, write_only=True)
-    confirm_password = serializers.CharField(required=True, write_only=True)
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
-    email = serializers.EmailField(required=True)
-    membership = serializers.ChoiceField(required=True, write_only=True, choices=MEMBERSHIP_CHOICES)
+    membership = serializers.ChoiceField(
+        required=True,
+        write_only=True,
+        choices=MEMBERSHIP_CHOICES,
+    )
+    username = serializers.CharField(
+        required=True,
+        error_messages={
+            'blank': '사용자 계정을 입력해주세요.',
+        },
+    )
+    email = serializers.EmailField(
+        required=True,
+        error_messages={
+            'blank': '이메일 주소를 입력해주세요.',
+            'invalid': '이메일 주소를 다시 확인해주세요.',
+        },
+    )
+    first_name = serializers.CharField(
+        required=True,
+        error_messages={
+            'blank': '성 (이름)을 입력해주세요.',
+        },
+    )
+    last_name = serializers.CharField(
+        required=True,
+        error_messages={
+            'blank': '이름을 입력해주세요.',
+        },
+    )
+    password = serializers.CharField(
+        required=True,
+        write_only=True,
+        error_messages={
+            'blank': '비밀번호를 입력해주세요.',
+        },
+    )
+    confirm_password = serializers.CharField(
+        required=True,
+        write_only=True,
+        error_messages={
+            'blank': '비밀번호 재확인을 입력해주세요.',
+        },
+    )
+
+    def validate_username(self, value):
+        try:
+            User.objects.get(username=value)
+        except ObjectDoesNotExist:
+            return value
+
+        raise serializers.ValidationError('이미 존재하는 계정입니다.')
+
+    def validate_email(self, value):
+        try:
+            User.objects.get(email=value)
+        except ObjectDoesNotExist:
+            return value
+
+        raise serializers.ValidationError('이미 사용중인 이메일 주소입니다.')
 
     def validate_password(self, value):
         try:
             validators.validate_password(value)
         except exceptions.ValidationError:
-            raise serializers.ValidationError()
-
-        return value
-
-    def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError()
+            raise serializers.ValidationError('문자, 숫자, 기호를 조합하여 8자 이상의 비밀번호를 입력해주세요.')
 
         return value
 
     def validate(self, data):
         if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError()
+            raise serializers.ValidationError('비밀번호가 일치하지 않습니다.')
 
         return data
 
@@ -65,14 +113,23 @@ class UserSerializer(serializers.Serializer):
 
 
 class AuthSerializer(serializers.Serializer):
-    username = serializers.CharField(write_only=True)
-    password = serializers.CharField(write_only=True)
+    username = serializers.CharField(
+        write_only=True,
+        error_messages={
+            'blank': '사용자 계정을 입력해주세요.',
+        },
+    )
+    password = serializers.CharField(
+        write_only=True,
+        error_messages={
+            'blank': '비밀번호를 입력해주세요.',
+        },
+    )
 
     def validate(self, data):
-        self.user = authenticate(
-            username=data['username'], password=data['password'])
+        self.user = authenticate(username=data['username'], password=data['password'])
 
         if self.user is None:
-            raise serializers.ValidationError()
+            raise serializers.ValidationError('아이디 또는 비밀번호를 다시 확인하세요.')
 
         return data

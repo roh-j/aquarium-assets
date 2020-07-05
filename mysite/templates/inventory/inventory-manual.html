@@ -44,78 +44,57 @@
 </head>
 
 <body>
-    <div id="shipping-register-modal" class="modal fade" tabindex="-1">
+    <div id="goods-issue-register-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h5 class="modal-title">출고</h5>
                 </div>
-                <form id="form-shipping-register" method="POST">
+                <form id="form-goods-issue-register" method="POST">
                     {% csrf_token %}
                     <div class="modal-body">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#with-shipping-closing" data-toggle="tab">결산 포함</a></li>
-                            <li><a href="#without-shipping-closing" data-toggle="tab">결산 미포함</a></li>
+                            <li class="active"><a href="#goods-issue-to-sales" data-toggle="tab">판매</a></li>
+                            <li><a href="#goods-issue" data-toggle="tab">출고</a></li>
                         </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="with-shipping-closing">
-                                <div id="shipping-order"></div>
-                                <div class="form-group modal-lg-form">
-                                    <label for="id_with_sc_quantity" class="control-label">출고 수량</label>
-                                    <div class="input-group">
-                                        <span class="input-group-btn input-spinner">
-                                            <button type="button" class="btn btn-default" data-spinner-value="-1">
-                                                <i class="fas fa-angle-left fa-fw"></i>
-                                            </button>
-                                        </span>
-                                        <input type="text" class="form-control text-center" id="id_with_sc_quantity" name="with_sc_quantity" data-input-type="int" value="0">
-                                        <span class="input-group-btn input-spinner">
-                                            <button type="button" class="btn btn-default" data-spinner-value="+1">
-                                                <i class="fas fa-angle-right fa-fw"></i>
-                                            </button>
-                                        </span>
-                                    </div>
-                                    <div class="btn-group input-spinner">
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="-10">-10</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="-1">-1</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+1">+1</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+10">+10</button>
-                                    </div>
-                                </div>
+                        <div class="form-group modal-lg-form">
+                            <label for="id_goods_issue_quantity" class="control-label">출고 수량</label>
+                            <div class="input-group">
+                                <span class="input-group-btn input-spinner">
+                                    <button type="button" class="btn btn-default" data-spinner-value="-1">
+                                        <i class="fas fa-angle-left fa-fw"></i>
+                                    </button>
+                                </span>
+                                <input type="text" class="form-control text-center" id="id_goods_issue_quantity" name="goods_issue_quantity" data-input-type="int" value="0">
+                                <span class="input-group-btn input-spinner">
+                                    <button type="button" class="btn btn-default" data-spinner-value="+1">
+                                        <i class="fas fa-angle-right fa-fw"></i>
+                                    </button>
+                                </span>
                             </div>
-                            <div class="tab-pane" id="without-shipping-closing">
-                                <div class="form-group modal-lg-form">
-                                    <label for="id_without_sc_quantity" class="control-label">출고 수량</label>
-                                    <div class="input-group">
-                                        <span class="input-group-btn input-spinner">
-                                            <button type="button" class="btn btn-default" data-spinner-value="-1">
-                                                <i class="fas fa-angle-left fa-fw"></i>
-                                            </button>
-                                        </span>
-                                        <input type="text" class="form-control text-center" id="id_without_sc_quantity" name="without_sc_quantity" data-input-type="int" value="0">
-                                        <span class="input-group-btn input-spinner">
-                                            <button type="button" class="btn btn-default" data-spinner-value="+1">
-                                                <i class="fas fa-angle-right fa-fw"></i>
-                                            </button>
-                                        </span>
-                                    </div>
-                                    <div class="btn-group input-spinner">
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="-10">-10</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="-1">-1</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+1">+1</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+10">+10</button>
-                                    </div>
-                                </div>
+                            <div class="btn-group input-spinner">
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="-10">-10</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="-1">-1</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+1">+1</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+10">+10</button>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="goods-issue-to-sales">
+                                <span class="control-label">주문 처리</span>
+                                <div id="pending-order"></div>
+                            </div>
+                            <div class="tab-pane" id="goods-issue">
                                 <div class="form-group modal-lg-form">
                                     <div style="width: 50%">
-                                        <label for="id_without_sc_type" class="control-label d-block">출고 유형</label>
-                                        <div id="id_without_sc_type" class="btn-group d-flex" data-toggle="buttons">
+                                        <span class="control-label">출고 유형</span>
+                                        <div id="id_goods_issue_description" class="btn-group d-flex" data-toggle="buttons">
                                             <label class="btn btn-default w-100 active">
-                                                <input type="radio" name="without_sc_type" value="parcel_out" checked> 분양
+                                                <input type="radio" name="goods_issue_description" value="parcel_out" checked> 분양
                                             </label>
                                             <label class="btn btn-default w-100">
-                                                <input type="radio" name="without_sc_type" value="death"> 폐사
+                                                <input type="radio" name="goods_issue_description" value="death"> 폐사
                                             </label>
                                         </div>
                                     </div>
@@ -130,53 +109,53 @@
             </div>
         </div>
     </div>
-    <div id="receiving-register-modal" class="modal fade" tabindex="-1">
+    <div id="goods-receipt-register-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h5 class="modal-title">입고</h5>
                 </div>
-                <form id="form-receiving-register" method="POST">
+                <form id="form-goods-receipt-register" method="POST">
                     {% csrf_token %}
                     <div class="modal-body">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#with-receiving-closing" data-toggle="tab">결산 포함</a></li>
-                            <li><a href="#without-receiving-closing" data-toggle="tab">결산 미포함</a></li>
+                            <li class="active"><a href="#goods-receipt-for-purchase" data-toggle="tab">구매</a></li>
+                            <li><a href="#goods-receipt" data-toggle="tab">입고</a></li>
                         </ul>
+                        <div class="form-group">
+                            <label for="id_goods_receipt_quantity" class="control-label">입고 수량</label>
+                            <div class="input-group">
+                                <span class="input-group-btn input-spinner">
+                                    <button type="button" class="btn btn-default" data-spinner-value="-1">
+                                        <i class="fas fa-angle-left fa-fw"></i>
+                                    </button>
+                                </span>
+                                <input type="text" class="form-control text-center" id="id_goods_receipt_quantity" name="goods_receipt_quantity" data-input-type="int" value="0">
+                                <span class="input-group-btn input-spinner">
+                                    <button type="button" class="btn btn-default" data-spinner-value="+1">
+                                        <i class="fas fa-angle-right fa-fw"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <div class="btn-group input-spinner">
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="-10">-10</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="-1">-1</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+1">+1</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+10">+10</button>
+                            </div>
+                        </div>
                         <div class="tab-content">
-                            <div class="tab-pane active" id="with-receiving-closing">
+                            <div class="tab-pane active" id="goods-receipt-for-purchase">
                                 <div class="form-group">
-                                    <label for="id_with_rc_quantity" class="control-label">입고 수량</label>
-                                    <div class="input-group">
-                                        <span class="input-group-btn input-spinner">
-                                            <button type="button" class="btn btn-default" data-spinner-value="-1">
-                                                <i class="fas fa-angle-left fa-fw"></i>
-                                            </button>
-                                        </span>
-                                        <input type="text" class="form-control text-center" id="id_with_rc_quantity" name="with_rc_quantity" data-input-type="int" value="0">
-                                        <span class="input-group-btn input-spinner">
-                                            <button type="button" class="btn btn-default" data-spinner-value="+1">
-                                                <i class="fas fa-angle-right fa-fw"></i>
-                                            </button>
-                                        </span>
-                                    </div>
-                                    <div class="btn-group input-spinner">
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="-10">-10</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="-1">-1</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+1">+1</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+10">+10</button>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="id_with_rc_price" class="control-label">입고 가격</label>
+                                    <label for="id_purchase_price" class="control-label">가격</label>
                                     <div class="input-group">
                                         <span class="input-group-btn input-spinner">
                                             <button type="button" class="btn btn-default" data-spinner-value="-100">
                                                 <i class="fas fa-angle-left fa-fw"></i>
                                             </button>
                                         </span>
-                                        <input type="text" class="form-control text-center" id="id_with_rc_price" name="with_rc_price" data-input-type="int" value="0">
+                                        <input type="text" class="form-control text-center" id="id_purchase_price" name="purchase_price" data-input-type="int" value="0">
                                         <span class="input-group-btn input-spinner">
                                             <button type="button" class="btn btn-default" data-spinner-value="+100">
                                                 <i class="fas fa-angle-right fa-fw"></i>
@@ -191,30 +170,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="without-receiving-closing">
-                                <div class="form-group">
-                                    <label for="id_without_rc_quantity" class="control-label">입고 수량</label>
-                                    <div class="input-group">
-                                        <span class="input-group-btn input-spinner">
-                                            <button type="button" class="btn btn-default" data-spinner-value="-1">
-                                                <i class="fas fa-angle-left fa-fw"></i>
-                                            </button>
-                                        </span>
-                                        <input type="text" class="form-control text-center" id="id_without_rc_quantity" name="without_rc_quantity" data-input-type="int" value="0">
-                                        <span class="input-group-btn input-spinner">
-                                            <button type="button" class="btn btn-default" data-spinner-value="+1">
-                                                <i class="fas fa-angle-right fa-fw"></i>
-                                            </button>
-                                        </span>
-                                    </div>
-                                    <div class="btn-group input-spinner">
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="-10">-10</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="-1">-1</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+1">+1</button>
-                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+10">+10</button>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="tab-pane" id="goods-receipt"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -315,7 +271,7 @@
                         </div>
                         <div class="form-group">
                             <div style="width: 75%">
-                                <label for="id_gender" class="control-label d-block">암/수</label>
+                                <span class="control-label">암/수</span>
                                 <div id="id_gender" class="btn-group d-flex" data-toggle="buttons">
                                     <label class="btn btn-default w-100 active">
                                         <input type="radio" name="gender" value="none" checked> 없음

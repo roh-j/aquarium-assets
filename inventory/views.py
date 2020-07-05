@@ -1,13 +1,14 @@
+from django.db.models import Q, Case, When, CharField, Value
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db.models import Case, When, CharField, Value
+from console.models import Console
 from store.models import StorageRoom, AquariumSection, StoreLayout, Aquarium
 from inventory.models import AquariumStock
 from store.serializers import StorageRoomSerializer, AquariumSectionSerializer, StoreLayoutSerializer, AquariumSerializer
-from inventory.serializers import AquariumStockSerializer
+from inventory.serializers import AquariumStockSerializer, GoodsIssueSerializer, GoodsReceiptSerializer
 
 # Create your views here.
 
@@ -15,10 +16,23 @@ from inventory.serializers import AquariumStockSerializer
 class ManualView(APIView):
     renderer_classes = (TemplateHTMLRenderer,)
 
+    def access_control(self, user_id, control_number):
+        console = Console.objects.select_related('business').filter(
+            Q(user=user_id) | Q(business__user=user_id) & Q(business__comfirm_business=True),
+            id=control_number,
+        )
+
+        return console
+
     def get(self, request, control_number, format=None):
         if request.user.is_authenticated:
-            queryset = StorageRoom.objects.filter(console=control_number).order_by('-id')
-            return Response({'storage_room_list': queryset}, template_name='inventory/inventory-manual.html')
+            access = self.access_control(request.user.id, control_number)
+
+            if access.exists():
+                queryset = StorageRoom.objects.filter(console=control_number).order_by('-id')
+                return Response({'storage_room_list': queryset}, template_name='inventory/inventory-manual.html')
+            else:
+                return redirect('Main:IndexView')
         else:
             return redirect('Main:SignInView')
 
@@ -31,7 +45,7 @@ class StoreLayoutView(APIView):
         sorted_id, sorted_color = [], []
         match = {}
 
-        queryset = StoreLayout.objects.filter(storage_room=request.query_params.get('FK'))
+        queryset = StoreLayout.objects.filter(storage_room=request.query_params.get('fk_storage_room'))
 
         if queryset.exists():
             for data in queryset:
@@ -67,7 +81,7 @@ class AquariumSectionView(APIView):
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, control_number, format=None):
-        queryset = AquariumSection.objects.get(id=request.query_params.get('PK'))
+        queryset = AquariumSection.objects.get(id=request.query_params.get('pk_aquarium_section'))
 
         serializer = AquariumSectionSerializer(queryset)
         return JsonResponse(serializer.data, safe=False, status=200)
@@ -77,7 +91,7 @@ class AquariumView(APIView):
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, control_number, format=None):
-        queryset = Aquarium.objects.get(aquarium_section=request.query_params.get('FK'), row=request.query_params.get('row'), column=request.query_params.get('column'))
+        queryset = Aquarium.objects.get(aquarium_section=request.query_params.get('fk_aquarium_section'), row=request.query_params.get('row'), column=request.query_params.get('column'))
 
         serializer = AquariumSerializer(queryset)
         return JsonResponse(serializer.data, safe=False, status=200)
@@ -96,14 +110,42 @@ class AquariumStockView(APIView):
                 default=Value('available'),
                 output_field=CharField(),
             )
-        ).filter(aquarium=request.query_params.get('FK')).order_by('-id')
+        ).filter(aquarium=request.query_params.get('fk_aquarium')).order_by('-id')
         context = list(queryset.values('creature__species', 'creature__breed',
                                        'creature__remark', 'size', 'gender', 'quantity', 'status'))
         return JsonResponse(context, safe=False, status=200)
 
     def post(self, request, control_number, format=None):
         serializer = AquariumStockSerializer(data=request.data)
-        serializer.set_foreign_key(control_number, request.data['FK'])
+        serializer.set_foreign_key(control_number, request.data['fk_aquarium'])
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+
+        return JsonResponse(serializer.errors, status=400)
+
+
+class GoodsIssueView(APIView):
+    renderer_classes = (JSONRenderer,)
+
+    def post(self, request, control_number, format=None):
+        serializer = GoodsIssueSerializer(data=request.data)
+        serializer.set_foreign_key(control_number, request.data['fk_aquarium'])
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+
+        return JsonResponse(serializer.errors, status=400)
+
+
+class GoodsReceiptView(APIView):
+    renderer_classes = (JSONRenderer,)
+
+    def post(self, request, control_number, format=None):
+        serializer = GoodsReceiptSerializer(data=request.data)
+        serializer.set_foreign_key(control_number, request.data['fk_aquarium'])
 
         if serializer.is_valid():
             serializer.save()

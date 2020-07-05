@@ -1,30 +1,61 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, Subquery, F
 from django.utils import timezone
 from rest_framework import serializers
 from console.models import Console
 from store.models import Aquarium
 from product.models import Creature, UnitPrice
-from inventory.models import AquariumStock, GENDER_CHOICES
+from order.models import OrderItem
+from inventory.models import GENDER_CHOICES, TRANSACTION_TYPE_CHOICES, DESCRIPTION_CHOICES, AquariumStock, StockLedger
 
 # Create your serializers here.
 
 
 class AquariumStockSerializer(serializers.Serializer):
-    species = serializers.CharField(write_only=True, required=True)
-    breed = serializers.CharField(write_only=True, required=True)
-    remark = serializers.CharField(allow_blank=True, required=False)
-    gender = serializers.ChoiceField(required=True, choices=GENDER_CHOICES)
-    size = serializers.FloatField(required=True)
-    quantity = serializers.IntegerField(required=True)
+    species = serializers.CharField(
+        write_only=True,
+        required=True,
+        error_messages={
+            'blank': '어종을 입력해주세요.',
+        },
+    )
+    breed = serializers.CharField(
+        write_only=True,
+        required=True,
+        error_messages={
+            'blank': '품종을 입력해주세요.',
+        },
+    )
+    remark = serializers.CharField(
+        allow_blank=True,
+        required=False,
+    )
+    gender = serializers.ChoiceField(
+        required=True,
+        choices=GENDER_CHOICES,
+    )
+    size = serializers.FloatField(
+        required=True,
+        error_messages={
+            'blank': '크기를 입력해주세요.',
+            'invalid': '유효한 숫자가 필요합니다.',
+        },
+    )
+    quantity = serializers.IntegerField(
+        required=True,
+        error_messages={
+            'blank': '마릿수를 입력해주세요.',
+            'invalid': '유효한 숫자가 필요합니다.',
+        },
+    )
 
-    def set_foreign_key(self, key1, key2):
-        self.FK1 = key1  # Console
-        self.FK2 = key2  # Aquarium
+    def set_foreign_key(self, fk_console, fk_aquarium):
+        self.fk_console = fk_console
+        self.fk_aquarium = fk_aquarium
 
     def get_creature(self, species, breed, remark):
         try:
-            creature = Creature.objects.get(species=species, breed=breed, remark=remark, console=self.FK1)
+            creature = Creature.objects.get(species=species, breed=breed, remark=remark, console=self.fk_console)
         except ObjectDoesNotExist:
             creature = None
 
@@ -35,8 +66,8 @@ class AquariumStockSerializer(serializers.Serializer):
 
         if creature is not None:
             aquarium_stock = AquariumStock.objects.filter(
-                console=Console.objects.get(id=self.FK1),
-                aquarium=Aquarium.objects.get(id=self.FK2),
+                console=Console.objects.get(id=self.fk_console),
+                aquarium=Aquarium.objects.get(id=self.fk_aquarium),
                 creature=creature,
                 gender=data['gender'],
                 size=data['size'],
@@ -52,7 +83,7 @@ class AquariumStockSerializer(serializers.Serializer):
 
         if creature is None:
             creature = Creature.objects.create(
-                console=Console.objects.get(id=self.FK1),
+                console=Console.objects.get(id=self.fk_console),
                 species=validated_data['species'],
                 breed=validated_data['breed'],
                 remark=validated_data['remark'],
@@ -60,8 +91,8 @@ class AquariumStockSerializer(serializers.Serializer):
             creature.save()
 
         aquarium_stock = AquariumStock.objects.create(
-            console=Console.objects.get(id=self.FK1),
-            aquarium=Aquarium.objects.get(id=self.FK2),
+            console=Console.objects.get(id=self.fk_console),
+            aquarium=Aquarium.objects.get(id=self.fk_aquarium),
             creature=creature,
             gender=validated_data['gender'],
             size=validated_data['size'],
@@ -71,7 +102,7 @@ class AquariumStockSerializer(serializers.Serializer):
         try:
             unit_price = UnitPrice.objects.get(
                 Q(min_size__lte=validated_data['size']) & Q(max_size__gte=validated_data['size']),
-                console=Console.objects.get(id=self.FK1),
+                console=Console.objects.get(id=self.fk_console),
                 creature=creature,
                 unit=validated_data['gender'],
             )
@@ -86,15 +117,61 @@ class AquariumStockSerializer(serializers.Serializer):
         return aquarium_stock
 
 
-class ShippingSerializer(serializers.Serializer):
-    def set_foreign_key(self, key1, key2):
-        self.FK1 = key1  # Console
-        self.FK2 = key2  # Aquarium
-    pass
+class GoodsIssueSerializer(serializers.Serializer):
+    order_item = serializers.CharField(required=False)
+    transaction_type = serializers.ChoiceField(required=True, choices=TRANSACTION_TYPE_CHOICES)
+    description = serializers.ChoiceField(required=True, choices=DESCRIPTION_CHOICES)
+    quantity = serializers.IntegerField(required=True)
 
+    def set_foreign_key(self, fk_console, fk_aquarium):
+        self.fk_console = fk_console
+        self.fk_aquarium = fk_aquarium
 
-class ReceivingSerializer(serializers.Serializer):
-    def set_foreign_key(self, key1, key2):
-        self.FK1 = key1  # Console
-        self.FK2 = key2  # Aquarium
-    pass
+    def validate(self, data):
+        if (data['description'] == 'goods_sales'):
+            if ('order_item' not in data):
+                raise serializers.ValidationError('처리할 주문을 선택해주세요.')
+        else:
+            data['order_item'] = None
+
+        return data
+
+    def create(self, validated_data):
+        stock_ledger = StockLedger.objects.create(
+            console=Console.objects.get(id=self.fk_console),
+            aquarium=Aquarium.objects.get(id=self.fk_aquarium),
+            transaction_type=validated_data['transaction_type'],
+            description=validated_data['description'],
+            quantity=validated_data['quantity'],
+        )
+
+        if validated_data['order_item'] is not None:
+            stock_ledger.order_item = OrderItem.objects.get(id=validated_data['order_item'])
+
+            UnitPrice.objects.filter(
+                id=Subquery(
+                    OrderItem.objects.filter(
+                        id=validated_data['order_item']
+                    ).values_list('unit_price')[:1]
+                )
+            ).update(
+                order_quantity=F('order_quantity') - validated_data['quantity']
+            )
+            
+        return stock_ledger
+
+class GoodsReceiptSerializer(serializers.Serializer):
+    transaction_type = serializers.ChoiceField(required=True, choices=TRANSACTION_TYPE_CHOICES)
+    description = serializers.ChoiceField(required=True, choices=DESCRIPTION_CHOICES)
+    quantity = serializers.IntegerField(required=True)
+    purchase_price = serializers.IntegerField(required=True)
+
+    def set_foreign_key(self, fk_console, fk_aquarium):
+        self.fk_console = fk_console
+        self.fk_aquarium = fk_aquarium
+
+    def validate(self, data):
+        return data
+
+    def create(self, validated_data):
+        return validated_data

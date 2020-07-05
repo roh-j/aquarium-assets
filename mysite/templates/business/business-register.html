@@ -20,7 +20,6 @@
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
-    <script src="{% static 'assets/js/messages.js' %}"></script>
 
     <title>Aquarium Assets</title>
     <script>
@@ -45,7 +44,7 @@
                 }).fail(function (res, status, xhr) {
                     $.each(res.responseJSON, function (key, value) {
                         toastr.remove();
-                        toastr.warning(error_messages['business_register'][key][value]);
+                        toastr.warning(value);
                         return false;
                     });
                 });
@@ -95,15 +94,15 @@
                     <img src="{% static 'assets/img/icon/Actions-view-pim-contacts-icon-128x128.png' %}" class="primary-image img-responsive">
                     <hr>
                     <div class="form-group">
+                        <label for="id_name_of_company">상호</label>
+                        <input type="text" id="id_name_of_company" name="name_of_company" class="form-control" autofocus>
+                    </div>
+                    <div class="form-group">
                         <label for="id_registration_number">사업자등록번호</label>
-                        <input type="text" id="id_registration_number" name="registration_number" class="form-control" autofocus>
+                        <input type="text" id="id_registration_number" name="registration_number" class="form-control">
                     </div>
                     <div class="alert alert-explain">
                         <i class="fas fa-exclamation-circle fa-fw"></i> (-) 를 제외하고 입력해주세요.
-                    </div>
-                    <div class="form-group">
-                        <label for="id_name_of_company">상호</label>
-                        <input type="text" id="id_name_of_company" name="name_of_company" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="id_address">소재지</label>

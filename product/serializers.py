@@ -16,22 +16,64 @@ class CreatureSerializer(serializers.ModelSerializer):
 
 
 class UnitPriceSerializer(serializers.Serializer):
-    species = serializers.CharField(write_only=True, required=True)
-    breed = serializers.CharField(write_only=True, required=True)
-    remark = serializers.CharField(allow_blank=True, required=False)
-    min_size = serializers.FloatField(required=True)
-    max_size = serializers.FloatField(required=True)
-    stages_of_development = serializers.ChoiceField(required=True, choices=STAGES_OF_DEVELOPMENT_CHOICES)
-    unit = serializers.ChoiceField(required=True, choices=UNIT_CHOICES)
-    scope_of_sales = serializers.ChoiceField(required=True, choices=SCOPE_OF_SALES_CHOICES)
-    price = serializers.FloatField(required=True)
+    species = serializers.CharField(
+        write_only=True,
+        required=True,
+        error_messages={
+            'blank': '어종을 입력해주세요.',
+        },
+    )
+    breed = serializers.CharField(
+        write_only=True,
+        required=True,
+        error_messages={
+            'blank': '품종을 입력해주세요.',
+        },
+    )
+    remark = serializers.CharField(
+        allow_blank=True,
+        required=False,
+    )
+    min_size = serializers.FloatField(
+        required=True,
+        error_messages={
+            'blank': '최소 크기를 입력해주세요.',
+            'invalid': '유효한 숫자가 필요합니다.',
+        },
+    )
+    max_size = serializers.FloatField(
+        required=True,
+        error_messages={
+            'blank': '최대 크기를 입력해주세요.',
+            'invalid': '유효한 숫자가 필요합니다.',
+        },
+    )
+    stages_of_development = serializers.ChoiceField(
+        required=True,
+        choices=STAGES_OF_DEVELOPMENT_CHOICES,
+    )
+    unit = serializers.ChoiceField(
+        required=True,
+        choices=UNIT_CHOICES,
+    )
+    scope_of_sales = serializers.ChoiceField(
+        required=True,
+        choices=SCOPE_OF_SALES_CHOICES,
+    )
+    price = serializers.FloatField(
+        required=True,
+        error_messages={
+            'blank': '가격을 입력해주세요.',
+            'invalid': '유효한 숫자가 필요합니다.',
+        },
+    )
 
-    def set_foreign_key(self, key):
-        self.FK = key
+    def set_foreign_key(self, fk_console):
+        self.fk_console = fk_console
 
     def get_creature(self, species, breed, remark):
         try:
-            creature = Creature.objects.get(species=species, breed=breed, remark=remark, console=self.FK)
+            creature = Creature.objects.get(species=species, breed=breed, remark=remark, console=self.fk_console)
         except ObjectDoesNotExist:
             creature = None
 
@@ -44,7 +86,7 @@ class UnitPriceSerializer(serializers.Serializer):
             unit_price = UnitPrice.objects.filter(
                 Q(min_size__lte=data['min_size']) & Q(max_size__gte=data['min_size']) |
                 Q(min_size__lte=data['max_size']) & Q(max_size__gte=data['max_size']),
-                console=Console.objects.get(id=self.FK),
+                console=Console.objects.get(id=self.fk_console),
                 creature=creature,
                 unit=data['unit'],
             )
@@ -53,7 +95,7 @@ class UnitPriceSerializer(serializers.Serializer):
                 raise serializers.ValidationError()
 
         if data['min_size'] > data['max_size']:
-            raise serializers.ValidationError()
+            raise serializers.ValidationError('크기의 범위를 확인하세요.')
 
         return data
 
@@ -62,7 +104,7 @@ class UnitPriceSerializer(serializers.Serializer):
 
         if creature is None:
             creature = Creature.objects.create(
-                console=Console.objects.get(id=self.FK),
+                console=Console.objects.get(id=self.fk_console),
                 species=validated_data['species'],
                 breed=validated_data['breed'],
                 remark=validated_data['remark'],
@@ -70,7 +112,7 @@ class UnitPriceSerializer(serializers.Serializer):
             creature.save()
 
         unit_price = UnitPrice.objects.create(
-            console=Console.objects.get(id=self.FK),
+            console=Console.objects.get(id=self.fk_console),
             creature=creature,
             min_size=validated_data['min_size'],
             max_size=validated_data['max_size'],
@@ -82,7 +124,7 @@ class UnitPriceSerializer(serializers.Serializer):
 
         aquarium_stock = AquariumStock.objects.filter(
             Q(size__gte=validated_data['min_size']) & Q(size__lte=validated_data['max_size']),
-            console=Console.objects.get(id=self.FK),
+            console=Console.objects.get(id=self.fk_console),
             creature=creature,
             gender=validated_data['unit'],
         )

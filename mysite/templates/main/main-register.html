@@ -20,7 +20,6 @@
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
-    <script src="{% static 'assets/js/messages.js' %}"></script>
 
     <title>Aquarium Assets</title>
     <script>
@@ -45,7 +44,7 @@
                 }).fail(function (res, status, xhr) {
                     $.each(res.responseJSON, function (key, value) {
                         toastr.remove();
-                        toastr.warning(error_messages['main_register'][key][value]);
+                        toastr.warning(value);
                         return false;
                     });
                 });
@@ -85,7 +84,7 @@
                     <img src="{% static 'assets/img/icon/Places-user-identity-icon-128x128.png' %}" class="primary-image img-responsive">
                     <hr>
                     <div class="form-group">
-                        <label for="id_membership" class="control-label d-block">멤버십</label>
+                        <span class="control-label">멤버십</span>
                         <div id="id_membership" class="btn-group d-flex" data-toggle="buttons">
                             <label class="btn btn-default w-100 active">
                                 <input type="radio" name="membership" value="general" checked> 일반

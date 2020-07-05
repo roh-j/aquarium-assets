@@ -20,7 +20,6 @@
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
-    <script src="{% static 'assets/js/messages.js' %}"></script>
 
     <title>Aquarium Assets</title>
     <script>
@@ -45,7 +44,7 @@
                 }).fail(function (res, status, xhr) {
                     $.each(res.responseJSON, function (key, value) {
                         toastr.remove();
-                        toastr.warning(error_messages['main_login'][key][value]);
+                        toastr.warning(value);
                         return false;
                     });
                 });

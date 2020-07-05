@@ -24,4 +24,6 @@ urlpatterns = [
     path('manual/aquarium-section/', views.AquariumSectionView.as_view(), name='AquariumSectionView'),
     path('manual/aquarium/', views.AquariumView.as_view(), name='AquariumView'),
     path('manual/aquarium-stock/', views.AquariumStockView.as_view(), name='AquariumStockView'),
+    path('manual/goods-issue/', views.GoodsIssueView.as_view(), name='GoodsIssueView'),
+    path('manual/goods-receipt/', views.GoodsReceiptView.as_view(), name='GoodsReceiptView'),
 ]

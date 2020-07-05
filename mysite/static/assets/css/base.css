@@ -30,9 +30,6 @@ table tbody tr td {
     vertical-align: middle !important;
     white-space: nowrap !important;
 }
-.panel-group .panel-collapse {
-    border-top: 1px solid #343a40 !important;
-}
 .panel,
 .panel-heading {
     border-color: #343a40 !important;
@@ -302,6 +299,33 @@ table .pretty {
 }
 #list-widget > div:last-child {
     border-right: none;
+}
+.modal-body .nav-tabs {
+    margin-bottom: 20px;
+}
+.modal-body .tab-content > .tab-pane {
+    padding-top: 0;
+}
+#pending-order .panel {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: none;
+}
+#pending-order .panel .panel-heading {
+    padding: 10px 0;
+}
+#pending-order .panel:first-child .panel-heading {
+    border-top: 1px dashed #ddd !important;
+}
+#pending-order .panel .table {
+    border: 1px solid #ddd;
+}
+span.control-label {
+    vertical-align: middle;
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
 }
 /* menu styles */
 .navbar-menu {

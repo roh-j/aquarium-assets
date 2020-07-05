@@ -139,7 +139,7 @@ $(function () {
         }).fail(function (res, status, xhr) {
             $.each(res.responseJSON, function (key, value) {
                 toastr.remove();
-                toastr.warning(error_messages['product'][key][value]);
+                toastr.warning(value);
                 return false;
             });
         });
