@@ -62,115 +62,6 @@ $(function () {
         $('.nav-tabs a[href="#store-layout"]').tab('show');
     });
 
-    $('#form-goods-issue-register').on('submit', function (e) {
-        e.preventDefault();
-        var transaction = $('.modal-body .nav-tabs li.active a', this).attr('href');
-
-        switch (transaction) {
-            case '#goods-issue-to-sales':
-                var params = {
-                    'transaction_type': 'goods_issue',
-                    'fk_aquarium': aquarium_id,
-                    'fk_aquarium_stock': aquarium_stock_id,
-                    'order_item': $('input:radio[name=pending_order]:checked').val(),
-                    'description': 'goods_sales',
-                    'quantity': $('input[name=goods_issue_quantity]').val()
-                }; break;
-            case '#goods-issue':
-                var params = {
-                    'transaction_type': 'goods_issue',
-                    'fk_aquarium': aquarium_id,
-                    'fk_aquarium_stock': aquarium_stock_id,
-                    'description': $('input:radio[name=goods_issue_description]:checked').val(),
-                    'quantity': $('input[name=goods_issue_quantity]').val()
-                }; break;
-        }
-        
-        $.ajax({
-            url: 'goods-issue/',
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            data: JSON.stringify(params),
-            dataType: 'json'
-        }).done(function (data, status, xhr) {
-            if (transaction == '#goods-issue-to-sales') {
-                var target = $('td span.remaining-order-quantity', $('input:radio[name=pending_order]:checked').closest('tr'));
-                var pre = target.text();
-                var res = parseInt(pre) + parseInt(params['quantity']);
-
-                target.text(res);
-            }
-            
-            $('#goods-issue-register-modal').modal('hide');
-            $('#goods-issue-register-modal').on('hidden.bs.modal', function () {
-                async_aquarium_stock();
-
-                toastr.remove();
-                toastr.success('출고가 등록되었습니다.');
-                $(this).off('hidden.bs.modal');
-            });
-        }).fail(function (res, status, xhr) {
-            $.each(res.responseJSON, function (key, value) {
-                toastr.remove();
-                toastr.warning(value);
-                return false;
-            });
-        });
-    });
-
-    $('#form-goods-receipt-register').on('submit', function (e) {
-        e.preventDefault();
-
-        switch ($('.modal-body .nav-tabs li.active a', this).attr('href')) {
-            case '#goods-receipt-for-purchase':
-                var params = {
-                    'transaction_type': 'goods_receipt',
-                    'fk_aquarium': aquarium_id,
-                    'fk_aquarium_stock': aquarium_stock_id,
-                    'description': 'purchase_of_goods',
-                    'quantity': $('input[name=goods_receipt_quantity]').val(),
-                    'purchase_price': $('input[name=purchase_price]').val()
-                }; break;
-            case '#goods-receipt':
-                var params = {
-                    'transaction_type': 'goods_receipt',
-                    'fk_aquarium': aquarium_id,
-                    'fk_aquarium_stock': aquarium_stock_id,
-                    'description': $('input:radio[name=goods_receipt_description]:checked').val(),
-                    'quantity': $('input[name=goods_receipt_quantity]').val()
-                }; break;
-        }
-
-        $.ajax({
-            url: 'goods-receipt/',
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            data: JSON.stringify(params),
-            dataType: 'json'
-        }).done(function (data, status, xhr) {
-            $('#goods-receipt-register-modal').modal('hide');
-            $('#goods-receipt-register-modal').on('hidden.bs.modal', function () {
-                async_aquarium_stock();
-
-                toastr.remove();
-                toastr.success('입고가 등록되었습니다.');
-                $(this).off('hidden.bs.modal');
-            });
-        }).fail(function (res, status, xhr) {
-            $.each(res.responseJSON, function (key, value) {
-                toastr.remove();
-                toastr.warning(value);
-                return false;
-            });
-        });
-    });
-
     order_sheet_table = $('#order_sheet_table').DataTable({
         'rowsGroup': [0, 1, 2, 3],
         'autoWidth': false,
@@ -307,13 +198,29 @@ $(function () {
 
     $('#form-aquarium-stock-register').on('submit', function (e) {
         e.preventDefault();
+        var transaction = $('.modal-body .nav-tabs li.active a', this).attr('href');
         var params = $('#form-aquarium-stock-register').serializeObject();
-        params = $.extend(
-            params, {
-                'fk_aquarium': aquarium_id
-            }
-        );
 
+        switch (transaction) {
+            case '#new-receipt-of-goods':
+                params = $.extend(
+                    params, {
+                        'fk_aquarium': aquarium_id,
+                        'transaction_type': 'goods_receipt',
+                        'description': 'new_receipt_of_goods',
+                    }
+                ); break;
+            case '#goods-receipt-for-new-purchase':
+                params = $.extend(
+                    params, {
+                        'fk_aquarium': aquarium_id,
+                        'transaction_type': 'goods_receipt',
+                        'description': 'new_receipt_of_goods',
+                        'purchase_price': $('input[name=new_purchase_price]').val()
+                    }
+                ); break;
+        }
+        
         $.ajax({
             url: 'aquarium-stock/',
             method: 'post',
@@ -330,6 +237,115 @@ $(function () {
 
                 toastr.remove();
                 toastr.success('재고를 등록하였습니다.');
+                $(this).off('hidden.bs.modal');
+            });
+        }).fail(function (res, status, xhr) {
+            $.each(res.responseJSON, function (key, value) {
+                toastr.remove();
+                toastr.warning(value);
+                return false;
+            });
+        });
+    });
+
+    $('#form-goods-issue-register').on('submit', function (e) {
+        e.preventDefault();
+        var transaction = $('.modal-body .nav-tabs li.active a', this).attr('href');
+
+        switch (transaction) {
+            case '#goods-issue-to-sales':
+                var params = {
+                    'fk_aquarium': aquarium_id,
+                    'fk_aquarium_stock': aquarium_stock_id,
+                    'transaction_type': 'goods_issue',
+                    'order_item': $('input:radio[name=pending_order]:checked').val(),
+                    'description': 'goods_sales',
+                    'quantity': $('input[name=goods_issue_quantity]').val()
+                }; break;
+            case '#goods-issue':
+                var params = {
+                    'fk_aquarium': aquarium_id,
+                    'fk_aquarium_stock': aquarium_stock_id,
+                    'transaction_type': 'goods_issue',
+                    'description': $('input:radio[name=goods_issue_description]:checked').val(),
+                    'quantity': $('input[name=goods_issue_quantity]').val()
+                }; break;
+        }
+
+        $.ajax({
+            url: 'goods-issue/',
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(params),
+            dataType: 'json'
+        }).done(function (data, status, xhr) {
+            if (transaction == '#goods-issue-to-sales') {
+                var target = $('td span.remaining-order-quantity', $('input:radio[name=pending_order]:checked').closest('tr'));
+                var pre = target.text();
+                var res = parseInt(pre) + parseInt(params['quantity']);
+
+                target.text(res);
+            }
+
+            $('#goods-issue-register-modal').modal('hide');
+            $('#goods-issue-register-modal').on('hidden.bs.modal', function () {
+                async_aquarium_stock();
+
+                toastr.remove();
+                toastr.success('출고가 등록되었습니다.');
+                $(this).off('hidden.bs.modal');
+            });
+        }).fail(function (res, status, xhr) {
+            $.each(res.responseJSON, function (key, value) {
+                toastr.remove();
+                toastr.warning(value);
+                return false;
+            });
+        });
+    });
+
+    $('#form-goods-receipt-register').on('submit', function (e) {
+        e.preventDefault();
+
+        switch ($('.modal-body .nav-tabs li.active a', this).attr('href')) {
+            case '#goods-receipt-for-purchase':
+                var params = {
+                    'fk_aquarium': aquarium_id,
+                    'fk_aquarium_stock': aquarium_stock_id,
+                    'transaction_type': 'goods_receipt',
+                    'description': 'purchase_of_goods',
+                    'quantity': $('input[name=goods_receipt_quantity]').val(),
+                    'purchase_price': $('input[name=purchase_price]').val()
+                }; break;
+            case '#goods-receipt':
+                var params = {
+                    'fk_aquarium': aquarium_id,
+                    'fk_aquarium_stock': aquarium_stock_id,
+                    'transaction_type': 'goods_receipt',
+                    'description': $('input:radio[name=goods_receipt_description]:checked').val(),
+                    'quantity': $('input[name=goods_receipt_quantity]').val()
+                }; break;
+        }
+
+        $.ajax({
+            url: 'goods-receipt/',
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(params),
+            dataType: 'json'
+        }).done(function (data, status, xhr) {
+            $('#goods-receipt-register-modal').modal('hide');
+            $('#goods-receipt-register-modal').on('hidden.bs.modal', function () {
+                async_aquarium_stock();
+
+                toastr.remove();
+                toastr.success('입고가 등록되었습니다.');
                 $(this).off('hidden.bs.modal');
             });
         }).fail(function (res, status, xhr) {
@@ -361,7 +377,7 @@ var async_order_sheet = function (callback) {
                 order_sheet_table.row.add(
                     $(
                         '<tr>\
-                            <th scope="row" class="selection">\
+                            <th scope="row">\
                                 <div class="pretty p-icon">\
                                     <input type="checkbox" name="order" value="' + data[i]['id'] + '">\
                                     <div class="state p-warning">\
@@ -441,7 +457,7 @@ var async_order_sheet = function (callback) {
                             var remaining_order_quantity = parseInt(order[i]['order_items'][j]['quantity']) - parseInt(order[i]['order_items'][j]['remaining_order_quantity']);
                             tbody +=
                                 '<tr>\
-                                    <th scope="row" class="selection">\
+                                    <th scope="row">\
                                         <div class="pretty p-default p-round">\
                                             <input type="radio" name="pending_order" value="' + order[i]['order_items'][j]['id'] + '">\
                                             <div class="state p-warning">\
@@ -469,7 +485,7 @@ var async_order_sheet = function (callback) {
                                 <div id="order-' + order[i]['id'] + '" class="table-responsive panel-collapse collapse">\
                                     <table class="table table-bordered table-hover">\
                                         <thead>\
-                                            <th class="selection"></th>\
+                                            <th class="radio-selection"></th>\
                                             <th>번호</th>\
                                             <th>어종</th>\
                                             <th>품종</th>\
@@ -485,7 +501,7 @@ var async_order_sheet = function (callback) {
                                 </div>\
                             </div>'
                         );
-                        idx = i;
+                        idx = i + 1;
                         selected = true;
                         break;
                     }
@@ -544,7 +560,6 @@ var async_aquarium_stock = function (callback) {
                             <div class="btn-group d-flex">\
                                 <button type="button" class="btn btn-default goods-issue-register"><i class="fas fa-minus fa-fw"></i></button>\
                                 <button type="button" class="btn btn-default goods-receipt-register"><i class="fas fa-plus fa-fw"></i></button>\
-                                <button type="button" class="btn btn-default"><i class="fas fa-pen fa-fw"></i></button>\
                             </div>\
                         </td>\
                     </tr>'
@@ -767,15 +782,33 @@ var draw_aquarium = function (callback) {
                             'data-aquarium-row': (data['aquarium_num_of_rows'] - i),
                             'data-aquarium-column': j
                         }));
+                        if (data['aquariums'][data['aquarium_num_of_columns'] * (data['aquarium_num_of_rows'] - i) + j]['is_empty'] == false) {
+                            group.add(aquarium.rect(10, 10).move(48, 68).attr({
+                                'stroke': '#000',
+                                'stroke-width': 2
+                            }));
+                            group.add(aquarium.rect(10, 10).fill('#ffc107').move(48, 68));
+                            group.add(aquarium.line(50, 74, 52, 76).stroke({ width: 1 }));
+                            group.add(aquarium.line(52, 76, 56, 72).stroke({ width: 1 }));
+                        }
+                        else {
+                            group.add(aquarium.rect(10, 10).move(48, 68).attr({
+                                'stroke': '#000',
+                                'stroke-width': 2
+                            }));
+                            group.add(aquarium.rect(10, 10).fill('#e7e7e7').move(48, 68));
+                            group.add(aquarium.line(50, 76, 56, 70).stroke({ width: 1 }));
+                            group.add(aquarium.line(50, 70, 56, 76).stroke({ width: 1 }));
+                        }
                     }
                     
                     group.move(60 * j + j, 60 * (i - 1) + (i - 1));
-                    aquarium.plain((data['aquarium_num_of_rows'] - i + 1) + '-' + (
-                        j + 1
-                    )).attr({
+                    aquarium.plain(
+                        (data['aquarium_num_of_rows'] - i + 1) + '-' + (j + 1)
+                    ).attr({
                         'text-anchor': 'middle',
                         'x': 60 * j + j + 30,
-                        'y': 40 + 60 * (i - 1) + (i - 1)
+                        'y': 41 + 60 * (i - 1) + (i - 1)
                     });
                 }
             }

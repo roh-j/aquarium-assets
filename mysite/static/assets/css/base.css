@@ -60,8 +60,14 @@ table tbody tr td {
     content: "\2022";
     margin-right: 5px;
 }
-thead > tr > th.selection {
+thead > tr > th.checkbox-selection,
+thead > tr > th.radio-selection {
+    min-width: 32px;
     width: 32px;
+}
+.panel-collapse thead > tr > th.radio-selection {
+    min-width: 48px;
+    width: 48px;
 }
 .panel-heading a {
     color: #333;
@@ -390,10 +396,6 @@ dl.business-info dd:last-of-type {
 .navbar-side {
     border: none;
     background-color: #424858;
-}
-.sidebar-collapse,
-.sidebar-collapse .nav {
-    background-color: none;
 }
 .sidebar-collapse .nav {
     padding: 0;

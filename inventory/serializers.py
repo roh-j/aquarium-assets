@@ -48,6 +48,24 @@ class AquariumStockSerializer(serializers.Serializer):
             'invalid': '유효한 숫자가 필요합니다.',
         },
     )
+    transaction_type = serializers.ChoiceField(
+        write_only=True,
+        required=True,
+        choices=TRANSACTION_TYPE_CHOICES,
+    )
+    description = serializers.ChoiceField(
+        write_only=True,
+        required=True,
+        choices=DESCRIPTION_CHOICES,
+    )
+    purchase_price = serializers.IntegerField(
+        write_only=True,
+        required=False,
+        error_messages={
+            'blank': '출고 수량을 입력해주세요.',
+            'invalid': '유효한 숫자가 필요합니다.',
+        },
+    )
 
     def set_foreign_key(self, fk_console, fk_aquarium):
         self.fk_console = fk_console
@@ -61,13 +79,17 @@ class AquariumStockSerializer(serializers.Serializer):
 
         return creature
 
+    def get_aquarium(self):
+        self.aquarium = Aquarium.objects.get(id=self.fk_aquarium)
+
     def validate(self, data):
         creature = self.get_creature(data['species'], data['breed'], data['remark'])
+        self.get_aquarium()
 
         if creature is not None:
             aquarium_stock = AquariumStock.objects.filter(
                 console=Console.objects.get(id=self.fk_console),
-                aquarium=Aquarium.objects.get(id=self.fk_aquarium),
+                aquarium=self.aquarium,
                 creature=creature,
                 gender=data['gender'],
                 size=data['size'],
@@ -79,6 +101,10 @@ class AquariumStockSerializer(serializers.Serializer):
         return data
 
     def create(self, validated_data):
+        if (self.aquarium.is_empty == True):
+            self.aquarium.is_empty = False
+            self.aquarium.save()
+
         creature = self.get_creature(validated_data['species'], validated_data['breed'], validated_data['remark'])
 
         if creature is None:
@@ -91,12 +117,39 @@ class AquariumStockSerializer(serializers.Serializer):
 
         aquarium_stock = AquariumStock.objects.create(
             console=Console.objects.get(id=self.fk_console),
-            aquarium=Aquarium.objects.get(id=self.fk_aquarium),
+            aquarium=self.aquarium,
             creature=creature,
             gender=validated_data['gender'],
             size=validated_data['size'],
             quantity=validated_data['quantity'],
         )
+        
+        ledger_value = AquariumStock.objects.select_related('aquarium').annotate(
+            storage_room_name=F('aquarium__aquarium_section__storage_room__storage_room_name'),
+            section_name=F('aquarium__aquarium_section__section_name'),
+            aquarium_row=F('aquarium__row'),
+            aquarium_column=F('aquarium__column'),
+        ).get(id=aquarium_stock.id)
+
+        stock_ledger = StockLedger.objects.create(
+            console=Console.objects.get(id=self.fk_console),
+            aquarium=self.aquarium,
+            storage_room_name=ledger_value.storage_room_name,
+            section_name=ledger_value.section_name,
+            aquarium_row=ledger_value.aquarium_row,
+            aquarium_column=ledger_value.aquarium_column,
+            species=validated_data['species'],
+            breed=validated_data['breed'],
+            remark=validated_data['remark'],
+            size=validated_data['size'],
+            transaction_type=validated_data['transaction_type'],
+            description=validated_data['description'],
+            quantity=validated_data['quantity'],
+        )
+
+        if ('purchase_price' in validated_data):
+            stock_ledger.purchase_price = validated_data['purchase_price']
+            stock_ledger.save()
 
         try:
             unit_price = UnitPrice.objects.get(
@@ -132,7 +185,10 @@ class GoodsIssueSerializer(serializers.Serializer):
         self.fk_aquarium = fk_aquarium
         self.fk_aquarium_stock = fk_aquarium_stock
 
-    def set_aquarium_stock(self):
+    def get_aquarium(self):
+        self.aquarium = Aquarium.objects.get(id=self.fk_aquarium)
+
+    def get_aquarium_stock(self):
         self.aquarium_stock = AquariumStock.objects.get(id=self.fk_aquarium_stock)
 
     def set_order_item(self, fk_order_item):
@@ -145,6 +201,9 @@ class GoodsIssueSerializer(serializers.Serializer):
         return value
 
     def validate(self, data):
+        self.get_aquarium()
+        self.get_aquarium_stock()
+
         if (data['description'] == 'goods_sales'):
             if ('order_item' not in data):
                 raise serializers.ValidationError('처리할 주문을 선택해주세요.')
@@ -156,17 +215,33 @@ class GoodsIssueSerializer(serializers.Serializer):
         else:
             data['order_item'] = None
 
-        self.set_aquarium_stock()
-
         if (self.aquarium_stock.quantity - data['quantity'] < 0):
             raise serializers.ValidationError('재고 수량이 부족합니다.')
 
         return data
 
     def create(self, validated_data):
+        ledger_value = AquariumStock.objects.select_related('aquarium', 'creature').annotate(
+            storage_room_name=F('aquarium__aquarium_section__storage_room__storage_room_name'),
+            section_name=F('aquarium__aquarium_section__section_name'),
+            aquarium_row=F('aquarium__row'),
+            aquarium_column=F('aquarium__column'),
+            species=F('creature__species'),
+            breed=F('creature__breed'),
+            remark=F('creature__remark'),
+        ).get(id=self.fk_aquarium_stock)
+
         stock_ledger = StockLedger.objects.create(
             console=Console.objects.get(id=self.fk_console),
-            aquarium=Aquarium.objects.get(id=self.fk_aquarium),
+            aquarium=self.aquarium,
+            storage_room_name=ledger_value.storage_room_name,
+            section_name=ledger_value.section_name,
+            aquarium_row=ledger_value.aquarium_row,
+            aquarium_column=ledger_value.aquarium_column,
+            species=ledger_value.species,
+            breed=ledger_value.breed,
+            remark=ledger_value.remark,
+            size=self.aquarium_stock.size,
             transaction_type=validated_data['transaction_type'],
             description=validated_data['description'],
             quantity=validated_data['quantity'],
@@ -194,10 +269,15 @@ class GoodsIssueSerializer(serializers.Serializer):
                 ).delete()
 
             self.aquarium_stock.delete()
+
+            is_empty = AquariumStock.objects.filter(console=self.fk_console, aquarium=self.fk_aquarium).count()
+
+            if (is_empty == 0):
+                self.aquarium.is_empty = True
+                self.aquarium.save()
         else:
             self.aquarium_stock.quantity = F('quantity') - validated_data['quantity']
             self.aquarium_stock.save()
-            stock_ledger.aquarium_stock = self.aquarium_stock
 
         if validated_data['order_item'] is not None:
             stock_ledger.order_item = self.order_item
@@ -278,6 +358,12 @@ class GoodsReceiptSerializer(serializers.Serializer):
         self.fk_aquarium = fk_aquarium
         self.fk_aquarium_stock = fk_aquarium_stock
 
+    def get_aquarium(self):
+        self.aquarium = Aquarium.objects.get(id=self.fk_aquarium)
+
+    def get_aquarium_stock(self):
+        self.aquarium_stock = AquariumStock.objects.get(id=self.fk_aquarium_stock)
+
     def validate_quantity(self, value):
         if (value <= 0):
             raise serializers.ValidationError('입고 수량을 확인해주세요.')
@@ -285,6 +371,9 @@ class GoodsReceiptSerializer(serializers.Serializer):
         return value
 
     def validate(self, data):
+        self.get_aquarium()
+        self.get_aquarium_stock()
+
         if (data['description'] == 'purchase_of_goods'):
             if (data['purchase_price'] <= 0):
                 raise serializers.ValidationError('가격을 확인해주세요.')
@@ -292,10 +381,27 @@ class GoodsReceiptSerializer(serializers.Serializer):
         return data
 
     def create(self, validated_data):
+        ledger_value = AquariumStock.objects.select_related('aquarium', 'creature').annotate(
+            storage_room_name=F('aquarium__aquarium_section__storage_room__storage_room_name'),
+            section_name=F('aquarium__aquarium_section__section_name'),
+            aquarium_row=F('aquarium__row'),
+            aquarium_column=F('aquarium__column'),
+            species=F('creature__species'),
+            breed=F('creature__breed'),
+            remark=F('creature__remark'),
+        ).get(id=self.fk_aquarium_stock)
+
         stock_ledger = StockLedger.objects.create(
             console=Console.objects.get(id=self.fk_console),
-            aquarium=Aquarium.objects.get(id=self.fk_aquarium),
-            aquarium_stock=AquariumStock.objects.get(id=self.fk_aquarium_stock),
+            aquarium=self.aquarium,
+            storage_room_name=ledger_value.storage_room_name,
+            section_name=ledger_value.section_name,
+            aquarium_row=ledger_value.aquarium_row,
+            aquarium_column=ledger_value.aquarium_column,
+            species=ledger_value.species,
+            breed=ledger_value.breed,
+            remark=ledger_value.remark,
+            size=self.aquarium_stock.size,
             transaction_type=validated_data['transaction_type'],
             description=validated_data['description'],
             quantity=validated_data['quantity'],
@@ -303,11 +409,9 @@ class GoodsReceiptSerializer(serializers.Serializer):
 
         if ('purchase_price' in validated_data):
             stock_ledger.purchase_price = validated_data['purchase_price']
+            stock_ledger.save()
 
-        aquarium_stock = AquariumStock.objects.get(id=self.fk_aquarium_stock)
-        aquarium_stock.quantity = F('quantity') + validated_data['quantity']
-        aquarium_stock.save()
-
-        stock_ledger.save()
+        self.aquarium_stock.quantity = F('quantity') + validated_data['quantity']
+        self.aquarium_stock.save()
 
         return stock_ledger

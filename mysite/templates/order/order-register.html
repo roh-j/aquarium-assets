@@ -113,6 +113,9 @@
                             <label for="id_address" class="control-label">주소</label>
                             <input type="text" class="form-control" id="id_address" name="address">
                         </div>
+                        <div class="alert alert-explain">
+                            모든 항목이 입력되어있을 경우 고객 정보에 저장됩니다.
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-default">등록</button>
@@ -135,7 +138,7 @@
                             <table id="customer_table" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="selection"></th>
+                                        <th class="radio-selection"></th>
                                         <th>번호</th>
                                         <th>이름</th>
                                         <th>연락처</th>
@@ -240,7 +243,7 @@
                                 <table id="product_table" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="selection">
+                                            <th class="checkbox-selection">
                                                 <div class="pretty p-icon p-has-indeterminate">
                                                     <input type="checkbox" class="select-all">
                                                     <div class="state p-warning">

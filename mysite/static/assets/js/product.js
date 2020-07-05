@@ -154,6 +154,9 @@ $(function () {
             $('#unit-price-register-modal').on('hidden.bs.modal', function () {
                 form_reset('#form-unit-price-register');
                 async_unit_price();
+
+                toastr.remove();
+                toastr.success('단가가 등록되었습니다.');
                 $(this).off('hidden.bs.modal');
             });
         }).fail(function (res, status, xhr) {
@@ -262,7 +265,7 @@ var async_unit_price = function (callback) {
                         <td>' + data[i]['price'].toLocaleString() + ' 원</td>\
                         <td>' + conv_scope_of_sales(data[i]['scope_of_sales']) + '</td>\
                         <td class="min col-btn">\
-                            <button type="button" class="btn btn-default unit-price-modify"><i class="fas fa-pen fa-fw"></i></button>\
+                            <button type="button" class="btn btn-default unit-price-modify">변경</button>\
                         </td>\
                     </tr>'
                 )

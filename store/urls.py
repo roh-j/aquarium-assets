@@ -20,6 +20,7 @@ app_name = 'Store'
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='IndexView'),
+    path('delete-dependency/', views.DeleteDependencyView.as_view(), name='DeleteDependencyView'),
     path('storage-room/', views.StorageRoomView.as_view(), name='StorageRoomView'),
     path('aquarium-section/', views.AquariumSectionView.as_view(), name='AquariumSectionView'),
     path('store-layout/', views.StoreLayoutView.as_view(), name='StoreLayoutView'),

@@ -1,4 +1,6 @@
 var params = {};
+
+var product_items = [];
 var order_items = [];
 var order_item_idx = null;
 
@@ -288,10 +290,26 @@ var async_product = function (callback) {
         product_table.clear().draw();
 
         for (i = 0; i < data.length; i++) {
+            var meta = {};
+
+            meta['id'] = (product_table.rows().count() + 1);
+            meta['unit_price'] = data[i]['unit_price'];
+            meta['species'] = data[i]['creature__species'];
+            meta['breed'] = data[i]['creature__breed'];
+            meta['remark'] = data[i]['creature__remark'];
+            meta['min_size'] = data[i]['unit_price__min_size'];
+            meta['max_size'] = data[i]['unit_price__max_size'];
+            meta['stages_of_development'] = data[i]['unit_price__stages_of_development'];
+            meta['unit'] = data[i]['unit'];
+            meta['price'] = data[i]['unit_price__price'];
+            meta['quantity'] = 1;
+            meta['remaining_quantity'] = data[i]['remaining_quantity'];
+
+            product_items.push(meta);
             product_table.row.add(
                 $(
                     '<tr>\
-                        <th scope="row" class="selection">\
+                        <th scope="row">\
                             <div class="pretty p-icon">\
                                 <input type="checkbox" name="product">\
                                 <div class="state p-warning">\
@@ -300,21 +318,7 @@ var async_product = function (callback) {
                                 </div>\
                             </div>\
                         </th>\
-                        <th>\
-                            <span class="data-bind"\
-                                data-id="' + (product_table.rows().count() + 1) + '"\
-                                data-unit-price="' + data[i]['unit_price'] + '"\
-                                data-species="' + data[i]['creature__species'] + '"\
-                                data-breed="' + data[i]['creature__breed'] + '"\
-                                data-remark="' + escape_html(data[i]['creature__remark']) + '"\
-                                data-min-size="' + data[i]['unit_price__min_size'] + '"\
-                                data-max-size="' + data[i]['unit_price__max_size'] + '"\
-                                data-stages-of-development="' + data[i]['unit_price__stages_of_development'] + '"\
-                                data-unit="' + data[i]['unit'] + '"\
-                                data-price="' + data[i]['unit_price__price'] + '"\
-                                data-remaining-quantity="' + data[i]['remaining_quantity'] + '"></span>\
-                            ' + (product_table.rows().count() + 1) + '\
-                        </th>\
+                        <th>' + (product_table.rows().count() + 1) + '</th>\
                         <td>' + data[i]['creature__species'] + '</td>\
                         <td>' + data[i]['creature__breed'] + '</td>\
                         <td>' + data[i]['creature__remark'] + '</td>\
@@ -345,46 +349,49 @@ var async_product = function (callback) {
             }
         });
 
-        event_add_to_cart();
-
         $('#selected-items-to-cart').on('click', function () {
             var cells = product_table.cells().nodes();
-            
+            var selected = false;
+            var excess = true;
+            var i = 0;
+
             $(cells).find('input:checkbox[name=product]:checked').each(function () {
                 var overlap = false;
-                var product = $('th span.data-bind', $(this).closest('tr'));
-                for (i = 0; i < order_items.length; i++) {
-                    if (order_items[i]['id'] == product.data('id')) {
-                        if (order_items[i]['remaining_quantity'] <= order_items[i]['quantity']) {
+                var idx = product_table.row($(this).parents('tr')).index();
+                selected = true;
+
+                for (j = i; j < order_items.length; j++) {
+                    if (order_items[j]['id'] == product_items[idx]['id']) {
+                        if (order_items[j]['remaining_quantity'] <= order_items[j]['quantity']) {
                             return;
                         }
-                        order_items[i]['quantity'] = parseInt(order_items[i]['quantity']) + 1;
+                        order_items[j]['quantity'] = parseInt(order_items[j]['quantity']) + 1;
                         overlap = true;
+                        i = j + 1;
+                        break;
                     }
                 }
                 if (!overlap) {
-                    var data = {
-                        'id': product.data('id'),
-                        'unit_price': product.data('unit-price'),
-                        'species': product.data('species'),
-                        'breed': product.data('breed'),
-                        'remark': product.data('remark'),
-                        'min_size': product.data('min-size'),
-                        'max_size': product.data('max-size'),
-                        'stages_of_development': product.data('stages-of-development'),
-                        'unit': product.data('unit'),
-                        'price': product.data('price'),
-                        'quantity': 1,
-                        'remaining_quantity': product.data('remaining-quantity')
-                    };
-                    order_items.push(data);
+                    order_items.push(product_items[idx]);
                 }
+
+                excess = false;
+            });
+
+            if (!selected) {
+                $('#alert-modal .modal-body').text('상품을 선택해주세요.');
+                $('#alert-modal').modal('show');
+            }
+            if (selected && !excess) {
                 update_cart(function () {
                     toastr.remove();
                     toastr.success('상품을 담았습니다.');
                 });
-            });
+            }
         });
+
+        event_add_to_cart();
+
         typeof callback === 'function' && callback();
     }).fail(function (res, status, xhr) { });
 };
@@ -405,7 +412,7 @@ var async_customer = function (callback) {
             customer_table.row.add(
                 $(
                     '<tr>\
-                        <th scope="row" class="selection">\
+                        <th scope="row">\
                             <div class="pretty p-default p-round">\
                                 <input type="radio" name="customer">\
                                 <div class="state p-warning">\
@@ -466,49 +473,6 @@ var async_customer = function (callback) {
     }).fail(function (res, status, xhr) { });
 };
 
-var event_add_to_cart = function (callback) {
-    $('.add-to-cart').off('click');
-    $('.add-to-cart').on('click', function () {
-        var overlap = false;
-        var product = $('th span.data-bind', $(this).closest('tr'));
-
-        for (i = 0; i < order_items.length; i++) {
-            if (order_items[i]['id'] == product.data('id')) {
-                if (order_items[i]['remaining_quantity'] <= order_items[i]['quantity']) {
-                    toastr.remove();
-                    toastr.warning('재고가 부족합니다.');
-                    return;
-                }
-                order_items[i]['quantity'] = parseInt(order_items[i]['quantity']) + 1;
-                overlap = true;
-            }
-        }
-        if (!overlap) {
-            var data = {
-                'id': product.data('id'),
-                'unit_price': product.data('unit-price'),
-                'species': product.data('species'),
-                'breed': product.data('breed'),
-                'remark': product.data('remark'),
-                'min_size': product.data('min-size'),
-                'max_size': product.data('max-size'),
-                'stages_of_development': product.data('stages-of-development'),
-                'unit': product.data('unit'),
-                'price': product.data('price'),
-                'quantity': 1,
-                'remaining_quantity': product.data('remaining-quantity')
-            };
-            order_items.push(data);
-        }
-        update_cart(function () {
-            toastr.remove();
-            toastr.success('상품을 담았습니다.');
-        });
-    });
-
-    typeof callback === 'function' && callback();
-};
-
 var update_cart = function (callback) {
     var payment = 0;
     order_item_table.clear().draw();
@@ -517,21 +481,7 @@ var update_cart = function (callback) {
         order_item_table.row.add(
             $(
                 '<tr>\
-                    <th>\
-                        <span class="data-bind"\
-                            data-unit-price="' + order_items[i]['unit_price'] + '"\
-                            data-species="' + order_items[i]['species'] + '"\
-                            data-breed="' + order_items[i]['breed'] + '"\
-                            data-remark="' + escape_html(order_items[i]['remark']) + '"\
-                            data-min-size="' + order_items[i]['min_size'] + '"\
-                            data-max-size="' + order_items[i]['max_size'] + '"\
-                            data-stages-of-development="' + order_items[i]['stages_of_development'] + '"\
-                            data-unit="' + order_items[i]['unit'] + '"\
-                            data-price="' + order_items[i]['price'] + '"\
-                            data-quantity="' + order_items[i]['quantity'] + '"\
-                            data-remaining-quantity="' + order_items[i]['remaining_quantity'] + '"></span>\
-                        ' + (order_item_table.rows().count() + 1) + '\
-                    </th>\
+                    <th>' + (order_item_table.rows().count() + 1) + '</th>\
                     <td>' + order_items[i]['species'] + '</td>\
                     <td>' + order_items[i]['breed'] + '</td>\
                     <td>' + order_items[i]['remark'] + '</td>\
@@ -555,8 +505,34 @@ var update_cart = function (callback) {
 
     event_order_item_modify();
     event_order_item_delete();
-    
+
     typeof callback === 'function' && callback();
+};
+
+var event_add_to_cart = function (callback) {
+    $('.add-to-cart').off('click');
+    $('.add-to-cart').on('click', function () {
+        var overlap = false;
+        var idx = product_table.row($(this).parents('tr')).index();
+
+        for (i = 0; i < order_items.length; i++) {
+            if (order_items[i]['id'] == product_items[idx]['id']) {
+                if (order_items[i]['remaining_quantity'] <= order_items[i]['quantity']) {
+                    return;
+                }
+                order_items[i]['quantity'] = parseInt(order_items[i]['quantity']) + 1;
+                overlap = true;
+                break;
+            }
+        }
+        if (!overlap) {
+            order_items.push(product_items[idx]);
+        }
+        update_cart(function () {
+            toastr.remove();
+            toastr.success('상품을 담았습니다.');
+        });
+    });
 };
 
 var event_order_item_modify = function (callback) {

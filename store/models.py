@@ -56,6 +56,7 @@ class StoreLayout(models.Model):
 class Aquarium(models.Model):
     aquarium_section = models.ForeignKey(
         AquariumSection,
+        related_name='aquariums',
         on_delete=models.CASCADE,
     )
     row = models.IntegerField(default=0)
@@ -68,6 +69,7 @@ class Aquarium(models.Model):
     )
     memo = models.TextField(null=True, blank=True)
     setup_date = models.DateTimeField(default=timezone.now)
+    is_empty = models.BooleanField(default=True)
     last_modified_date = models.DateTimeField(default=timezone.now)
     creation_date = models.DateTimeField(default=timezone.now)
 

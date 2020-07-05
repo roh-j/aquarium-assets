@@ -61,15 +61,59 @@ $(function () {
     $('#storage-room-modify').on('click', function () {
         var form = '#form-storage-room-modify';
 
-        $(form + ' #id_storage_room_name').val(storage_room_name);
+        $.ajax({
+            url: 'delete-dependency/',
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            dataType: 'json'
+        }).done(function (data, status, xhr) {
+            if (data['delete_dependency'] == 0) {
+                $('#storage-room-delete').attr('disabled', false);
+            }
+            else {
+                $('#storage-room-modify-warning').html(
+                    '<div class="alert alert-explain">\
+                        처리되지 않은 주문 <span class="text-danger font-weight-bold">' + data['delete_dependency'] + '</span> 건이 존재하여 삭제하실 수 없습니다.\
+                    </div>'
+                );
+                $('#storage-room-delete').attr('disabled', true);
+            }
+        }).fail(function (res, status, xhr) { });
+
+        $(form + ' #id_modify_storage_room_name').val(storage_room_name);
         $('#storage-room-modify-modal').modal('show');
     });
 
     $('#aquarium-section-modify').on('click', function () {
         var form = '#form-aquarium-section-modify';
 
-        $(form + ' #id_section_name').val(section_name);
-        $(form + ' #id_section_color').val(section_color);
+        $.ajax({
+            url: 'delete-dependency/',
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            dataType: 'json'
+        }).done(function (data, status, xhr) {
+            if (data['delete_dependency'] == 0) {
+                $('#aquarium-section-delete').attr('disabled', false);
+            }
+            else {
+                $('#aquarium-section-modify-warning').html(
+                    '<div class="alert alert-explain">\
+                        처리되지 않은 주문 <span class="text-danger font-weight-bold">' + data['delete_dependency'] + '</span> 건이 존재하여 삭제하실 수 없습니다.\
+                    </div>'
+                );
+                $('#aquarium-section-delete').attr('disabled', true);
+            }
+        }).fail(function (res, status, xhr) { });
+
+        $(form + ' #id_modify_section_name').val(section_name);
+        $(form + ' #id_modify_section_color').val(section_color);
         $('#modify-color-selected').css({ 'background': section_color });
         $('#aquarium-section-modify-modal').modal('show');
     });
@@ -85,7 +129,7 @@ $(function () {
         var form = '#form-aquarium-section-modify';
 
         $('#modify-color-selected').css({ 'background': $(this).data('section-color') });
-        $(form + ' #id_section_color').val($(this).data('section-color'));
+        $(form + ' #id_modify_section_color').val($(this).data('section-color'));
     });
 
     $('#form-storage-room-register').on('submit', function (e) {

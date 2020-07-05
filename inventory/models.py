@@ -18,6 +18,8 @@ TRANSACTION_TYPE_CHOICES = (
 )
 DESCRIPTION_CHOICES = (
     ('modify', 'modify'),
+    ('new_receipt_of_goods', 'new_receipt_of_goods'),
+    ('new_purchase_of_goods', 'new_purchase_of_goods'),
     ('goods_sales', 'goods_sales'),
     ('parcel_out', 'parcel_out'),
     ('death', 'death'),
@@ -65,10 +67,6 @@ class StockLedger(models.Model):
     )
     aquarium = models.ForeignKey(
         Aquarium,
-        on_delete=models.CASCADE,
-    )
-    aquarium_stock = models.ForeignKey(
-        AquariumStock,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -79,6 +77,14 @@ class StockLedger(models.Model):
         null=True,
         blank=True,
     )
+    storage_room_name = models.CharField(max_length=100)
+    section_name = models.CharField(max_length=100)
+    aquarium_row = models.IntegerField(default=0)
+    aquarium_column = models.IntegerField(default=0)
+    species = models.CharField(max_length=100)
+    breed = models.CharField(max_length=100)
+    remark = models.CharField(max_length=200, null=True, blank=True)
+    size = models.FloatField(default=0.0)
     transaction_type = models.CharField(
         max_length=20,
         choices=TRANSACTION_TYPE_CHOICES,

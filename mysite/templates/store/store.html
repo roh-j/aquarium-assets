@@ -90,9 +90,7 @@
                             <label for="id_modify_storage_room_name" class="control-label">생물실 레이블</label>
                             <input type="text" class="form-control" id="id_modify_storage_room_name" name="storage_room_name">
                         </div>
-                        <div class="alert alert-explain">
-                            생물실 레이블을 변경할 수 있습니다.
-                        </div>
+                        <div id="storage-room-modify-warning"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="storage-room-delete" class="btn btn-default">삭제</button>
@@ -138,7 +136,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label for="id_aquarium_num_of_rows" class="control-label">높이 (층)</label>
+                                <label for="id_aquarium_num_of_rows" class="control-label">세로 (층)</label>
                                 <div class="input-group">
                                     <span class="input-group-btn input-spinner">
                                         <button type="button" class="btn btn-default" data-spinner-value="-1">
@@ -225,6 +223,7 @@
                                 </ul>
                             </div>
                         </div>
+                        <div id="aquarium-section-modify-warning"></div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="aquarium-section-delete" class="btn btn-default">삭제</button>

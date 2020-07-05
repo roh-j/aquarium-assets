@@ -69,7 +69,7 @@
                     {% csrf_token %}
                     <div class="modal-body">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#goods-issue-to-sales" data-toggle="tab">판매</a></li>
+                            <li class="active"><a href="#goods-issue-to-sales" data-toggle="tab">매출</a></li>
                             <li><a href="#goods-issue" data-toggle="tab">출고</a></li>
                         </ul>
                         <div class="form-group">
@@ -138,7 +138,7 @@
                     {% csrf_token %}
                     <div class="modal-body">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#goods-receipt-for-purchase" data-toggle="tab">구매</a></li>
+                            <li class="active"><a href="#goods-receipt-for-purchase" data-toggle="tab">매입</a></li>
                             <li><a href="#goods-receipt" data-toggle="tab">입고</a></li>
                         </ul>
                         <div class="form-group">
@@ -166,7 +166,7 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="goods-receipt-for-purchase">
                                 <div class="form-group">
-                                    <label for="id_purchase_price" class="control-label">가격</label>
+                                    <label for="id_purchase_price" class="control-label">매입 가격</label>
                                     <div class="input-group">
                                         <span class="input-group-btn input-spinner">
                                             <button type="button" class="btn btn-default" data-spinner-value="-100">
@@ -222,6 +222,10 @@
                 <form id="form-aquarium-stock-register" method="POST">
                     {% csrf_token %}
                     <div class="modal-body">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#new-receipt-of-goods" data-toggle="tab">입고</a></li>
+                            <li><a href="#goods-receipt-for-new-purchase" data-toggle="tab">매입</a></li>
+                        </ul>
                         <div class="form-group">
                             <label for="id_species" class="control-label">어종</label>
                             <div class="input-group dropdown-wide">
@@ -314,6 +318,33 @@
                                     <label class="btn btn-default w-100">
                                         <input type="radio" name="gender" value="male"> 수컷
                                     </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="new-receipt-of-goods"></div>
+                            <div class="tab-pane" id="goods-receipt-for-new-purchase">
+                                <div class="form-group">
+                                    <label for="id_new_purchase_price" class="control-label">매입 가격</label>
+                                    <div class="input-group">
+                                        <span class="input-group-btn input-spinner">
+                                            <button type="button" class="btn btn-default" data-spinner-value="-100">
+                                                <i class="fas fa-angle-left fa-fw"></i>
+                                            </button>
+                                        </span>
+                                        <input type="text" class="form-control text-center" id="id_new_purchase_price" name="new_purchase_price" data-input-type="int" value="0">
+                                        <span class="input-group-btn input-spinner">
+                                            <button type="button" class="btn btn-default" data-spinner-value="+100">
+                                                <i class="fas fa-angle-right fa-fw"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class="btn-group input-spinner">
+                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+100">백</button>
+                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+1000">천</button>
+                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+10000">1 만</button>
+                                        <button type="button" class="btn btn-default w-100" data-spinner-value="+100000">10 만</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -412,7 +443,7 @@
                                 <table id="order_sheet_table" class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th class="selection">
+                                            <th class="checkbox-selection">
                                                 <div class="pretty p-icon p-has-indeterminate">
                                                     <input type="checkbox" class="select-all">
                                                     <div class="state p-warning">

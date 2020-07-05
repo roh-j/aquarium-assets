@@ -7,6 +7,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from console.models import Console
 from store.models import StorageRoom, AquariumSection, StoreLayout
+from product.models import Creature, UnitPrice
+from order.models import Order
+from inventory.models import AquariumStock
 from store.serializers import StorageRoomSerializer, AquariumSectionSerializer, StoreLayoutSerializer
 
 # Create your views here.
@@ -37,6 +40,14 @@ class IndexView(APIView):
             return redirect('Main:SignInView')
 
 
+class DeleteDependencyView(APIView):
+    renderer_classes = (JSONRenderer,)
+
+    def get(self, request, control_number, format=None):
+        delete_dependency = Order.objects.filter(~Q(task_status='completed'), console=control_number).count()
+        return JsonResponse({'delete_dependency': delete_dependency}, safe=False, status=200)
+
+
 class StorageRoomView(APIView):
     renderer_classes = (JSONRenderer,)
 
@@ -63,6 +74,15 @@ class StorageRoomView(APIView):
 
     def delete(self, request, control_number, format=None):
         StorageRoom.objects.filter(id=request.data['pk_storage_room']).delete()
+        creature_dependency = AquariumStock.objects.values_list('creature', flat=True).filter(
+            console=control_number,
+        ).union(
+            UnitPrice.objects.values_list('creature', flat=True).filter(
+                console=control_number,
+            ),
+            all=False,
+        )
+        Creature.objects.filter(~Q(id__in=creature_dependency), console=control_number).delete()
         return HttpResponse(status=204)
 
 
@@ -97,6 +117,15 @@ class AquariumSectionView(APIView):
 
     def delete(self, request, control_number, format=None):
         AquariumSection.objects.filter(id=request.data['pk_aquarium_section']).delete()
+        creature_dependency = AquariumStock.objects.values_list('creature', flat=True).filter(
+            console=control_number,
+        ).union(
+            UnitPrice.objects.values_list('creature', flat=True).filter(
+                console=control_number,
+            ),
+            all=False,
+        )
+        Creature.objects.filter(~Q(id__in=creature_dependency), console=control_number).delete()
         return HttpResponse(status=204)
 
 

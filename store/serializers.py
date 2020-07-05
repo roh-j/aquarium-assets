@@ -25,8 +25,25 @@ class StorageRoomSerializer(serializers.ModelSerializer):
 
         return storage_room
 
+    def update(self, instance, validated_data):
+        instance.storage_room_name = validated_data.get('storage_room_name', instance.storage_room_name)
+        instance.last_modified_date = timezone.now()
+        instance.save()
+
+        return instance
+
+
+class AquariumSerializer(serializers.ModelSerializer):
+    aquarium_section = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Aquarium
+        fields = ('id', 'aquarium_section', 'row', 'column', 'alias', 'memo',
+                  'setup_date', 'is_empty', 'last_modified_date', 'creation_date',)
+
 
 class AquariumSectionSerializer(serializers.ModelSerializer):
+    aquariums = serializers.SerializerMethodField()
     section_name = serializers.CharField(required=True)
     section_color = serializers.CharField(required=True)
     aquarium_num_of_rows = serializers.IntegerField(required=True)
@@ -34,12 +51,16 @@ class AquariumSectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AquariumSection
-        fields = ('id', 'section_name', 'section_color',
+        fields = ('id', 'aquariums', 'section_name', 'section_color',
                   'aquarium_num_of_rows', 'aquarium_num_of_columns',)
 
     def set_foreign_key(self, fk_storage_room):
         self.fk_storage_room = fk_storage_room
 
+    def get_aquariums(self, instance):
+        queryset = instance.aquariums.all().order_by('row', 'column')
+        return AquariumSerializer(queryset, read_only=True, many=True).data
+        
     def create(self, validated_data):
         aquarium_section = AquariumSection.objects.create(
             storage_room=StorageRoom.objects.get(id=self.fk_storage_room),
@@ -68,14 +89,6 @@ class AquariumSectionSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-
-
-class AquariumSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Aquarium
-        fields = ('id', 'row', 'column', 'alias', 'memo',
-                  'setup_date', 'last_modified_date', 'creation_date',)
 
 
 class StoreLayoutSerializer(serializers.ModelSerializer):
