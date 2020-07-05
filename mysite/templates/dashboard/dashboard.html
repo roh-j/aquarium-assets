@@ -7,33 +7,28 @@
     <meta name="Author" content="roh-j">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <!-- morris (chart) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-    <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-    <!-- metisMenu (A jQuery menu plugin) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <!-- Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/lib/bootoast.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
 
-    <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <!-- morris (chart) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-    <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <!-- metisMenu (A jQuery menu plugin) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
-    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+    <script src="{% static 'assets/js/lib/bootoast.min.js' %}"></script>
+    <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
+    <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
 
     <title>Aquarium Assets</title>
@@ -42,7 +37,7 @@
             $("#console-menu").metisMenu();
             $(".nav-second-level").removeClass("d-none");
 
-            //load_complete();
+            load_complete();
         });
     </script>
 </head>
@@ -72,7 +67,7 @@
             <div class="collapse sidebar-collapse">
                 <ul id="console-menu" class="nav">
                     <li class="text-center">
-                        <img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive">
+                        <img src="{% static 'assets/img/icon/Places-user-identity-icon-128x128.png' %}" class="primary-image img-responsive">
                     </li>
                     <li><a href="" class="active-menu"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
@@ -113,13 +108,10 @@
         </nav>
         <div id="page-wrapper" class="d-none">
             <div class="page-inner container-fluid">
-                <h2>대시보드</h2>
-                <h5>Welcome Jhon Deo , Love to see you back.</h5>
+                <h3 class="head">대시보드</h3>
                 <hr>
             </div>
-            <footer class="text-muted text-small text-center my-section">
-                <i>Copyright &copy; roh-j, Licensed under the Apache License</i>
-            </footer>
+            <footer><i>Copyright &copy; roh-j, Licensed under the Apache License</i></footer>
         </div>
     </div>
 </body>

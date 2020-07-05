@@ -7,40 +7,30 @@
     <meta name="Author" content="roh-j">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <!-- morris (chart) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-    <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-    <!-- metisMenu (A jQuery menu plugin) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <!-- Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/lib/bootoast.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/graphics.css' %}">
 
-    <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <!-- morris (chart) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-    <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <!-- metisMenu (A jQuery menu plugin) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
-    <!-- SVG.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
-    <!-- Fake Smile (SVG) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+    <script src="{% static 'assets/js/lib/bootoast.min.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
-    <!-- serializeObject -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
-    <!-- Scripts -->
     <script src="{% static 'assets/js/common.js' %}"></script>
     <script src="{% static 'assets/js/store.js' %}"></script>
 
@@ -76,7 +66,7 @@
                             <label for="id_storage_room_name" class="control-label">생물실 레이블</label>
                             <input type="text" class="form-control" id="id_storage_room_name" name="storage_room_name">
                         </div>
-                        <div class="alert bg-default border-secondary">
+                        <div class="alert alert-explain">
                             <i class="fas fa-exclamation-circle fa-fw"></i> 생물실 레이블을 입력하세요.
                         </div>
                     </div>
@@ -102,63 +92,47 @@
                         <div class="row">
                             <div class="form-group col-xs-6">
                                 <label for="id_aquarium_num_of_columns" class="control-label">가로</label>
-                                <input type="number" class="form-control" id="id_aquarium_num_of_columns" name="aquarium_num_of_columns" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="-1" data-spinner-target="#id_aquarium_num_of_columns">
+                                            <i class="fas fa-angle-left fa-fw"></i>
+                                        </button>
+                                    </span>
+                                    <input type="text" class="form-control text-center" id="id_aquarium_num_of_columns" name="aquarium_num_of_columns" data-input-type="int" value="0">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_columns">
+                                            <i class="fas fa-angle-right fa-fw"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="btn-group input-spinner d-flex mt-3">
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10" data-spinner-target="#id_aquarium_num_of_columns">10</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_columns">1</button>
+                                </div>
                             </div>
                             <div class="form-group col-xs-6">
                                 <label for="id_aquarium_num_of_rows" class="control-label">높이 (층)</label>
-                                <input type="number" class="form-control" id="id_aquarium_num_of_rows" name="aquarium_num_of_rows" min="0">
+                                <div class="input-group">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="-1" data-spinner-target="#id_aquarium_num_of_rows">
+                                            <i class="fas fa-angle-left fa-fw"></i>
+                                        </button>
+                                    </span>
+                                    <input type="text" class="form-control text-center" id="id_aquarium_num_of_rows" name="aquarium_num_of_rows" data-input-type="int" value="0">
+                                    <span class="input-group-btn input-spinner">
+                                        <button type="button" class="btn btn-default" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_rows">
+                                            <i class="fas fa-angle-right fa-fw"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="btn-group input-spinner d-flex mt-3">
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+10" data-spinner-target="#id_aquarium_num_of_rows">10</button>
+                                    <button type="button" class="btn btn-default w-100" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_rows">1</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="alert bg-default border-secondary">
+                        <div class="alert alert-explain">
                             <i class="fas fa-exclamation-circle fa-fw"></i> 섹션 안에 있는 수조의 개수를 입력하세요.
-                        </div>
-                        <div class="alert bg-default border-secondary">
-                            <div class="text-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="143" height="82">
-                                    <g transform="translate(0, 0)">
-                                        <pattern id="water" width=".25" height="1.1" patternContentUnits="objectBoundingBox">
-                                            <path fill="#6198b3" d="M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z" />
-                                        </pattern>
-                                        <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-grid" />
-                                        <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-plane" />
-                                        <polygon points="81,2 62,21 62,81 81,62" class="effect-aquarium-grid" />
-                                        <polygon points="81,2 62,21 62,81 81,62" class="effect-aquarium-plane" />
-                                        <rect x="1" y="21" width="60" height="60" class="effect-aquarium-front-grid" />
-                                        <rect x="1" y="21" width="60" height="60" class="effect-aquarium-front-button" />
-                                        <mask id="water-mask">
-                                            <rect x="1" y="21" width="60" height="60" fill="#fff" />
-                                        </mask>
-                                        <rect mask="url(#water-mask)" fill="url(#water)" x="-300" y="45" width="1200" height="120" opacity="0.3">
-                                            <animate attributeType="xml" attributeName="x" from="-300" to="0" repeatCount="indefinite" dur="3s" />
-                                        </rect>
-                                        <rect mask="url(#water-mask)" fill="url(#water)" x="-400" y="40" width="1600" height="120" opacity="0.3">
-                                            <animate attributeType="xml" attributeName="x" from="-400" to="0" repeatCount="indefinite" dur="4s" />
-                                        </rect>
-                                    </g>
-                                    <g transform="translate(61, 0)">
-                                        <pattern id="water" width=".25" height="1.1" patternContentUnits="objectBoundingBox">
-                                            <path fill="#6198b3" d="M0.25,1H0c0,0,0-0.659,0-0.916c0.083-0.303,0.158,0.334,0.25,0C0.25,0.327,0.25,1,0.25,1z" />
-                                        </pattern>
-                                        <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-grid" />
-                                        <polygon points="20,1 1,20 61,20 80,1" class="effect-aquarium-plane" />
-                                        <polygon points="81,2 62,21 62,81 81,62" class="effect-aquarium-grid" />
-                                        <polygon points="81,2 62,21 62,81 81,62" class="effect-aquarium-plane" />
-                                        <rect x="1" y="21" width="60" height="60" class="effect-aquarium-front-grid" />
-                                        <rect x="1" y="21" width="60" height="60" class="effect-aquarium-front-button" />
-                                        <mask id="water-mask">
-                                            <rect x="1" y="21" width="60" height="60" fill="#fff" />
-                                        </mask>
-                                        <rect mask="url(#water-mask)" fill="url(#water)" x="-300" y="45" width="1200" height="120" opacity="0.3">
-                                            <animate attributeType="xml" attributeName="x" from="-300" to="0" repeatCount="indefinite" dur="3s" />
-                                        </rect>
-                                        <rect mask="url(#water-mask)" fill="url(#water)" x="-400" y="40" width="1600" height="120" opacity="0.3">
-                                            <animate attributeType="xml" attributeName="x" from="-400" to="0" repeatCount="indefinite" dur="4s" />
-                                        </rect>
-                                    </g>
-                                </svg>
-                            </div>
-                            <hr>
-                            <div class="text-center">섹션 안에 수조의 개수가 위와 같다면 가로 2, 높이 1로 입력합니다.</div>
                         </div>
                         <div class="form-group">
                             <label for="id_section_color" class="control-label">섹션 색상</label>
@@ -212,7 +186,9 @@
         <nav class="navbar-side">
             <div class="collapse sidebar-collapse">
                 <ul id="console-menu" class="nav">
-                    <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive"></li>
+                    <li class="text-center">
+                        <img src="{% static 'assets/img/icon/Places-user-identity-icon-128x128.png' %}" class="primary-image img-responsive">
+                    </li>
                     <li><a href="../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
                     <li><a href="" class="active-menu"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
@@ -252,8 +228,7 @@
         </nav>
         <div id="page-wrapper" class="d-none">
             <div class="page-inner container-fluid">
-                <h2>매장관리</h2>
-                <h5>Welcome Jhon Deo , Love to see you back.</h5>
+                <h3 class="head">매장 관리</h3>
                 <hr>
                 <ul class="nav nav-tabs">
                     <li class="disabled active"><a href="#storage-room">생물실 관리</a></li>
@@ -262,16 +237,13 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="storage-room">
-                        <div class="panel panel-default border-dark max-600 mx-auto">
-                            <div class="panel-heading border-dark">생물실 관리</div>
+                        <div class="panel panel-default max-600 mx-auto">
+                            <div class="panel-heading">생물실 관리</div>
                             <div class="panel-body">
                                 <button type="button" id="storage-room-register" class="btn btn-default">생물실 추가</button>
                                 <hr>
                                 {% if not storage_room_list %}
                                 <div class="standby">
-                                    <img src="{% static 'assets/img/icon/Apps-utilities-file-archiver-icon.png' %}"
-                                        class="img-responsive mx-auto">
-                                    <hr>
                                     <p class="text-center">생물실을 등록해주세요.</p>
                                 </div>
                                 {% else %}
@@ -279,11 +251,11 @@
                                     {% for list in storage_room_list %}
                                     <a href="#" class="list-group-item">
                                         <div class="media">
-                                            <span class="data-binding" data-storage-room-id="{{ list.id }}"
+                                            <span class="data-bind"
+                                                data-storage-room-id="{{ list.id }}"
                                                 data-storage-room-name="{{ list.storage_room_name }}"></span>
                                             <div class="media-left">
-                                                <img class="media-object"
-                                                    src="{% static 'assets/img/icon/Mimetypes-application-x-tar-icon-64x64.png' %}">
+                                                <img class="media-object" src="{% static 'assets/img/icon/Mimetypes-application-x-archive-icon-64x64.png' %}">
                                             </div>
                                             <div class="media-body w-100">
                                                 <p class="font-weight-bold">{{ list.storage_room_name }}</p>
@@ -295,31 +267,27 @@
                                 </div>
                                 {% endif %}
                             </div>
-                            <div class="panel-footer bg-white text-right">
+                            <div class="panel-footer text-right">
                                 <div class="btn-group">
-                                    <button type="button" id="storage-room-modify" class="btn btn-default"
-                                        disabled="disabled">변경</button>
-                                    <button type="button" id="move-aquarium-section" class="btn btn-default"
-                                        disabled="disabled">다음</button>
+                                    <button type="button" id="storage-room-modify" class="btn btn-default" disabled="disabled">변경</button>
+                                    <button type="button" id="move-aquarium-section" class="btn btn-default" disabled="disabled">다음</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane" id="aquarium-section">
-                        <div class="panel panel-default border-dark max-600 mx-auto">
-                            <div class="panel-heading border-dark">섹션 / 수조 관리</div>
+                        <div class="panel panel-default max-600 mx-auto">
+                            <div class="panel-heading">섹션 / 수조 관리</div>
                             <div class="panel-body">
                                 <button type="button" id="aquarium-section-register" class="btn btn-default">섹션 추가</button>
                                 <hr>
                                 <div id="async-aquarium-section"></div>
                             </div>
-                            <div class="panel-footer bg-white text-right">
+                            <div class="panel-footer text-right">
                                 <div class="btn-group">
                                     <a href="" class="btn btn-default">처음으로</a>
-                                    <button type="button" id="aquarium-section-modify" class="btn btn-default"
-                                        disabled="disabled">변경</button>
-                                    <button type="button" id="move-store-layout" class="btn btn-default"
-                                        disabled="disabled">다음</button>
+                                    <button type="button" id="aquarium-section-modify" class="btn btn-default" disabled="disabled">변경</button>
+                                    <button type="button" id="move-store-layout" class="btn btn-default" disabled="disabled">다음</button>
                                 </div>
                             </div>
                         </div>
@@ -333,8 +301,8 @@
                         <hr>
                         <div id="store-layout-console" class="text-center"></div>
                         <hr>
-                        <div class="text-center mb-section">
-                            <div class="btn-group">
+                        <div class="text-center">
+                            <div class="btn-group mb-section">
                                 <button type="button" id="redo-aquarium-section" class="btn btn-default">이전</button>
                                 <a href="" class="btn btn-default">처음으로</a>
                             </div>
@@ -342,9 +310,7 @@
                     </div>
                 </div>
             </div>
-            <footer class="text-muted text-small text-center my-section">
-                <i>Copyright &copy; roh-j, Licensed under the Apache License</i>
-            </footer>
+            <footer><i>Copyright &copy; roh-j, Licensed under the Apache License</i></footer>
         </div>
     </div>
 </body>

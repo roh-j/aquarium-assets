@@ -7,19 +7,15 @@
     <meta name="Author" content="roh-j">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <!-- Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
 
-    <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <!-- Scripts -->
+    <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
+    <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
 
     <title>Aquarium Assets</title>
@@ -43,14 +39,14 @@
             </div>
         </div>
     </nav>
-    <div class="container-fluid">
-        <div class="panel panel-default border-dark max-380 mx-auto my-section">
-            <div class="panel-heading border-dark">비즈니스 관리</div>
+    <div class="container">
+        <div class="panel panel-default max-380 mx-auto">
+            <div class="panel-heading">비즈니스 관리</div>
             <div class="panel-body">
-                <img src="{% static 'assets/img/icon/Actions-view-pim-contacts-icon.png' %}" class="primary-image img-responsive">
+                <img src="{% static 'assets/img/icon/Actions-view-pim-contacts-icon-128x128.png' %}" class="primary-image img-responsive">
                 <hr>
                 {% if not business_list %}
-                <div class="alert bg-default border-secondary">
+                <div class="alert alert-explain">
                     <i class="fas fa-exclamation-circle fa-fw"></i> 비즈니스 등록이 필요합니다.
                 </div>
                 {% else %}
@@ -68,15 +64,12 @@
                     {% endfor %}
                 </div>
                 {% endif %}
-                <hr>
-                <div class="pull-right">
-                    <a href="register/" class="btn btn-default">비즈니스 추가</a>
-                </div>
+            </div>
+            <div class="panel-footer text-right">
+                <a href="register/" class="btn btn-default">비즈니스 추가</a>
             </div>
         </div>
-        <footer class="text-muted text-small text-center my-section">
-            <i>Copyright &copy; roh-j, Licensed under the Apache License</i>
-        </footer>
+        <footer><i>Copyright &copy; roh-j, Licensed under the Apache License</i></footer>
     </div>
 </body>
 

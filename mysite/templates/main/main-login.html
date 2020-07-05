@@ -7,21 +7,16 @@
     <meta name="Author" content="roh-j">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <!-- Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
 
-    <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <!-- serializeObject -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
-    <!-- Scripts -->
+    <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
+    <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
 
     <title>Aquarium Assets</title>
@@ -43,7 +38,6 @@
                 }).done(function (res, status, xhr) {
                     location.replace("../business/");
                 }).fail(function (res, status, xhr) {
-                    console.log(res);
                 });
             });
         });
@@ -72,14 +66,14 @@
             </div>
         </div>
     </nav>
-    <div class="container-fluid">
-        <div class="panel panel-default border-dark max-380 mx-auto my-section">
-            <div class="panel-heading border-dark">로그인</div>
-            <div class="panel-body">
-                <img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}" class="primary-image img-responsive">
-                <hr>
-                <form method="POST">
-                    {% csrf_token %}
+    <div class="container">
+        <div class="panel panel-default max-380 mx-auto">
+            <div class="panel-heading">로그인</div>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="panel-body">
+                    <img src="{% static 'assets/img/icon/Places-user-identity-icon-128x128.png' %}" class="primary-image img-responsive">
+                    <hr>
                     <div class="form-group">
                         <label for="id_username">사용자 계정</label>
                         <input type="text" class="form-control" id="id_username" name="username" autofocus>
@@ -91,16 +85,13 @@
                     <div class="text-right">
                         <a href="../register/">회원이 아니십니까?</a>
                     </div>
-                    <hr>
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-default">로그인</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="panel-footer text-right">
+                    <button type="submit" class="btn btn-default">로그인</button>
+                </div>
+            </form>
         </div>
-        <footer class="text-muted text-small text-center my-section">
-            <i>Copyright &copy; roh-j, Licensed under the Apache License</i>
-        </footer>
+        <footer><i>Copyright &copy; roh-j, Licensed under the Apache License</i></footer>
     </div>
 </body>
 

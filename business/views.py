@@ -17,7 +17,7 @@ class IndexView(APIView):
         if request.user.is_authenticated:
             business_list = BusinessModels.Business.objects.filter(
                 user=request.user.id).order_by('-id')
-            return Response({'business_list': business_list}, template_name='business/business.html')
+            return Response({'business_list': business_list}, template_name='business/business-list.html')
         else:
             return redirect('Main:SignInView')
 

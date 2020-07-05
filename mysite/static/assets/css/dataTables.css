@@ -5,6 +5,9 @@ table.dataTable {
     max-width: none !important;
     border-collapse: collapse !important;
 }
+table.dataTable tbody tr {
+    height: 51px;
+}
 .dataTables_filter,
 .dataTables_length {
     float: right;

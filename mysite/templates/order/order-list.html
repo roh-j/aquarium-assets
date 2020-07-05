@@ -7,56 +7,32 @@
     <meta name="Author" content="roh-j">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <!-- morris (chart) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
-    <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
-    <!-- metisMenu (A jQuery menu plugin) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
-    <!-- Pretty Checkbox -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css">
-    <!-- Styles -->
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-customize.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/dataTables-customize.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/common.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/component.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/lib/bootoast.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/dataTables.css' %}">
 
-    <!-- jQuery (1.12.4) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <!-- morris (chart) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-    <!-- DataTables (To enhance the accessibility of data in HTML tables) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
-    <!-- metisMenu (A jQuery menu plugin) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
-    <!-- SVG.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
-    <!-- Fake Smile (SVG) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+    <script src="{% static 'assets/js/lib/bootoast.min.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
-    <!-- serializeObject -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
-    <!-- Bootstrap Typeahead -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
-    <!-- Moment -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <!-- Scripts -->
     <script src="{% static 'assets/js/common.js' %}"></script>
     <script src="{% static 'assets/js/lib/calendar.js' %}"></script>
     <script src="{% static 'assets/js/order-list.js' %}"></script>
@@ -65,57 +41,120 @@
 </head>
 
 <body>
-    <div id="add-order-modal" class="modal fade" tabindex="-1">
+    <div id="search-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h5 id="add-order-modal-title" class="modal-title"><i
-                            class="fas fa-exclamation-circle fa-fw text-primary"></i> 단가 등록</h5>
+                    <h5 class="modal-title"><i class="fas fa-exclamation-circle fa-fw text-primary"></i> 필터</h5>
                 </div>
-                <form id="form-add-order" method="POST">
+                <form id="form-unit-price" method="POST">
                     {% csrf_token %}
-                    <div id="add-order-modal-body" class="modal-body">
+                    <div class="modal-body">
                         <div class="form-group">
-                            <label for="id_species" class="control-label">어종</label>
-                            <input type="text" class="form-control" id="id_species" name="species">
-                        </div>
-                        <div class="form-group">
-                            <label for="id_breed" class="control-label">품종</label>
-                            <input type="text" class="form-control" id="id_breed" name="breed">
+                            <label for="id_query" class="control-label">검색어</label>
+                            <div class="input-group dropdown-wide">
+                                <input type="text" class="form-control" id="id_query" name="query">
+                                <div class="dropdown-addon">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <i class="fas fa-caret-down fa-fw"></i>
+                                    </button>
+                                    <ul id="query-dropdown-menu" class="dropdown-menu"></ul>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-xs-6">
-                                <label for="id_size" class="control-label">크기 (cm)</label>
-                                <input type="text" class="form-control" id="id_size" name="size">
+                                <label for="id_delivery" class="control-label">배송</label>
+                                <div class="dropdown dropdown-wide">
+                                    <button type="button" class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown">
+                                        매장 <i class="fas fa-caret-down fa-fw"></i>
+                                    </button>
+                                    <ul class="dropdown-menu"></ul>
+                                </div>
                             </div>
                             <div class="form-group col-xs-6">
-                                <label for="id_price" class="control-label">가격</label>
-                                <input type="text" class="form-control" id="id_price" name="price">
+                                <label for="id_status" class="control-label">상태</label>
+                                <div class="dropdown dropdown-wide">
+                                    <button type="button" class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown">
+                                        대기중 <i class="fas fa-caret-down fa-fw"></i>
+                                    </button>
+                                    <ul class="dropdown-menu"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">캘린더</div>
+                            <table id="datepicker" class="table table-bordered datepicker-days">
+                                <thead>
+                                    <tr>
+                                        <th><i class="fas fa-angle-left fa-fw"></i></th>
+                                        <th colspan="2" id="date-year"></th>
+                                        <th><i class="fas fa-angle-right fa-fw"></i></th>
+                                        <th><i class="fas fa-angle-left fa-fw"></i></th>
+                                        <th id="date-month"></th>
+                                        <th><i class="fas fa-angle-right fa-fw"></i></th>
+                                    </tr>
+                                    <tr class="active">
+                                        <th class="text-danger">일</th>
+                                        <th>월</th>
+                                        <th>화</th>
+                                        <th>수</th>
+                                        <th>목</th>
+                                        <th>금</th>
+                                        <th class="text-primary">토</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div id="pick-date" class="panel-footer clearfix"></div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-6">
+                                <label for="id_start_date" class="control-label">시작일</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="id_start_date" name="start_date">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button"><i class="far fa-calendar-alt fa-fw"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <label for="id_end_date" class="control-label">종료일</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="id_end_date" name="end_date">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button"><i class="far fa-calendar-alt fa-fw"></i></button>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="id_unit" class="control-label d-block">단위</label>
-                            <div id="id_unit" class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-default">
-                                    <input type="radio" name="unit" value="couple"> 한쌍
+                            <label for="id_quick_term" class="control-label d-block">기간 지정</label>
+                            <div id="id_quick_term" class="btn-group d-flex" data-toggle="buttons">
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="qucik_term" value="today"> 오늘
                                 </label>
-                                <label class="btn btn-default">
-                                    <input type="radio" name="unit" value="female"> 암컷
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="qucik_term" value="week"> 일주일
                                 </label>
-                                <label class="btn btn-default">
-                                    <input type="radio" name="unit" value="male"> 수컷
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="qucik_term" value="month"> 1개월
                                 </label>
-                                <label class="btn btn-default active">
-                                    <input type="radio" name="unit" value="none" checked> 없음
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="qucik_term" value="3_months"> 3개월
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="qucik_term" value="whole_day"> 전체
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <div id="add-order-modal-footer" class="modal-footer">
-                        <button type="submit" class="btn btn-primary">확인</button>
-                    </div>
                 </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                </div>
             </div>
         </div>
     </div>
@@ -142,15 +181,15 @@
         <nav class="navbar-side">
             <div class="collapse sidebar-collapse">
                 <ul id="console-menu" class="nav">
-                    <li class="text-center"><img src="{% static 'assets/img/icon/Places-user-identity-icon.png' %}"
-                            class="primary-image img-responsive"></li>
+                    <li class="text-center">
+                        <img src="{% static 'assets/img/icon/Places-user-identity-icon-128x128.png' %}" class="primary-image img-responsive">
+                    </li>
                     <li><a href="../../dashboard/"><i class="fas fa-tachometer-alt fa-fw"></i>대시보드</a></li>
                     <li><a href="../../report/"><i class="fas fa-chart-bar fa-fw"></i>보고서</a></li>
                     <li><a href="../../store/"><i class="fas fa-edit fa-fw"></i>매장관리</a></li>
                     <li><a href="../../price/"><i class="fas fa-coins fa-fw"></i>단가관리</a></li>
                     <li class="mm-active">
-                        <a href="#" aria-expanded="true"><i class="fas fa-shopping-basket fa-fw"></i>주문관리 <span
-                                class="fa arrow"></span></a>
+                        <a href="#" aria-expanded="true"><i class="fas fa-shopping-basket fa-fw"></i>주문관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li><a href="../register/"><i class="fas fa-feather-alt fa-fw"></i>주문서 작성</a></li>
                             <li><a href="" class="active-menu"><i class="far fa-clone fa-fw"></i>주문 목록</a></li>
@@ -160,17 +199,14 @@
                         <a href="#"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
                             <li><a href="../../inventory/selection/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
-                            <li><a href="../../inventory/order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로
-                                    재고관리</a>
-                            </li>
+                            <li><a href="../../inventory/order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="fas fa-user-friends fa-fw"></i>고객관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
                             <li><a href="../../customer/list/"><i class="fas fa-list-ul fa-fw"></i>고객 목록</a></li>
-                            <li><a href="../../customer/service/"><i class="fas fa-headphones-alt fa-fw"></i>고객 문의</a>
-                            </li>
+                            <li><a href="../../customer/service/"><i class="fas fa-headphones-alt fa-fw"></i>고객 문의</a></li>
                         </ul>
                     </li>
                     <li>
@@ -187,137 +223,45 @@
         </nav>
         <div id="page-wrapper" class="d-none">
             <div class="page-inner container-fluid">
-                <h2>주문관리</h2>
-                <h5>Welcome Jhon Deo , Love to see you back.</h5>
+                <h3 class="head">주문 관리</h3>
                 <hr>
                 <ul class="nav nav-tabs">
-                    <li class="disabled active"><a href="#order-sheet">주문관리</a></li>
+                    <li class="disabled active"><a href="#order-sheet">주문 목록</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="order-sheet">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6">
-                                <div class="panel panel-info border-dark">
-                                    <div class="panel-heading border-dark">시작일</div>
-                                    <table id="start-datepicker-days" class="table table-bordered datepicker-days">
-                                        <thead>
-                                            <tr>
-                                                <th><i class="fas fa-angle-left fa-fw"></i></th>
-                                                <th colspan="2" id="start-date-year"></th>
-                                                <th><i class="fas fa-angle-right fa-fw"></i></th>
-                                                <th><i class="fas fa-angle-left fa-fw"></i></th>
-                                                <th id="start-date-month"></th>
-                                                <th><i class="fas fa-angle-right fa-fw"></i></th>
-                                            </tr>
-                                            <tr class="active">
-                                                <th class="text-danger">일</th>
-                                                <th>월</th>
-                                                <th>화</th>
-                                                <th>수</th>
-                                                <th>목</th>
-                                                <th>금</th>
-                                                <th class="text-primary">토</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                    <div id="start-date" class="panel-footer bg-white text-right"></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="panel panel-success border-dark">
-                                    <div class="panel-heading border-dark">종료일</div>
-                                    <table id="end-datepicker-days" class="table table-bordered datepicker-days">
-                                        <thead>
-                                            <tr>
-                                                <th><i class="fas fa-angle-left fa-fw"></i></th>
-                                                <th colspan="2" id="end-date-year"></th>
-                                                <th><i class="fas fa-angle-right fa-fw"></i></th>
-                                                <th><i class="fas fa-angle-left fa-fw"></i></th>
-                                                <th id="end-date-month"></th>
-                                                <th><i class="fas fa-angle-right fa-fw"></i></th>
-                                            </tr>
-                                            <tr class="active">
-                                                <th class="text-danger">일</th>
-                                                <th>월</th>
-                                                <th>화</th>
-                                                <th>수</th>
-                                                <th>목</th>
-                                                <th>금</th>
-                                                <th class="text-primary">토</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                    <div id="end-date" class="panel-footer bg-white text-right"></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-12">
-                                <div class="panel panel-danger border-dark">
-                                    <div class="panel-heading border-dark">검색</div>
-                                    <div class="panel-body">
-                                        <div class="dl-search">
-                                            <dt>검색</dt>
-                                            <dd>
-                                                <div class="input-group dropdown-wide">
-                                                    <input type="text" class="form-control" id="id_species"
-                                                        name="species">
-                                                    <div class="dropdown-addon">
-                                                        <button type="button" class="btn btn-default dropdown-toggle"
-                                                            data-toggle="dropdown">
-                                                            주문번호 <i class="fas fa-caret-down fa-fw"></i>
-                                                        </button>
-                                                        <ul id="species-dropdown-menu" class="dropdown-menu">
-                                                        </ul>
-                                                    </div>
-                                                </div>
-
-                                            </dd>
-                                            <dt>배송</dt>
-                                            <dd>
-                                                <div class="dropdown dropdown-wide">
-                                                    <button type="button"
-                                                        class="btn btn-default btn-block dropdown-toggle"
-                                                        data-toggle="dropdown">
-                                                        매장
-                                                        <i class="fas fa-caret-down fa-fw"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a href="#">Action</a></li>
-                                                        <li><a href="#">Action</a></li>
-                                                        <li><a href="#">Action</a></li>
-                                                    </ul>
-                                                </div>
-                                            </dd>
-                                            <dt>상태</dt>
-                                            <dd>
-                                                <div class="dropdown dropdown-wide">
-                                                    <button type="button"
-                                                        class="btn btn-default btn-block dropdown-toggle"
-                                                        data-toggle="dropdown">
-                                                        완료됨
-                                                        <i class="fas fa-caret-down fa-fw"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a href="#">Action</a></li>
-                                                        <li><a href="#">Action</a></li>
-                                                        <li><a href="#">Action</a></li>
-                                                    </ul>
-                                                </div>
-                                            </dd>
-                                        </div>
+                        <div class="panel panel-success">
+                            <div class="panel-heading">필터</div>
+                            <div class="panel-body">
+                                <div id="list-widget" class="row">
+                                    <div class="col-sm-3">
+                                        <p class="text-secondary">검색어</p>
+                                        (없음)
                                     </div>
-                                    <div class="panel-footer bg-white text-right">
-                                        <button type="button" class="btn btn-default">검색</button>
+                                    <div class="col-sm-3">
+                                        <p class="text-secondary">배송</p>
+                                        매장
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <p class="text-secondary">상태</p>
+                                        전체
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <p class="text-secondary">기간</p>
+                                        3일간
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default border-dark">
-                            <div id="order-sheet-tool" class="panel-heading border-dark clearfix">
-                                <button type="button" class="btn btn-default pull-right">도움말</button>
+                        <hr>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#search-modal">항목 담기</button>
+                            <button type="button" class="btn btn-default">항목 담기</button>
+                        </div>
+                        <hr>
+                        <div class="panel panel-default">
+                            <div id="order-sheet-tool" class="panel-heading clearfix">
+                                <button type="button" class="btn btn-default pull-right">정보</button>
                             </div>
                             <div class="table-responsive">
                                 <table id="order_sheet_table" class="table table-bordered">
@@ -338,19 +282,20 @@
                                     </thead>
                                 </table>
                             </div>
-                            <div id="order-sheet-info" class="panel-footer bg-white"></div>
+                            <div id="order-sheet-info" class="panel-footer"></div>
                         </div>
                         <div id="order-sheet-pagination" class="text-center"></div>
-                        <hr>
-                        <div class="text-right mb-section">
+                        <hr class="mt-0">
+                        <div class="text-right">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-default">완료 표시</button>
-                                <button type="button" class="btn btn-default">상세 보기</button>
+                                <button type="button" class="btn btn-default">항목 담기</button>
+                                <button type="button" class="btn btn-default">항목 담기</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <footer><i>Copyright &copy; roh-j, Licensed under the Apache License</i></footer>
         </div>
     </div>
 </body>

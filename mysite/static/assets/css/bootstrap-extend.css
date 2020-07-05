@@ -1,14 +1,4 @@
-/* overflow */
-.overflow-auto {
-    overflow: auto !important;
-}
-.overflow-scroll {
-    overflow: scroll !important;
-}
-.overflow-visible {
-    overflow: visible !important;
-}
-/* min - max */
+/* component size */
 .min-145 {
     min-width: 145px !important;
 }
@@ -21,41 +11,7 @@
 .max-600 {
     max-width: 600px !important;
 }
-/* table-hover (rowspan) */
-.table-merge-hover > tbody.active {
-    background-color: #f5f5f5;
-}
-.table-merge-hover > tbody.success {
-    background-color: #dff0d8;
-}
-.table-merge-hover > tbody.info {
-    background-color: #d9edf7;
-}
-.table-merge-hover > tbody.warning {
-    background-color: #fcf8e3;
-}
-.table-merge-hover > tbody.danger {
-    background-color: #f2dede;
-}
-.table-merge-hover > tbody:hover {
-    background-color: #f5f5f5;
-}
-.table-merge-hover > tbody.active:hover {
-    background-color: #e8e8e8;
-}
-.table-merge-hover > tbody.success:hover {
-    background-color: #d0e9c6;
-}
-.table-merge-hover > tbody.info:hover {
-    background-color: #c4e3f3;
-}
-.table-merge-hover > tbody.warning:hover {
-    background-color: #faf2cc;
-}
-.table-merge-hover > tbody.danger:hover {
-    background-color: #ebcccc;
-}
-/* custom badge */
+/* bootstrap extend */
 .badge-danger {
     background-color: #d9534f;
 }
@@ -86,7 +42,6 @@
 .badge-primary:hover {
     background-color: #286090;
 }
-/* callout */
 .bs-callout {
     padding: 20px;
     margin: 20px 0;
@@ -143,7 +98,6 @@
 .bs-callout-info h4 {
     color: #5bc0de;
 }
-/* bootstrap 4 */
 .shadow-sm {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
