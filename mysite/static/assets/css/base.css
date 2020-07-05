@@ -60,6 +60,9 @@ table tbody tr td {
     content: "•";
     margin-right: 5px;
 }
+thead > tr > th.selection {
+    width: 36px;
+}
 /* ui styles */
 .btn,
 .label,
@@ -139,7 +142,7 @@ table tbody tr td {
     padding-bottom: 15px;
     background-color: #fff;
 }
-.page-inner {
+#page-inner {
     max-width: 1170px;
     padding-top: 15px;
     background-color: #fff;

@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.0.96/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretty-checkbox/3.0.0/pretty-checkbox.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap-extend.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/base.css' %}">
@@ -27,6 +29,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.4/metisMenu.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.7.1/svg.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.serializeObject/2.0.3/jquery.serializeObject.min.js"></script>
@@ -210,17 +213,61 @@
             </div>
         </nav>
         <div id="page-wrapper" class="d-none">
-            <div class="page-inner container-fluid">
+            <div id="page-inner" class="container-fluid">
                 <h3 class="head">재고 관리</h3>
                 <hr>
                 <ul class="nav nav-tabs">
-                    <li><a href="#order-sheet" data-toggle="tab">주문서</a></li>
-                    <li class="active"><a href="#storage-room" data-toggle="tab">생물실</a></li>
+                    <li class="active"><a href="#order-sheet" data-toggle="tab">주문서</a></li>
+                    <li><a href="#storage-room" data-toggle="tab">생물실</a></li>
                     <li><a href="#store-layout" data-toggle="tab">매장</a></li>
                     <li><a href="#aquarium" data-toggle="tab">수조</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active" id="storage-room">
+                    <div class="tab-pane active" id="order-sheet">
+                        <button type="button" id="skip-order-sheet" class="btn btn-default">건너뛰기</button>
+                        <button type="button" class="wide-screen btn btn-default ml-3">넓게</button>
+                        <hr>
+                        <div class="panel panel-default">
+                            <div id="order-sheet-tool" class="panel-heading d-flex"></div>
+                            <div class="table-responsive">
+                                <table id="order_sheet_table" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="selection">
+                                                <div class="pretty p-icon">
+                                                    <input type="checkbox" class="check-all">
+                                                    <div class="state p-warning">
+                                                        <i class="icon mdi mdi-check-bold"></i>
+                                                        <label></label>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <th>주문번호</th>
+                                            <th>주문일자</th>
+                                            <th>배송</th>
+                                            <th>어종</th>
+                                            <th>품종</th>
+                                            <th>특이사항</th>
+                                            <th>단계</th>
+                                            <th>단위</th>
+                                            <th>처리</th>
+                                            <th>동작</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <div class="btn-group">
+                                    <button type="button" id="selected-items-to-cart" class="btn btn-default">선택 항목 처리</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="order-sheet-pagination" class="text-center"></div>
+                        <hr>
+                    </div>
+                    <div class="tab-pane" id="storage-room">
                         <div class="panel panel-default max-600 mx-auto">
                             <div class="panel-heading">생물실 선택</div>
                             <div class="panel-body">

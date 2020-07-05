@@ -19,5 +19,7 @@ from . import views
 app_name = 'Order'
 
 urlpatterns = [
+    path('order-sheet/', views.OrderSheetView.as_view(), name='OrderSheetView'),
     path('register/', views.RegisterView.as_view(), name='RegisterView'),
+    path('status/', views.StatusView.as_view(), name='StatusView'),
 ]

@@ -37,9 +37,9 @@ class AquariumStock(models.Model):
         choices=GENDER_CHOICES,
         default='none',
     )
+    remark = models.CharField(max_length=200, null=True, blank=True)
     size = models.FloatField(default=0.0)
     quantity = models.IntegerField(default=1)
-    remark = models.CharField(max_length=200, null=True, blank=True)
     last_modified_date = models.DateTimeField(default=timezone.now)
     creation_date = models.DateTimeField(default=timezone.now)
 

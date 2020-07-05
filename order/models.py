@@ -70,6 +70,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(
         Order,
+        related_name='order_items',
         on_delete=models.CASCADE,
     )
     unit_price = models.ForeignKey(
@@ -80,6 +81,7 @@ class OrderItem(models.Model):
     )
     species = models.CharField(max_length=100)
     breed = models.CharField(max_length=100)
+    remark = models.CharField(max_length=200, null=True, blank=True)
     min_size = models.FloatField(default=0.0)
     max_size = models.FloatField(default=0.0)
     stages_of_development = models.CharField(

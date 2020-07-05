@@ -1,9 +1,3 @@
-/**
- * messages javascript
- * @author roh-j
- * @version 2019-08-10
- */
-
 var error_messages = {
     'main_register': {
         'username': {
@@ -37,7 +31,7 @@ var error_messages = {
             'This field may not be blank.': '사용자 계정을 입력해주세요.'
         },
         'password': {
-            'This field may not be blank.': '비밀번호를 입력해주세요.',
+            'This field may not be blank.': '비밀번호를 입력해주세요.'
         },
         'non_field_errors': {
             'Invalid input.': '아이디 또는 비밀번호를 다시 확인하세요.'
@@ -79,6 +73,6 @@ var error_messages = {
         },
         'breed': {
             'This field may not be blank.': '품종을 입력해주세요.'
-        },
+        }
     }
 };

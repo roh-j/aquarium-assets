@@ -39,6 +39,20 @@
 </head>
 
 <body>
+    <div id="alert-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">알림</h5>
+                </div>
+                <div class="modal-body text-center"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="recipient-register-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -82,7 +96,7 @@
                             <table id="customer_table" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th class="min"></th>
+                                        <th class="selection"></th>
                                         <th>번호</th>
                                         <th>이름</th>
                                         <th>연락처</th>
@@ -189,7 +203,7 @@
             </div>
         </nav>
         <div id="page-wrapper" class="d-none">
-            <div class="page-inner container-fluid">
+            <div id="page-inner" class="container-fluid">
                 <h3 class="head">주문 관리</h3>
                 <hr>
                 <ul class="nav nav-tabs">
@@ -197,7 +211,9 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="order-sheet">
-                        <div id="order-menu"></div>
+                        <div id="order-menu">
+                            <button type="button" class="wide-screen btn btn-default">넓게</button>
+                        </div>
                         <hr><h4 class="lead-step">Step 1. <small>상품 선택</small></h4><hr>
                         <div class="panel panel-default">
                             <div id="product-tool" class="panel-heading d-flex"></div>
@@ -205,7 +221,7 @@
                                 <table id="product_table" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>
+                                            <th class="selection">
                                                 <div class="pretty p-icon">
                                                     <input type="checkbox" class="check-all">
                                                     <div class="state p-warning">
@@ -236,9 +252,9 @@
                         <div id="product-pagination" class="text-center"></div>
                         <hr><h4 class="lead-step">Step 2. <small>항목 관리</small></h4><hr>
                         <div class="panel panel-default">
-                            <div id="cart-tool" class="panel-heading d-flex"></div>
+                            <div id="order-item-tool" class="panel-heading d-flex"></div>
                             <div class="table-responsive">
-                                <table id="cart_table" class="table table-bordered table-hover">
+                                <table id="order_item_table" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th>번호</th>
@@ -258,7 +274,7 @@
                                 <button type="button" id="empty-cart" class="btn btn-default">비우기</button>
                             </div>
                         </div>
-                        <div id="cart-pagination" class="text-center"></div>
+                        <div id="order-item-pagination" class="text-center"></div>
                         <hr><h4 class="lead-step">Step 3. <small>주문서 확인</small></h4><hr>
                         <div class="dl-order bs-callout bs-callout-warning">
                             <dl>
