@@ -78,8 +78,8 @@ $(function () {
             $('.dataTables_paginate').detach().appendTo('#unit-price-pagination');
 
             $('.dt-buttons').detach().appendTo('#unit-price-menu');
-            $('.dataTables_filter').detach().appendTo('#unit-price-tool');
             $('.dataTables_length').detach().appendTo('#unit-price-tool');
+            $('.dataTables_filter').detach().appendTo('#unit-price-tool');
 
             async_unit_price(load_complete);
         }

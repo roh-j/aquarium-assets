@@ -2,7 +2,8 @@
 div.color-picker {
     width: 187px;
     padding: 5px;
-    border: 1px solid #343a40;
+    margin-top: 15px;
+    border: 1px solid #ccc;
 }
 div.color-picker ul {
     list-style: none;

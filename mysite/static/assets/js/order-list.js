@@ -11,23 +11,47 @@ var pick_year = year;
 var pick_month = month;
 var pick_day = day;
 
-var toast = function (type, message) {
-    bootoast.toast({
-        'message': message,
-        'type': type,
-        'position': 'right-top',
-        'icon': null,
-        'timeout': '200',
-        'dismissable': true
-    });
-}
+var pos_year = year;
+var pos_month = month;
 
 $(function () {
     $('#console-menu').metisMenu();
     $('.nav-second-level').removeClass('d-none');
 
-    draw_datepicker(year, month, day);
+    draw_datepicker(pos_year, pos_month);
+    toast('info', '주문을 관리할 수 있습니다.');
     load_complete();
+
+    $('#datepicker > thead > tr > th > a').on('click', function (e) {
+        e.preventDefault();
+
+        if ($(this).data('action') == 'year-previous') {
+            pos_year = (parseInt(pos_year) - 1).toString();
+        }
+        else if ($(this).data('action') == 'year-next') {
+            pos_year = (parseInt(pos_year) + 1).toString();
+        }
+        else if ($(this).data('action') == 'month-previous') {
+            pos_month = (parseInt(pos_month) - 1).toString();
+            if (pos_month < 1) {
+                pos_year = (parseInt(pos_year) - 1).toString();
+                pos_month = '12';
+            }
+        }
+        else if ($(this).data('action') == 'month-next') {
+            pos_month = (parseInt(pos_month) + 1).toString();
+            if (pos_month > 12) {
+                pos_year = (parseInt(pos_year) + 1).toString();
+                pos_month = '1';
+            }
+        }
+
+        if (pos_month.length == 1) {
+            pos_month = '0' + pos_month;
+        }
+
+        draw_datepicker(pos_year, pos_month);
+    });
 
     data = [
         ['<div class="pretty p-default p-round">\
@@ -55,8 +79,8 @@ $(function () {
         rowsGroup: [0, 1, 2, 8, 9],
         lengthMenu: [10, 25, 50],
         autoWidth: false,
-        ordering: false,
         searching: false,
+        ordering: false,
         pageLength: 10,
         pagingType: 'simple',
         dom: 'l' + 't' + 'p' + 'i',
@@ -83,20 +107,21 @@ $(function () {
             $('.dataTables_info').detach().appendTo('#order-sheet-info');
             $('.dataTables_paginate').detach().appendTo('#order-sheet-pagination');
             $('.dataTables_length').detach().appendTo('#order-sheet-tool');
+            $('#order-sheet-tool').append('<button type="button" class="btn btn-default">항목 담기</button>');
         }
     });
 });
 
-var draw_datepicker = function (year, month, day) {
-
-    toast('success', '안녕하세요');
-
+var draw_datepicker = function (year, month) {
+    $('#datepicker tbody').empty();
     $('#pick-date').html(
-        '<div class="table-heading">' + year + '년 ' + month + '월 ' + day + '일</div>\
-        <div class="btn-group pull-right">\
-            <button type="button" class="btn btn-default">오늘</button>\
+        pick_year + '년 ' + pick_month + '월 ' + pick_day + '일'
+    )
+    $('#set-date').html(
+        '<div class="btn-group pull-right">\
             <button type="button" class="btn btn-default">시작일로</button>\
             <button type="button" class="btn btn-default">종료일로</button>\
+            <button type="button" class="btn btn-default"><i class="far fa-calendar-alt fa-fw"></i></button>\
         </div>'
     );
 
@@ -114,9 +139,10 @@ var draw_datepicker = function (year, month, day) {
                     $('#datepicker tbody tr:last-child').append(
                         '<td>\
                             <span class="data-bind"\
+                                data-exist="true"\
                                 data-year="' + year + '"\
                                 data-month="' + month + '"\
-                                data-day="' + (i * 7 + j) + '"></span>\
+                                data-day="' + data[1][i * 7 + j] + '"></span>\
                             <span class="label label-danger">' + data[1][i * 7 + j] + '</span>\
                         </td>'
                     );
@@ -126,9 +152,10 @@ var draw_datepicker = function (year, month, day) {
                         $('#datepicker tbody tr:last-child').append(
                             '<td class="text-danger">\
                                 <span class="data-bind"\
+                                    data-exist="true"\
                                     data-year="' + year + '"\
                                     data-month="' + month + '"\
-                                    data-day="' + (i * 7 + j) + '"></span>\
+                                    data-day="' + data[1][i * 7 + j] + '"></span>\
                                 ' + data[1][i * 7 + j] + '\
                             </td>'
                         );
@@ -137,9 +164,10 @@ var draw_datepicker = function (year, month, day) {
                         $('#datepicker tbody tr:last-child').append(
                             '<td class="text-primary">\
                                 <span class="data-bind"\
+                                    data-exist="true"\
                                     data-year="' + year + '"\
                                     data-month="' + month + '"\
-                                    data-day="' + (i * 7 + j) + '"></span>\
+                                    data-day="' + data[1][i * 7 + j] + '"></span>\
                                 ' + data[1][i * 7 + j] + '\
                             </td>'
                         );
@@ -148,9 +176,10 @@ var draw_datepicker = function (year, month, day) {
                         $('#datepicker tbody tr:last-child').append(
                             '<td>\
                                 <span class="data-bind"\
+                                    data-exist="true"\
                                     data-year="' + year + '"\
                                     data-month="' + month + '"\
-                                    data-day="' + (i * 7 + j) + '"></span>\
+                                    data-day="' + data[1][i * 7 + j] + '"></span>\
                                 ' + data[1][i * 7 + j] + '\
                             </td>'
                         );
@@ -159,9 +188,23 @@ var draw_datepicker = function (year, month, day) {
             }
             else {
                 $('#datepicker tbody tr:last-child').append(
-                    '<td class="bg-light">&nbsp;</td>'
+                    '<td class="bg-light">\
+                        <span class="data-bind"\
+                            data-exist="false"></span>\
+                            &nbsp;\
+                    </td>'
                 );
             }
         }
     }
+
+    $('#datepicker > tbody > tr td').on('click', function () {
+        if ($('span.data-bind', this).data('exist') == true) {
+            pick_year = $('span.data-bind', this).data('year');
+            pick_month = $('span.data-bind', this).data('month');
+            pick_day = $('span.data-bind', this).data('day');
+
+            draw_datepicker(pick_year, pick_month);
+        }
+    });
 }

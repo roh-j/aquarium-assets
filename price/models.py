@@ -28,7 +28,7 @@ class UnitPrice(models.Model):
     price = models.IntegerField(default=0)
     publication_date = models.DateTimeField()
 
-    objects = models.Manager()  # VS Code 버그 해결을 위한 코드
+    objects = models.Manager()  # for Visual Studio Code
 
     def __str__(self):
         return self.breed

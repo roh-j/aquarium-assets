@@ -502,7 +502,7 @@ var draw_store_layout = function (url, callback) {
                 }
             });
 
-            $('#store-layout-console').html(
+            $('#guide-store-layout').html(
                 '<i class="fas fa-circle fa-fw" style="color: ' + section_color + '"></i> ' + section_name
             );
         }

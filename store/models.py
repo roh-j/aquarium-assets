@@ -12,7 +12,7 @@ class StorageRoom(models.Model):
     storage_room_name = models.CharField(max_length=20)
     modified_date = models.DateTimeField()
 
-    objects = models.Manager()  # VS Code 버그 해결을 위한 코드
+    objects = models.Manager()  # for Visual Studio Code
 
     def __str__(self):
         return self.storage_room_name
@@ -29,7 +29,7 @@ class AquariumSection(models.Model):
     aquarium_num_of_columns = models.IntegerField(default=0)
     modified_date = models.DateTimeField()
 
-    objects = models.Manager()  # VS Code 버그 해결을 위한 코드
+    objects = models.Manager()  # for Visual Studio Code
 
     def __str__(self):
         return self.section_name
@@ -47,7 +47,7 @@ class StoreLayout(models.Model):
     row = models.IntegerField(default=0)
     column = models.IntegerField(default=0)
 
-    objects = models.Manager()  # VS Code 버그 해결을 위한 코드
+    objects = models.Manager()  # for Visual Studio Code
 
     def __str__(self):
         return str(self.pk)
@@ -67,7 +67,7 @@ class Aquarium(models.Model):
     config_date = models.DateTimeField()
     modified_date = models.DateTimeField()
 
-    objects = models.Manager()  # VS Code 버그 해결을 위한 코드
+    objects = models.Manager()  # for Visual Studio Code
 
     def __str__(self):
         return str(self.pk)

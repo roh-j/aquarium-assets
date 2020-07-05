@@ -506,25 +506,6 @@ button.bg-dark:focus {
     content: "";
     background-color: rgba(0, 0, 0, 0);
 }
-.m-section {
-    margin: 20px !important;
-}
-.mt-section,
-.my-section {
-    margin-top: 20px !important;
-}
-.mr-section,
-.mx-section {
-    margin-right: 20px !important;
-}
-.mb-section,
-.my-section {
-    margin-bottom: 20px !important;
-}
-.ml-section,
-.mx-section {
-    margin-left: 20px !important;
-}
 .m-0 {
     margin: 0 !important;
 }

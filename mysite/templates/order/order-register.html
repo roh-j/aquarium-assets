@@ -47,7 +47,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="panel panel-default">
-                        <div id="customer-tool" class="panel-heading clearfix">
+                        <div id="customer-tool" class="panel-heading flex-component">
                             <div class="table-heading">고객</div>
                         </div>
                         <div class="table-responsive">
@@ -137,7 +137,7 @@
                     <li>
                         <a href="#"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../../inventory/selection/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
+                            <li><a href="../../inventory/manual/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
                             <li><a href="../../inventory/order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
                         </ul>
                     </li>
@@ -169,9 +169,9 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="order-sheet">
-                        <h4 class="lead-step">Step 1. <small>항목 선택</small></h4>
+                        <h4 class="lead-step">Step 1. <small>상품 선택</small></h4>
                         <div class="panel panel-success">
-                            <div id="product-tool" class="panel-heading clearfix">
+                            <div id="product-tool" class="panel-heading flex-component">
                                 <div class="table-heading">상품</div>
                             </div>
                             <div class="table-responsive">
@@ -225,8 +225,8 @@
                         <div id="product-pagination" class="text-center"></div>
                         <h4 class="lead-step">Step 2. <small>항목 관리</small></h4>
                         <div class="panel panel-info">
-                            <div id="cart-tool" class="panel-heading clearfix">
-                                <div class="table-heading">상품</div>
+                            <div id="cart-tool" class="panel-heading flex-component">
+                                <div class="table-heading">항목</div>
                             </div>
                             <div class="table-responsive">
                                 <table id="cart_table" class="table table-bordered table-hover">
@@ -290,11 +290,12 @@
                         </div>
                         <hr>
                         <div class="text-right">
-                            <div class="btn-group mb-section">
+                            <div class="btn-group">
                                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#customer-modal">항목 담기</button>
                                 <button type="button" class="btn btn-default">항목 담기</button>
                             </div>
                         </div>
+                        <hr>
                     </div>
                 </div>
             </div>

@@ -9,14 +9,14 @@ import store.serializers as StoreSerializers
 # Create your views here.
 
 
-class SelectionView(APIView):
+class ManualView(APIView):
     renderer_classes = (TemplateHTMLRenderer,)
 
     def get(self, request, control_number, format=None):
         if request.user.is_authenticated:
             queryset = StoreModels.StorageRoom.objects.filter(
                 business=control_number).order_by('-id')
-            return Response({'storage_room_list': queryset}, template_name='inventory/inventory-selection.html')
+            return Response({'storage_room_list': queryset}, template_name='inventory/inventory-manual.html')
         else:
             return redirect('Main:SignInView')
 

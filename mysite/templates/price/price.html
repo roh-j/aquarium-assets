@@ -72,24 +72,40 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="id_unit" class="control-label d-block">단위</label>
-                            <div id="id_unit" class="btn-group d-flex" data-toggle="buttons">
-                                <label class="btn btn-default w-100">
-                                    <input type="radio" name="unit" value="couple"> <i class="fas fa-seedling fa-fw text-success"></i> 한쌍
-                                </label>
-                                <label class="btn btn-default w-100">
-                                    <input type="radio" name="unit" value="female"> <i class="fas fa-venus fa-fw text-danger"></i> 암컷
-                                </label>
-                                <label class="btn btn-default w-100">
-                                    <input type="radio" name="unit" value="male"> <i class="fas fa-mars fa-fw text-primary"></i> 수컷
-                                </label>
+                            <label for="id_development_stage" class="control-label d-block">발육 단계</label>
+                            <div id="id_development_stage" class="btn-group d-flex" data-toggle="buttons">
                                 <label class="btn btn-default w-100 active">
-                                    <input type="radio" name="unit" value="none" checked> <i class="fas fa-genderless fa-fw text-secondary"></i> 없음
+                                    <input type="radio" name="development_stage" value="adult" checked> 성어
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="development_stage" value="immature"> 준성어
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="development_stage" value="juvenile"> 유어
+                                </label>
+                                <label class="btn btn-default w-100">
+                                    <input type="radio" name="development_stage" value="larva"> 치어
                                 </label>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div style="width: 75%">
+                                <label for="id_unit" class="control-label d-block">단위</label>
+                                <div id="id_unit" class="btn-group d-flex" data-toggle="buttons">
+                                    <label class="btn btn-default w-100 active">
+                                        <input type="radio" name="unit" value="none" checked> 없음
+                                    </label>
+                                    <label class="btn btn-default w-100">
+                                        <input type="radio" name="unit" value="female"> 암컷
+                                    </label>
+                                    <label class="btn btn-default w-100">
+                                        <input type="radio" name="unit" value="male"> 수컷
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
-                            <div class="form-group col-xs-6">
+                            <div class="form-group col-sm-6">
                                 <label for="id_size" class="control-label">크기 (cm)</label>
                                 <div class="input-group">
                                     <span class="input-group-btn input-spinner">
@@ -104,13 +120,13 @@
                                         </button>
                                     </span>
                                 </div>
-                                <div class="btn-group input-spinner d-flex mt-3">
+                                <div class="btn-group input-spinner">
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+10.0" data-spinner-target="#id_size">10 cm</button>
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+1.0" data-spinner-target="#id_size">1 cm</button>
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+0.1" data-spinner-target="#id_size">0.1 cm</button>
                                 </div>
                             </div>
-                            <div class="form-group col-xs-6">
+                            <div class="form-group col-sm-6">
                                 <label for="id_price" class="control-label">가격</label>
                                 <div class="input-group">
                                     <span class="input-group-btn input-spinner">
@@ -125,7 +141,7 @@
                                         </button>
                                     </span>
                                 </div>
-                                <div class="btn-group input-spinner d-flex mt-3">
+                                <div class="btn-group input-spinner">
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+10000" data-spinner-target="#id_price">만</button>
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+1000" data-spinner-target="#id_price">천</button>
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+100" data-spinner-target="#id_price">백</button>
@@ -183,7 +199,7 @@
                     <li>
                         <a href="#"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../inventory/selection/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
+                            <li><a href="../inventory/manual/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
                             <li><a href="../inventory/order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
                         </ul>
                     </li>
@@ -220,7 +236,7 @@
                         </div>
                         <hr>
                         <div class="panel panel-default">
-                            <div id="unit-price-tool" class="panel-heading clearfix"></div>
+                            <div id="unit-price-tool" class="panel-heading flex-component"></div>
                             <div class="table-responsive">
                                 <table id="unit_price_table" class="table table-bordered table-hover">
                                     <thead>
@@ -241,6 +257,7 @@
                             <div id="unit-price-info" class="panel-footer"></div>
                         </div>
                         <div id="unit-price-pagination" class="text-center"></div>
+                        <hr>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@ label,
     vertical-align: middle;
 }
 .pagination {
-    margin-top: 0;
+    margin: 0;
 }
 .min {
     width: 1%;
@@ -39,6 +39,17 @@ table tbody tr td {
 }
 .head {
     margin: 0;
+}
+.flex-component {
+    display: flex;
+    justify-content: flex-end;
+}
+.btn-group.input-spinner {
+    display: flex;
+    margin-top: 15px;
+}
+.dropdown-menu {
+    min-width: 110px;
 }
 /* ui styles */
 .btn,
@@ -90,10 +101,17 @@ table tbody tr td {
     text-align: center;
 }
 .bootoast {
+    position: relative;
+    float: right;
+    margin: 0 15px;
     border: 1px solid;
 }
+.bootoast-container {
+    width: 100%;
+    max-width: 100%;
+}
 .bootoast-container.right {
-    right: 15px;
+    right: 0;
     left: inherit;
 }
 .bootoast-container.top {
@@ -142,15 +160,16 @@ table .pretty {
     margin: 0 10px;
 }
 .table-heading {
-    float: left;
     height: 34px;
     line-height: 34px;
+    margin-right: auto;
     vertical-align: middle;
 }
 .datepicker-days > thead > tr > th {
-    cursor: pointer;
+    width: 14.28%;
 }
 .datepicker-days > tbody > tr > td {
+    width: 14.28%;
     text-align: center;
     cursor: pointer;
 }
@@ -165,6 +184,11 @@ table .pretty {
     line-height: 1.42857143;
     vertical-align: middle;
     margin-right: 1px;
+}
+.mini-map {
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
 }
 /* content styles */
 .form-control-hidden {
@@ -389,6 +413,12 @@ table .pretty {
 @media(max-width: 767.98px) {
     .table-responsive {
         border: none !important;
+    }
+    .dl-order dt {
+        width: 100px;
+    }
+    .dl-order dd {
+        margin-left: 100px;
     }
 }
 @media(max-width: 991.98px) {

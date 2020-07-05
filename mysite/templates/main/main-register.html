@@ -75,6 +75,17 @@
                     <img src="{% static 'assets/img/icon/Places-user-identity-icon-128x128.png' %}" class="primary-image img-responsive">
                     <hr>
                     <div class="form-group">
+                        <label for="id_membership" class="control-label d-block">멤버십</label>
+                        <div id="id_membership" class="btn-group d-flex" data-toggle="buttons">
+                            <label class="btn btn-default w-100 active">
+                                <input type="radio" name="membership" value="general" checked> 일반
+                            </label>
+                            <label class="btn btn-default w-100">
+                                <input type="radio" name="membership" value="business"> 비즈니스
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="id_username">사용자 계정</label>
                         <input type="text" id="id_username" name="username" class="form-control" autofocus>
                     </div>

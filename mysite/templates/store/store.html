@@ -105,7 +105,7 @@
                                         </button>
                                     </span>
                                 </div>
-                                <div class="btn-group input-spinner d-flex mt-3">
+                                <div class="btn-group input-spinner">
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+10" data-spinner-target="#id_aquarium_num_of_columns">10</button>
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_columns">1</button>
                                 </div>
@@ -125,7 +125,7 @@
                                         </button>
                                     </span>
                                 </div>
-                                <div class="btn-group input-spinner d-flex mt-3">
+                                <div class="btn-group input-spinner">
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+10" data-spinner-target="#id_aquarium_num_of_rows">10</button>
                                     <button type="button" class="btn btn-default w-100" data-spinner-value="+1" data-spinner-target="#id_aquarium_num_of_rows">1</button>
                                 </div>
@@ -138,8 +138,6 @@
                             <label for="id_section_color" class="control-label">섹션 색상</label>
                             <input type="hidden" id="id_section_color" name="section_color" value="#cd5c5c">
                             <div id="aquarium-section-edit-color-selected" class="color-selected" style="background: #cd5c5c"></div>
-                        </div>
-                        <div class="form-group">
                             <div id="aquarium-section-edit-color-picker" class="color-picker clearfix">
                                 <ul>
                                     <li style="background: #cd5c5c" data-section-color="#cd5c5c"></li>
@@ -203,7 +201,7 @@
                     <li>
                         <a href="#"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../inventory/selection/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
+                            <li><a href="../inventory/manual/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
                             <li><a href="../inventory/order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
                         </ul>
                     </li>
@@ -231,9 +229,9 @@
                 <h3 class="head">매장 관리</h3>
                 <hr>
                 <ul class="nav nav-tabs">
-                    <li class="disabled active"><a href="#storage-room">생물실 관리</a></li>
-                    <li class="disabled"><a href="#aquarium-section">섹션 / 수조 관리</a></li>
-                    <li class="disabled"><a href="#store-layout">매장 레이아웃</a></li>
+                    <li class="disabled active"><a href="#storage-room">생물실</a></li>
+                    <li class="disabled"><a href="#aquarium-section">섹션</a></li>
+                    <li class="disabled"><a href="#store-layout">매장</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="storage-room">
@@ -274,10 +272,11 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
                     </div>
                     <div class="tab-pane" id="aquarium-section">
                         <div class="panel panel-default max-600 mx-auto">
-                            <div class="panel-heading">섹션 / 수조 관리</div>
+                            <div class="panel-heading">섹션 관리</div>
                             <div class="panel-body">
                                 <button type="button" id="aquarium-section-register" class="btn btn-default">섹션 추가</button>
                                 <hr>
@@ -285,28 +284,24 @@
                             </div>
                             <div class="panel-footer text-right">
                                 <div class="btn-group">
-                                    <a href="" class="btn btn-default">처음으로</a>
+                                    <a href="" class="btn btn-default">이전</a>
                                     <button type="button" id="aquarium-section-modify" class="btn btn-default" disabled="disabled">변경</button>
                                     <button type="button" id="move-store-layout" class="btn btn-default" disabled="disabled">다음</button>
                                 </div>
                             </div>
                         </div>
+                        <hr>
                     </div>
                     <div class="tab-pane" id="store-layout">
+                        <button type="button" id="redo-aquarium-section" class="btn btn-default">이전</button>
+                        <span id="guide-store-layout" class="ml-3"></span>
+                        <hr>
                         <div class="table-responsive">
                             <div id="store-layout-canvas">
                                 <div id="svg-store-layout" class="text-center"></div>
                             </div>
                         </div>
                         <hr>
-                        <div id="store-layout-console" class="text-center"></div>
-                        <hr>
-                        <div class="text-center">
-                            <div class="btn-group mb-section">
-                                <button type="button" id="redo-aquarium-section" class="btn btn-default">이전</button>
-                                <a href="" class="btn btn-default">처음으로</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

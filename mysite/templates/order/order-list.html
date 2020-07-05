@@ -84,16 +84,16 @@
                             </div>
                         </div>
                         <div class="panel panel-danger">
-                            <div class="panel-heading">캘린더</div>
+                            <div id="pick-date" class="panel-heading"></div>
                             <table id="datepicker" class="table table-bordered datepicker-days">
                                 <thead>
                                     <tr>
-                                        <th><i class="fas fa-angle-left fa-fw"></i></th>
+                                        <th><a href="#" data-action="year-previous"><i class="fas fa-angle-left fa-fw"></i></a></th>
                                         <th colspan="2" id="date-year"></th>
-                                        <th><i class="fas fa-angle-right fa-fw"></i></th>
-                                        <th><i class="fas fa-angle-left fa-fw"></i></th>
+                                        <th><a href="#" data-action="year-next"><i class="fas fa-angle-right fa-fw"></i></a></th>
+                                        <th><a href="#" data-action="month-previous"><i class="fas fa-angle-left fa-fw"></i></a></th>
                                         <th id="date-month"></th>
-                                        <th><i class="fas fa-angle-right fa-fw"></i></th>
+                                        <th><a href="#" data-action="month-next"><i class="fas fa-angle-right fa-fw"></i></a></th>
                                     </tr>
                                     <tr class="active">
                                         <th class="text-danger">일</th>
@@ -108,7 +108,7 @@
                                 <tbody>
                                 </tbody>
                             </table>
-                            <div id="pick-date" class="panel-footer clearfix"></div>
+                            <div id="set-date" class="panel-footer clearfix"></div>
                         </div>
                         <div class="row">
                             <div class="form-group col-xs-6">
@@ -131,23 +131,11 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="id_quick_term" class="control-label d-block">기간 지정</label>
-                            <div id="id_quick_term" class="btn-group d-flex" data-toggle="buttons">
-                                <label class="btn btn-default w-100">
-                                    <input type="radio" name="qucik_term" value="today"> 오늘
-                                </label>
-                                <label class="btn btn-default w-100">
-                                    <input type="radio" name="qucik_term" value="week"> 일주일
-                                </label>
-                                <label class="btn btn-default w-100">
-                                    <input type="radio" name="qucik_term" value="month"> 1개월
-                                </label>
-                                <label class="btn btn-default w-100">
-                                    <input type="radio" name="qucik_term" value="3_months"> 3개월
-                                </label>
-                                <label class="btn btn-default w-100">
-                                    <input type="radio" name="qucik_term" value="whole_day"> 전체
-                                </label>
+                            <div id="quick-term" class="btn-group d-flex">
+                                <button type="button" class="btn btn-default w-100">전체</button>
+                                <button type="button" class="btn btn-default w-100">오늘</button>
+                                <button type="button" class="btn btn-default w-100">3일</button>
+                                <button type="button" class="btn btn-default w-100">일주일</button>
                             </div>
                         </div>
                     </div>
@@ -198,7 +186,7 @@
                     <li>
                         <a href="#"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../../inventory/selection/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
+                            <li><a href="../../inventory/manual/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
                             <li><a href="../../inventory/order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
                         </ul>
                     </li>
@@ -235,7 +223,7 @@
                             <div class="panel-body">
                                 <div id="list-widget" class="row">
                                     <div class="col-sm-3">
-                                        <p class="text-secondary">검색어</p>
+                                        <p class="text-secondary">검색</p>
                                         (없음)
                                     </div>
                                     <div class="col-sm-3">
@@ -255,14 +243,12 @@
                         </div>
                         <hr>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#search-modal">항목 담기</button>
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#search-modal">필터 설정하기</button>
                             <button type="button" class="btn btn-default">항목 담기</button>
                         </div>
                         <hr>
                         <div class="panel panel-default">
-                            <div id="order-sheet-tool" class="panel-heading clearfix">
-                                <button type="button" class="btn btn-default pull-right">정보</button>
-                            </div>
+                            <div id="order-sheet-tool" class="panel-heading flex-component"></div>
                             <div class="table-responsive">
                                 <table id="order_sheet_table" class="table table-bordered">
                                     <thead>
@@ -285,13 +271,14 @@
                             <div id="order-sheet-info" class="panel-footer"></div>
                         </div>
                         <div id="order-sheet-pagination" class="text-center"></div>
-                        <hr class="mt-0">
+                        <hr>
                         <div class="text-right">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default">항목 담기</button>
                                 <button type="button" class="btn btn-default">항목 담기</button>
                             </div>
                         </div>
+                        <hr>
                     </div>
                 </div>
             </div>

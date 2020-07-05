@@ -34,8 +34,12 @@
     <title>Aquarium Assets</title>
     <script>
         $(function () {
+            username = '{{ user.username }}';
+
             $("#console-menu").metisMenu();
             $(".nav-second-level").removeClass("d-none");
+
+            toast('info', username + '님 환영합니다.');
 
             load_complete();
         });
@@ -83,7 +87,7 @@
                     <li>
                         <a href="#"><i class="fas fa-archive fa-fw"></i>재고관리 <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level d-none">
-                            <li><a href="../inventory/selection/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
+                            <li><a href="../inventory/manual/"><i class="fas fa-flag fa-fw"></i>선택으로 재고관리</a></li>
                             <li><a href="../inventory/order-sheet/"><i class="far fa-sticky-note fa-fw"></i>주문서로 재고관리</a></li>
                         </ul>
                     </li>

@@ -6,6 +6,8 @@
 
 var DJANGO_STATIC_URL = '/static';
 
+var username = null;
+
 var date = new Date();
 var year = date.getFullYear();
 var month = new String(date.getMonth() + 1);
@@ -50,6 +52,17 @@ $(function () {
         }
     });
 });
+
+var toast = function (type, message) {
+    bootoast.toast({
+        'message': message,
+        'type': type,
+        'position': 'right-top',
+        'icon': null,
+        'timeout': '3',
+        'dismissable': true
+    });
+}
 
 /**
  * loading - load_complete.

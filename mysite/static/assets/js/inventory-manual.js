@@ -4,6 +4,7 @@
  * @version 2019-07-26, 코드 표준화.
  */
 
+var storage_room_name = null;
 var storage_room_pk = null;
 var aquarium_section_pk = null;
 var aquarium_selection_row = null;
@@ -81,8 +82,8 @@ $(function () {
             $('.dataTables_paginate').detach().appendTo('#inventory-pagination');
 
             $('.dt-buttons').detach().appendTo('#inventory-menu');
-            $('.dataTables_filter').detach().appendTo('#inventory-tool');
             $('.dataTables_length').detach().appendTo('#inventory-tool');
+            $('.dataTables_filter').detach().appendTo('#inventory-tool');
         }
     });
 
@@ -209,6 +210,10 @@ var draw_store_layout = function (url, callback) {
                     });
                 }
             });
+
+            $('#guide-store-layout').html(
+                storage_room_name
+            )
         }
         else {
             alert('SVG를 지원하지 않는 브라우저입니다.');
@@ -251,8 +256,6 @@ var draw_aquarium = function (url, callback) {
             var col_count = 15;
             var width_interval = 15;
             var height_interval = 10;
-
-            $('#svg-center').width(Math.max(col_count * width_interval + col_count + 1, data['aquarium_num_of_columns'] * 60 + data['aquarium_num_of_columns'] + 21));
 
             var map = SVG('svg-mini-map').size(col_count * width_interval + col_count + 1, row_count * height_interval + row_count + 1).attr(
                 { 'class': 'align-middle' }

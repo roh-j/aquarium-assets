@@ -32,7 +32,7 @@
     <script src="{% static 'assets/js/lib/smil.check.js' %}"></script>
     <script src="{% static 'assets/js/lib/smil.user.js' %}"></script>
     <script src="{% static 'assets/js/common.js' %}"></script>
-    <script src="{% static 'assets/js/inventory.js' %}"></script>
+    <script src="{% static 'assets/js/inventory-manual.js' %}"></script>
 
     <title>Aquarium Assets</title>
 </head>
@@ -106,9 +106,10 @@
                 <h3 class="head">재고 관리</h3>
                 <hr>
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#storage-room" data-toggle="tab">생물실 선택</a></li>
-                    <li><a href="#store-layout" data-toggle="tab">매장 레이아웃</a></li>
-                    <li><a href="#aquarium" data-toggle="tab">수조 선택</a></li>
+                    <li class="active"><a href="#storage-room" data-toggle="tab">생물실</a></li>
+                    <li><a href="#store-layout" data-toggle="tab">매장</a></li>
+                    <li><a href="#aquarium" data-toggle="tab">수조</a></li>
+                    <li><a href="#maintenance-log" data-toggle="tab">일지</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="storage-room">
@@ -143,33 +144,32 @@
                                 {% endif %}
                             </div>
                         </div>
+                        <hr>
                     </div>
                     <div class="tab-pane" id="store-layout">
+                        <a href="" class="btn btn-default">이전</a>
+                        <span id="guide-store-layout" class="ml-3"></span>
+                        <hr>
                         <div class="table-responsive">
                             <div id="store-layout-canvas">
                                 <div id="svg-store-layout" class="text-center"></div>
                             </div>
                         </div>
                         <hr>
-                        <div class="text-center mb-section">
-                            <a href="" class="btn btn-default">처음으로</a>
-                        </div>
                     </div>
                     <div class="tab-pane" id="aquarium">
-                        <div class="table-responsive">
-                            <div id="aquarium-canvas" class="text-center">
-                                <div id="svg-center" class="text-center mx-auto">
-                                    <div id="svg-mini-map"></div>
-                                </div>
-                                <hr>
-                                <div id="svg-aquarium" class="text-center"></div>
-                            </div>
+                        <button type="button" id="redo-store-layout" class="btn btn-default">이전</button>
+                        <div class="btn-group ml-3">
+                            <button type="button" class="btn btn-default">수조 정보</button>
+                            <button type="button" class="btn btn-default">일지 관리</button>
                         </div>
                         <hr>
-                        <div class="text-center">
-                            <div class="btn-group">
-                                <button type="button" id="redo-store-layout" class="btn btn-default">이전</button>
-                                <a href="" class="btn btn-default">처음으로</a>
+                        <div class="mini-map">
+                            <div id="svg-mini-map" class="text-center"></div>
+                        </div>
+                        <div class="table-responsive">
+                            <div id="aquarium-canvas" class="text-center">
+                                <div id="svg-aquarium" class="text-center"></div>
                             </div>
                         </div>
                         <hr>
@@ -178,7 +178,7 @@
                         </div>
                         <hr>
                         <div class="panel panel-default">
-                            <div id="inventory-tool" class="panel-heading clearfix"></div>
+                            <div id="inventory-tool" class="panel-heading flex-component"></div>
                             <div class="table-responsive">
                                 <table id="inventory_table" class="table table-bordered table-hover">
                                     <thead>
@@ -199,7 +199,9 @@
                             <div id="inventory-info" class="panel-footer"></div>
                         </div>
                         <div id="inventory-pagination" class="text-center"></div>
+                        <hr>
                     </div>
+                    <div class="tab-pane" id="maintenance-log"></div>
                 </div>
             </div>
             <footer><i>Copyright &copy; roh-j, Licensed under the Apache License</i></footer>

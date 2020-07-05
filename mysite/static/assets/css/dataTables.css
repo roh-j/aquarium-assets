@@ -8,10 +8,6 @@ table.dataTable {
 table.dataTable tbody tr {
     height: 51px;
 }
-.dataTables_filter,
-.dataTables_length {
-    float: right;
-}
 .dataTables_length {
     margin-right: 1rem;
 }
@@ -19,7 +15,7 @@ table.dataTable tbody tr {
     margin-left: 1rem;
 }
 .dataTables_filter > input {
-    width: 196px;
+    max-width: 196px;
 }
 .dataTables_filter > label,
 .dataTables_length > label {

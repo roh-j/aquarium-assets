@@ -19,10 +19,10 @@ from . import views
 app_name = 'Inventory'
 
 urlpatterns = [
-    path('selection/', views.SelectionView.as_view(), name='SelectionView'),
-    path('selection/store-layout/',
+    path('manual/', views.ManualView.as_view(), name='ManualView'),
+    path('manual/store-layout/',
          views.StoreLayoutView.as_view(), name='StoreLayoutView'),
-    path('selection/aquarium-section/',
+    path('manual/aquarium-section/',
          views.AquariumSectionView.as_view(), name='AquariumSectionView'),
-    path('selection/aquarium/', views.AquariumView.as_view(), name='AquariumView'),
+    path('manual/aquarium/', views.AquariumView.as_view(), name='AquariumView'),
 ]
