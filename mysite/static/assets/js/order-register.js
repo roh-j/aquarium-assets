@@ -1,5 +1,6 @@
 var params = {};
 var order_items = [];
+var order_item_idx = null;
 
 var customer_table = null;
 var product_table = null;
@@ -19,6 +20,31 @@ $(function () {
 
     $('.wide-screen').on('click', function () {
         wide_screen('toggle');
+    });
+
+    $('#form-cart-quantity-register').on('submit', function (e) {
+        e.preventDefault();
+
+        if (order_items[order_item_idx]['remaining_quantity'] < $('input[name=cart_quantity]').val()) {
+            $('#cart-quantity-register-modal').modal('hide');
+            $('#cart-quantity-register-modal').on('hidden.bs.modal', function () {
+                toastr.remove();
+                toastr.warning('재고가 부족합니다.');
+                $(this).off('hidden.bs.modal');
+            });
+        }
+        else {
+            order_items[order_item_idx]['quantity'] = $('input[name=cart_quantity]').val();
+
+            $('#cart-quantity-register-modal').modal('hide');
+            $('#cart-quantity-register-modal').on('hidden.bs.modal', function () {
+                update_cart(function () {
+                    toastr.remove();
+                    toastr.success('항목을 수정하였습니다.');
+                });
+                $(this).off('hidden.bs.modal');
+            });
+        }
     });
 
     $('#form-recipient-register').on('submit', function (e) {
@@ -306,7 +332,10 @@ var async_product = function (callback) {
                 };
                 order_items.push(data);
             }
-            add_to_cart();
+            update_cart(function() {
+                toastr.remove();
+                toastr.success('상품을 담았습니다.');
+            });
         });
 
         $('#selected-items-to-cart').on('click', function () {
@@ -341,7 +370,10 @@ var async_product = function (callback) {
                     };
                     order_items.push(data);
                 }
-                add_to_cart();
+                update_cart(function () {
+                    toastr.remove();
+                    toastr.success('상품을 담았습니다.');
+                });
             });
         });
         typeof callback === 'function' && callback();
@@ -425,7 +457,7 @@ var async_customer = function (callback) {
     }).fail(function (res, status, xhr) { });
 };
 
-var add_to_cart = function (callback) {
+var update_cart = function (callback) {
     var payment = 0;
     order_item_table.clear().draw();
 
@@ -457,8 +489,8 @@ var add_to_cart = function (callback) {
                     <td>' + (parseInt(order_items[i]['price']) * parseInt(order_items[i]['quantity'])).toLocaleString() + ' 원</td>\
                     <td class="min col-btn">\
                         <div class="btn-group d-flex">\
-                            <button type="button" class="btn btn-default"><i class="fas fa-pen fa-fw"></i></button>\
-                            <button type="button" class="btn btn-default"><i class="fas fa-trash-alt fa-fw"></i></button>\
+                            <button type="button" class="btn btn-default order-item-modify"><i class="fas fa-pen fa-fw"></i></button>\
+                            <button type="button" class="btn btn-default order-item-delete"><i class="fas fa-trash-alt fa-fw"></i></button>\
                         </div>\
                     </td>\
                 </tr>'
@@ -466,8 +498,24 @@ var add_to_cart = function (callback) {
         ).draw();
         payment += (parseInt(order_items[i]['price']) * parseInt(order_items[i]['quantity']));
     }
+
     $('#view-payment').text(payment.toLocaleString() + ' 원');
-    toastr.remove();
-    toastr.success('상품을 담았습니다.');
+
+    $('.order-item-modify').on('click', function () {
+        order_item_idx = $(this).closest('tr').index();
+
+        $('input[name=cart_quantity]').val(order_items[order_item_idx]['quantity']);
+        $('#cart-quantity-register-modal').modal('show');
+    });
+
+    $('.order-item-delete').on('click', function () {
+        var idx = $(this).closest('tr').index();
+        order_items.splice(idx, 1);
+
+        update_cart(function () {
+            toastr.remove();
+            toastr.success('항목을 삭제하였습니다.');
+        });
+    });
     typeof callback === 'function' && callback();
 };

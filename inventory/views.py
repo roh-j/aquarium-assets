@@ -105,13 +105,13 @@ class AquariumStockView(APIView):
             status=Case(
                 When(
                     unit_price__isnull=True,
-                    then=Value('unavailable')
+                    then=Value('unavailable'),
                 ),
                 default=Value('available'),
                 output_field=CharField(),
             )
         ).filter(aquarium=request.query_params.get('fk_aquarium')).order_by('-id')
-        context = list(queryset.values('creature__species', 'creature__breed',
+        context = list(queryset.values('id', 'creature__species', 'creature__breed',
                                        'creature__remark', 'size', 'gender', 'quantity', 'status'))
         return JsonResponse(context, safe=False, status=200)
 
@@ -131,7 +131,7 @@ class GoodsIssueView(APIView):
 
     def post(self, request, control_number, format=None):
         serializer = GoodsIssueSerializer(data=request.data)
-        serializer.set_foreign_key(control_number, request.data['fk_aquarium'])
+        serializer.set_foreign_key(control_number, request.data['fk_aquarium'], request.data['fk_aquarium_stock'])
 
         if serializer.is_valid():
             serializer.save()
@@ -145,7 +145,7 @@ class GoodsReceiptView(APIView):
 
     def post(self, request, control_number, format=None):
         serializer = GoodsReceiptSerializer(data=request.data)
-        serializer.set_foreign_key(control_number, request.data['fk_aquarium'])
+        serializer.set_foreign_key(control_number, request.data['fk_aquarium'], request.data['fk_aquarium_stock'])
 
         if serializer.is_valid():
             serializer.save()

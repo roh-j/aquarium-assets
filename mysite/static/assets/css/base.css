@@ -307,18 +307,10 @@ table .pretty {
     padding-top: 0;
 }
 #pending-order .panel {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    border: none;
-}
-#pending-order .panel .panel-heading {
-    padding: 10px 0;
-}
-#pending-order .panel:first-child .panel-heading {
-    border-top: 1px dashed #ddd !important;
+    border: 1px solid #ddd !important;
 }
 #pending-order .panel .table {
-    border: 1px solid #ddd;
+    border-top: 1px solid #ddd !important;
 }
 span.control-label {
     vertical-align: middle;

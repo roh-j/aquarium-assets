@@ -11,11 +11,14 @@ from order.serializers import OrderSerializer
 # Create your views here.
 
 
-class OrderSheetView(APIView):
+class PendingOrderView(APIView):
     renderer_classes = (JSONRenderer,)
 
     def get(self, request, control_number, format=None):
-        queryset = Order.objects.filter(console=control_number)
+        queryset = Order.objects.filter(
+            ~Q(task_status='completed'),
+            console=control_number,
+        )
         serializer = OrderSerializer(queryset, many=True)
         return JsonResponse(serializer.data, safe=False, status=200)
 

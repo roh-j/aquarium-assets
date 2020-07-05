@@ -34,6 +34,7 @@ $(function () {
 
     $('#redo-aquarium-section').on('click', function () {
         $('#svg-store-layout').empty();
+        $('#guide-store-layout').empty();
         $('.nav-tabs a[href="#aquarium-section"]').tab('show');
     });
 
@@ -178,6 +179,7 @@ $(function () {
             $('#aquarium-section-register-modal').modal('hide');
             $('#aquarium-section-register-modal').on('hidden.bs.modal', function () {
                 async_aquarium_section();
+                $(this).off('hidden.bs.modal');
             });
         }).fail(function (res, status, xhr) { });
     });
@@ -207,6 +209,7 @@ $(function () {
             $('#aquarium-section-modify-modal').modal('hide');
             $('#aquarium-section-modify-modal').on('hidden.bs.modal', function () {
                 async_aquarium_section();
+                $(this).off('hidden.bs.modal');
             });
         }).fail(function (res, status, xhr) { });
     });
@@ -229,6 +232,7 @@ $(function () {
             $('#aquarium-section-modify-modal').modal('hide');
             $('#aquarium-section-modify-modal').on('hidden.bs.modal', function () {
                 async_aquarium_section();
+                $(this).off('hidden.bs.modal');
             });
         }).fail(function (res, status, xhr) { });
     });

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from store.models import Aquarium
 from console.models import Console
+from store.models import Aquarium
 from product.models import Creature, UnitPrice
 from order.models import OrderItem
 
@@ -65,6 +65,12 @@ class StockLedger(models.Model):
     aquarium = models.ForeignKey(
         Aquarium,
         on_delete=models.CASCADE,
+    )
+    aquarium_stock = models.ForeignKey(
+        AquariumStock,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
     order_item = models.ForeignKey(
         OrderItem,

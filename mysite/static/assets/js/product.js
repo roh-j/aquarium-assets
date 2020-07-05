@@ -135,6 +135,7 @@ $(function () {
             $('#unit-price-register-modal').on('hidden.bs.modal', function () {
                 form_reset('#form-unit-price-register');
                 async_unit_price();
+                $(this).off('hidden.bs.modal');
             });
         }).fail(function (res, status, xhr) {
             $.each(res.responseJSON, function (key, value) {

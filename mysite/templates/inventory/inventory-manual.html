@@ -44,6 +44,20 @@
 </head>
 
 <body>
+    <div id="alert-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">알림</h5>
+                </div>
+                <div class="modal-body text-center"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="goods-issue-register-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -66,7 +80,7 @@
                                         <i class="fas fa-angle-left fa-fw"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control text-center" id="id_goods_issue_quantity" name="goods_issue_quantity" data-input-type="int" value="0">
+                                <input type="text" class="form-control text-center" id="id_goods_issue_quantity" name="goods_issue_quantity" data-input-type="int" value="1">
                                 <span class="input-group-btn input-spinner">
                                     <button type="button" class="btn btn-default" data-spinner-value="+1">
                                         <i class="fas fa-angle-right fa-fw"></i>
@@ -83,7 +97,6 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="goods-issue-to-sales">
                                 <span class="control-label">주문 처리</span>
-                                <div id="pending-order"></div>
                             </div>
                             <div class="tab-pane" id="goods-issue">
                                 <div class="form-group modal-lg-form">
@@ -110,7 +123,7 @@
         </div>
     </div>
     <div id="goods-receipt-register-modal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -123,7 +136,7 @@
                             <li class="active"><a href="#goods-receipt-for-purchase" data-toggle="tab">구매</a></li>
                             <li><a href="#goods-receipt" data-toggle="tab">입고</a></li>
                         </ul>
-                        <div class="form-group">
+                        <div class="form-group modal-lg-form">
                             <label for="id_goods_receipt_quantity" class="control-label">입고 수량</label>
                             <div class="input-group">
                                 <span class="input-group-btn input-spinner">
@@ -131,7 +144,7 @@
                                         <i class="fas fa-angle-left fa-fw"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control text-center" id="id_goods_receipt_quantity" name="goods_receipt_quantity" data-input-type="int" value="0">
+                                <input type="text" class="form-control text-center" id="id_goods_receipt_quantity" name="goods_receipt_quantity" data-input-type="int" value="1">
                                 <span class="input-group-btn input-spinner">
                                     <button type="button" class="btn btn-default" data-spinner-value="+1">
                                         <i class="fas fa-angle-right fa-fw"></i>
@@ -147,7 +160,7 @@
                         </div>
                         <div class="tab-content">
                             <div class="tab-pane active" id="goods-receipt-for-purchase">
-                                <div class="form-group">
+                                <div class="form-group modal-lg-form">
                                     <label for="id_purchase_price" class="control-label">가격</label>
                                     <div class="input-group">
                                         <span class="input-group-btn input-spinner">
@@ -361,10 +374,10 @@
                 <h3 class="head">재고 관리</h3>
                 <hr>
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#order-sheet" data-toggle="tab">주문서</a></li>
-                    <li><a href="#storage-room" data-toggle="tab">생물실</a></li>
-                    <li><a href="#store-layout" data-toggle="tab">매장</a></li>
-                    <li><a href="#aquarium" data-toggle="tab">수조</a></li>
+                    <li class="disabled active"><a href="#order-sheet">주문서</a></li>
+                    <li class="disabled"><a href="#storage-room">생물실</a></li>
+                    <li class="disabled"><a href="#store-layout">매장</a></li>
+                    <li class="disabled"><a href="#aquarium">수조</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="order-sheet">
@@ -440,11 +453,14 @@
                                 </div>
                                 {% endif %}
                             </div>
+                            <div class="panel-footer text-right">
+                                <a href="" class="btn btn-default">이전</a>
+                            </div>
                         </div>
                         <hr>
                     </div>
                     <div class="tab-pane" id="store-layout">
-                        <a href="" class="btn btn-default">이전</a>
+                        <button type="button" id="redo-storage-room" class="btn btn-default">이전</button>
                         <span id="guide-store-layout" class="ml-2"></span>
                         <hr>
                         <div class="table-responsive">
@@ -456,6 +472,7 @@
                     </div>
                     <div class="tab-pane" id="aquarium">
                         <button type="button" id="redo-store-layout" class="btn btn-default">이전</button>
+                        <button type="button" class="wide-screen btn btn-default ml-2">넓게</button>
                         <button type="button" class="btn btn-default ml-2">수조 정보</button>
                         <hr>
                         <div class="mini-map">
@@ -470,6 +487,8 @@
                         <div id="inventory-menu">
                             <button type="button" id="aquarium-stock-register" class="btn btn-default" disabled>재고 추가</button>
                         </div>
+                        <hr>
+                        <div id="pending-order"></div>
                         <hr>
                         <div class="panel panel-default">
                             <div id="inventory-tool" class="panel-heading d-flex"></div>

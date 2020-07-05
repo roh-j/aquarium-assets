@@ -53,6 +53,45 @@
             </div>
         </div>
     </div>
+    <div id="cart-quantity-register-modal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">수량 변경</h5>
+                </div>
+                <form id="form-cart-quantity-register" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="id_cart_quantity" class="control-label">수량</label>
+                            <div class="input-group">
+                                <span class="input-group-btn input-spinner">
+                                    <button type="button" class="btn btn-default" data-spinner-value="-1">
+                                        <i class="fas fa-angle-left fa-fw"></i>
+                                    </button>
+                                </span>
+                                <input type="text" class="form-control text-center" id="id_cart_quantity" name="cart_quantity" data-input-type="int">
+                                <span class="input-group-btn input-spinner">
+                                    <button type="button" class="btn btn-default" data-spinner-value="+1">
+                                        <i class="fas fa-angle-right fa-fw"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <div class="btn-group input-spinner">
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="-10">-10</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="-1">-1</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+1">+1</button>
+                                <button type="button" class="btn btn-default w-100" data-spinner-value="+10">+10</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div id="recipient-register-modal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -263,11 +302,11 @@
                         <div class="dl-order bs-callout bs-callout-warning">
                             <dl>
                                 <dt>받는분</dt>
-                                <dd id="view-customer-name">(없음)</dd>
+                                <dd id="view-customer-name">없음</dd>
                                 <dt>연락처</dt>
-                                <dd id="view-contact">(없음)</dd>
+                                <dd id="view-contact">없음</dd>
                                 <dt>주소</dt>
-                                <dd id="view-address">(없음)</dd>
+                                <dd id="view-address">없음</dd>
                                 <dt>배송</dt>
                                 <dd id="view-order-type">방문수령</dd>
                                 <dt>합계</dt>
