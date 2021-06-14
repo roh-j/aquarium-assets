@@ -1,23 +1,30 @@
-### Version
+### 😍 Version
 
 - Python 3.9.5
 - Django 3.2.4
 - PostgreSQL 13.3
 
-### Step 1. Django 설치
+### 🙏 Step 1. Django 설치
 
 - Django 설치
 
-  - pip install Django==3.2.4
+  - ```
+    pip install Django==3.2.4
+    ```
 
 - Django REST framework 설치
 
-  - pip install djangorestframework
+  - ```
+    pip install djangorestframework
+    ```
 
 - PostgreSQL 연동
-  - pip install psycopg2
 
-### Step 2. Django 설정
+  - ```
+    pip install psycopg2
+    ```
+
+### 🖐 Step 2. Django 설정
 
 - Secret Key 생성
 
@@ -40,20 +47,23 @@
           'default': {
               'ENGINE': 'django.db.backends.postgresql',
               'NAME': 'DB 명',
-              'USER': 'DB 아이디',
-              'PASSWORD': 'DB 비밀번호',
+              'USER': '아이디',
+              'PASSWORD': '비밀번호',
               'HOST': '127.0.0.1',
               'PORT': '5432',
           }
       }
       ```
 
-### Step 3. PostgreSQL DB 생성
+### 👜 Step 3. PostgreSQL DB 생성
 
 - DB 생성
-  - create database [DB 명]
 
-### Step 4. Django 실행
+  - ```
+    create database [DB 명]
+    ```
+
+### 👍 Step 4. Django 실행
 
 - Super User 생성
 
