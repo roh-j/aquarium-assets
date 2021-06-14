@@ -27,15 +27,15 @@
 
   - aquarium-assets/mysite/settings.py
 
-    - ```json
+    - ```
       SECRET_KEY = 'Secret Key'
       ```
 
-    - ```json
+    - ```
       DEBUG = True
       ```
 
-    - ```json
+    - ```
       DATABASES = {
           'default': {
               'ENGINE': 'django.db.backends.postgresql',
