@@ -1,5 +1,23 @@
 ## Aquarium Assets
 
+### Introduction
+
+![screenshot-pokbeon com-2019 11 04-16_56_33](https://user-images.githubusercontent.com/66871626/134305308-82d3a8bd-24b6-464a-bd55-48674d7c19d2.png)
+
+![screenshot-pokbeon com-2019 11 04-16_56_57](https://user-images.githubusercontent.com/66871626/134305404-3f256ea2-67db-4415-bcf9-dd4d6df4c128.png)
+
+![screenshot-pokbeon com-2019 11 04-16_57_59](https://user-images.githubusercontent.com/66871626/134305441-66d4d6d6-9d32-473a-a74a-fe5ace85207f.png)
+
+### Features
+
+- 그래픽으로 한 눈에 매장을 관리하는 **매장 관리 기능**
+
+- 생물에 특화된 **단가 관리 기능**
+
+- 주문을 쉽게 작성하고 처리할 수 있는 **주문 관리 기능**
+
+- 주문과 연동되어 재고를 관리할 수 있는 **재고 관리 기능**
+
 ### 😍 Version
 
 - Python 3.9.5
